@@ -1,0 +1,75 @@
+# ============================
+# Python artifacts
+# ============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Packaging
+pip-wheel-metadata/
+
+# ============================
+# Testing & coverage
+# ============================
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.nox/
+
+# ============================
+# Logs & runtime artifacts
+# ============================
+*.log
+*.tmp
+*.bak
+
+# Trace outputs (DO NOT COMMIT)
+traces/
+*.trace.json
+*.trace.parquet
+
+# ============================
+# Jupyter / research noise
+# ============================
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================
+# Editors & OS
+# ============================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ============================
+# CLI tools
+# ============================
+*.out
+*.err
+
+# ============================
+# Schema generation artifacts
+# ============================
+schemas/generated/
+hilbertbench/models/*.py
+
+# Allow versioned model stubs
+!hilbertbench/models/__init__.py
+!hilbertbench/models/v1_0.py
