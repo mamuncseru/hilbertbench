@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hilbertbench.org/schemas/v1.0/artifact.json",
+  "title": "HilbertBench Artifact Metadata v1.0",
+  "description": "Metadata record for a content-addressed, immutable data object. This record lives in the catalog, pointing to a raw physical file on disk.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_hash",
+    "kind",
+    "encoding",
+    "file_path",
+    "size_bytes",
+    "created_at"
+  ],
+  "properties": {
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Content hash identifier. Must match the key in the catalog and the target file."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "circuit_qasm",
+        "pulse_schedule",
+        "execution_outcome",
+        "execution_error",
+        "calibration_snapshot",
+        "parameters",
+        "observables",
+        "generic_blob"
+      ],
+      "description": "Logical semantic type of the artifact. Helps analyzers filter data without opening files."
+    },
+    "encoding": {
+      "type": "string",
+      "enum": [
+        "json",
+        "ndjson",
+        "parquet",
+        "numpy_binary",
+        "openqasm",
+        "plaintext"
+      ],
+      "description": "Serialization format of the raw file on disk. Tells the reader which library to use (e.g., PyArrow vs Numpy)."
+    },
+    "file_path": {
+      "type": "string",
+      "pattern": "^artifacts/([a-f0-9]{2}/)?[a-f0-9]{64}\\.[a-z0-9]+$",
+      "description": "Relative path to the physical file. Supports optional 2-char sharding (e.g., 'artifacts/a4/a4b3...npy') to prevent OS directory limits."
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Exact file size. Allows offline verifiers to perform quick size checks before running expensive SHA-256 hashes."
+    },
+    "compression": {
+      "type": ["string", "null"],
+      "enum": ["gzip", "zstd", "snappy", null],
+      "description": "Optional compression applied to the file on disk."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "UTC nanoseconds when the file was written to disk."
+    },
+    "producer": {
+      "type": ["string", "null"],
+      "description": "Framework that serialized the artifact (e.g., 'qiskit=1.0.2', 'pennylane=0.35.0')."
+    },
+    "ref_count": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Number of span events referencing this artifact. Useful for pruning unreferenced blobs."
+    }
+  }
+}

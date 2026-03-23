@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hilbertbench.org/schemas/v1.0/trace.json",
+  "title": "HilbertBench Trace Manifest",
+  "description": "Root manifest describing a HilbertBench trace. Contains metadata, lifecycle state, intent mode, and integrity guarantees. Does NOT contain execution events.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hbtrace_version",
+    "trace_id",
+    "mode",
+    "timestamp_start",
+    "status",
+    "client_environment"
+  ],
+  "properties": {
+    "hbtrace_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version. v1.x guarantees immutability of core (Bucket A) fields."
+    },
+    "trace_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier for this trace. Must match all spans in the event stream."
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["passive", "active"],
+      "description": "Passive: observation only, zero additional executions. Active: controlled sampling explicitly authorized by user."
+    },
+    "timestamp_start": {
+      "type": "integer",
+      "description": "UTC time in nanoseconds when recording began."
+    },
+    "timestamp_end": {
+      "type": ["integer", "null"],
+      "description": "UTC time in nanoseconds when recording completed. Null indicates abnormal termination."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SEALED_SUCCESS",
+        "SEALED_WITH_ERRORS",
+        "CRASHED_IN_FLIGHT",
+        "INITIALIZATION_FAILED"
+      ],
+      "description": "Final lifecycle state of the trace."
+    },
+    "client_environment": {
+      "type": "object",
+      "description": "Execution environment metadata for reproducibility and debugging. Not part of physical evidence.",
+      "required": ["hilbertbench_version"],
+      "additionalProperties": false,
+      "properties": {
+        "hilbertbench_version": { "type": "string" },
+        "python_version": { "type": "string" },
+        "os_platform": { "type": "string" },
+        "frameworks": {
+          "type": "object",
+          "description": "Installed frameworks and versions. Informational only.",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "integrity_seal": {
+      "type": ["object", "null"],
+      "description": "Integrity proof of the trace. Null if sealing did not complete.",
+      "required": ["event_stream_checksum", "artifact_count"],
+      "additionalProperties": false,
+      "properties": {
+        "event_stream_checksum": {
+          "type": "string",
+          "description": "SHA-256 hash of the event stream file."
+        },
+        "artifact_count": {
+          "type": "integer",
+          "description": "Total number of artifacts referenced by the trace."
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "User-defined metadata for organization. No semantic meaning.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

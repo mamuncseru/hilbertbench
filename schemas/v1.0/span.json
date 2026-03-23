@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hilbertbench.org/schemas/v1.0/span.json",
+  "title": "HilbertBench Span v1.0",
+  "description": "A causal execution unit containing top-level physical evidence and an immutable sequence of execution-boundary events.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hbspan_version",
+    "span_id",
+    "trace_id",
+    "sequence_number",
+    "timestamp_start",
+    "payload_ref",
+    "events"
+  ],
+  "properties": {
+    "hbspan_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "span_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "trace_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "parent_span_id": {
+      "type": ["string", "null"],
+      "format": "uuid",
+      "description": "Causal parent span. Null if root."
+    },
+    "sequence_number": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Authoritative monotonic index representing strict causal ordering within the trace. Guaranteed by the recorder."
+    },
+    "timestamp_start": {
+      "type": "integer",
+      "description": "UTC nanoseconds when the span was initialized."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "COMPLETED",
+        "FAILED",
+        "PARTIAL",
+        "IN_FLIGHT"
+      ],
+      "description": "Lifecycle state of the span."
+    },
+    "backend_id": {
+      "type": ["string", "null"],
+      "description": "Execution target (hardware/simulator). Null if not applicable."
+    },
+    "payload_ref": {
+      "type": "string",
+      "description": "SHA-256 reference to the primary execution input (circuit, pulse schedule). Promoted to top-level for columnar query performance."
+    },
+    "outcome_ref": {
+      "type": ["string", "null"],
+      "description": "SHA-256 reference to execution result (counts, memory). Null if failed or in-flight. Promoted to top-level."
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "tags": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_type",
+        "timestamp"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "event_type": {
+          "type": "string",
+          "pattern": "^[A-Z_]+$",
+          "description": "Namespaced event identifier (e.g., EXECUTION_REQUEST, PENNYLANE_GRADIENT_STEP). Enum intentionally omitted to allow extension."
+        },
+        "timestamp": {
+          "type": "integer",
+          "description": "UTC nanoseconds for this specific point-in-time event."
+        },
+        "error_ref": {
+          "type": ["string", "null"],
+          "description": "SHA-256 reference to an error artifact (e.g., full traceback), if applicable."
+        },
+        "attributes": {
+          "type": ["object", "null"],
+          "additionalProperties": true,
+          "description": "POLICY: Must only contain scalar, non-reproducibility-critical metadata (e.g., queue position, API latency). Physical math and arrays MUST go in payload_ref/outcome_ref."
+        }
+      }
+    }
+  }
+}

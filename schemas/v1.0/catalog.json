@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hilbertbench.org/schemas/v1.0/catalog.json",
+  "title": "HilbertBench Artifact Catalog v1.0",
+  "description": "The central registry mapping SHA-256 hashes to their artifact metadata records. Ensures O(1) lookups.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hbcatalog_version",
+    "trace_id",
+    "created_at",
+    "artifacts"
+  ],
+  "properties": {
+    "hbcatalog_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version. v1.x guarantees immutability of the index structure."
+    },
+    "trace_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier. Must match the root trace.json manifest."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "UTC nanoseconds when this catalog was finalized/sealed."
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "A dictionary mapping 64-character SHA-256 hashes to their artifact metadata.",
+      "patternProperties": {
+        "^sha256:[a-f0-9]{64}$": {
+          "$ref": "artifact.json"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
