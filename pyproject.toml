@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hilbertbench"
+version = "0.1.0-dev"
+requires-python = ">=3.10"
+# Updated to standard SPDX string format for MIT
+license = "MIT" 
+
+# CORE: zero external dependencies
+dependencies = []
+
+[project.optional-dependencies]
+storage = ["pyarrow>=14.0.0"]
+qiskit  = ["qiskit>=1.0.0"]
+pennylane = ["pennylane>=0.38.0"]
+full = ["hilbertbench[storage,qiskit,pennylane]"]
+
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.7.0",
+    "black>=23.0.0",
+    "ruff>=0.4.0",
+    "jsonschema>=4.21.0",      # for schema validation
+    "datamodel-code-generator", # for generate_python_models.sh
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+hb-verify  = "hilbertbench.reader.verify:main"
+hb-migrate = "hilbertbench.recorder.storage.migrate:main"
+
+# ADDED: Explicitly tell setuptools which folder is the package
+[tool.setuptools.packages.find]
+include = ["hilbertbench*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --cov=hilbertbench --cov-report=term-missing"
+
+[tool.mypy]
+python_version         = "3.10"
+strict                 = true
+disallow_untyped_defs  = true
+
+[[tool.mypy.overrides]]
+module   = "hilbertbench.models.*"
+# auto-generated — relax strictness here only
+ignore_errors = true
+
+[tool.black]
+line-length    = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length    = 100
+target-version = "py310"
+select         = ["E", "F", "I", "N", "UP"]
