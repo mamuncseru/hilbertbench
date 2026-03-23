@@ -10,7 +10,9 @@ requires-python = ">=3.10"
 license = "MIT" 
 
 # CORE: zero external dependencies
-dependencies = []
+dependencies = [
+    "pydantic>=2.6.0",   # required: models/v1_0.py uses BaseModel
+]
 
 [project.optional-dependencies]
 storage = ["pyarrow>=14.0.0"]
