@@ -221,7 +221,13 @@ class HilbertTape:
         sha256_hash = f"sha256:{hashlib.sha256(data).hexdigest()}"
         
         # Write to physical layout
-        relative_path = f"artifacts/{sha256_hash.replace('sha256:', '')}{src.suffix}"
+        # Update the physical layout to use 2-character sharding
+        hash_hex = sha256_hash.replace('sha256:', '')
+        shard = hash_hex[:2]
+        shard_dir = self.dir_path / "artifacts" / shard
+        shard_dir.mkdir(exist_ok=True)
+        
+        relative_path = f"artifacts/{shard}/{hash_hex}{src.suffix}"
         dest = self.dir_path / relative_path
         shutil.copy2(src, dest)
 
