@@ -18,6 +18,9 @@ dist/
 *.egg-info/
 .eggs/
 
+# demo artifacts
+demo_traces/
+
 # Packaging
 pip-wheel-metadata/
 
