@@ -9,8 +9,8 @@ a BREAKING CHANGE and requires a schema version bump.
 import pytest
 from hilbertbench.models import (
     HilbertbenchTraceManifest,
-    HilbertbenchSpanV10,
-    HilbertbenchArtifactMetadataV10,
+    HilbertbenchSpan,
+    HilbertbenchArtifactMetadata,
 )
 
 # ── Frozen v1.0 golden records ────────────────────────────────────────────
@@ -62,9 +62,9 @@ class TestGoldenRecords:
         assert str(trace.trace_id) == "00000000-0000-0000-0000-000000000001"
 
     def test_golden_span_always_parses(self):
-        span = HilbertbenchSpanV10.model_validate(GOLDEN_SPAN)
+        span = HilbertbenchSpan.model_validate(GOLDEN_SPAN)
         assert span.sequence_number == 0
 
     def test_golden_artifact_always_parses(self):
-        artifact = HilbertbenchArtifactMetadataV10.model_validate(GOLDEN_ARTIFACT)
+        artifact = HilbertbenchArtifactMetadata.model_validate(GOLDEN_ARTIFACT)
         assert artifact.kind.value == "circuit_qasm"

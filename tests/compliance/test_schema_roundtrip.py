@@ -11,9 +11,9 @@ import pytest
 from uuid import uuid4
 from hilbertbench.models import (
     HilbertbenchTraceManifest,
-    HilbertbenchSpanV10,
-    HilbertbenchArtifactMetadataV10,
-    HilbertbenchArtifactCatalogV10,
+    HilbertbenchSpan,
+    HilbertbenchArtifactMetadata,
+    HilbertbenchArtifactCatalog,
     Mode,
     TraceStatus,
     SpanStatus,
@@ -208,55 +208,55 @@ class TestTraceManifest:
 class TestSpan:
 
     def test_valid_construction(self, valid_span_dict):
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.sequence_number == 0
 
     def test_roundtrip(self, valid_span_dict):
-        span  = HilbertbenchSpanV10.model_validate(valid_span_dict)
-        span2 = HilbertbenchSpanV10.model_validate(span.model_dump())
+        span  = HilbertbenchSpan.model_validate(valid_span_dict)
+        span2 = HilbertbenchSpan.model_validate(span.model_dump())
         assert span == span2
 
     def test_events_preserved(self, valid_span_dict):
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert len(span.events) == 2
         assert span.events[0].event_type == "EXECUTION_REQUEST"
         assert span.events[1].event_type == "EXECUTION_RESULT"
 
     def test_trace_id_matches_parent(self, valid_span_dict):
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert str(span.trace_id) == TRACE_ID
 
     def test_sequence_number_zero_allowed(self, valid_span_dict):
         valid_span_dict["sequence_number"] = 0
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.sequence_number == 0
 
     def test_sequence_number_large_value(self, valid_span_dict):
         valid_span_dict["sequence_number"] = 999999
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.sequence_number == 999999
 
     def test_all_status_values_valid(self, valid_span_dict):
         for status in ["COMPLETED", "FAILED", "PARTIAL", "IN_FLIGHT"]:
             valid_span_dict["status"] = status
-            span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+            span = HilbertbenchSpan.model_validate(valid_span_dict)
             assert span.status == SpanStatus(status)
 
     def test_null_outcome_ref_allowed(self, valid_span_dict):
         valid_span_dict["outcome_ref"] = None
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.outcome_ref is None
 
     def test_null_parent_span_id_allowed(self, valid_span_dict):
         # Null parent_span_id = root span
         valid_span_dict["parent_span_id"] = None
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.parent_span_id is None
 
     def test_event_type_open_pattern(self, valid_span_dict):
         # event_type is open pattern ^[A-Z_]+$ — custom types must be allowed
         valid_span_dict["events"][0]["event_type"] = "PENNYLANE_GRADIENT_STEP"
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.events[0].event_type == "PENNYLANE_GRADIENT_STEP"
 
     def test_event_attributes_allow_arbitrary_scalars(self, valid_span_dict):
@@ -265,35 +265,35 @@ class TestSpan:
             "api_latency_ms": 12.3,
             "backend_name": "ibm_kyiv",
         }
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.events[0].attributes["queue_pos"] == 7
 
     def test_event_null_attributes_allowed(self, valid_span_dict):
         valid_span_dict["events"][0]["attributes"] = None
-        span = HilbertbenchSpanV10.model_validate(valid_span_dict)
+        span = HilbertbenchSpan.model_validate(valid_span_dict)
         assert span.events[0].attributes is None
 
     def test_rejects_negative_sequence_number(self, valid_span_dict):
         valid_span_dict["sequence_number"] = -1
         with pytest.raises(Exception):
-            HilbertbenchSpanV10.model_validate(valid_span_dict)
+            HilbertbenchSpan.model_validate(valid_span_dict)
 
     def test_rejects_empty_events(self, valid_span_dict):
         # minItems: 1 — a span with no events is invalid
         valid_span_dict["events"] = []
         with pytest.raises(Exception):
-            HilbertbenchSpanV10.model_validate(valid_span_dict)
+            HilbertbenchSpan.model_validate(valid_span_dict)
 
     def test_rejects_lowercase_event_type(self, valid_span_dict):
         # event_type pattern is ^[A-Z_]+$ — lowercase must be rejected
         valid_span_dict["events"][0]["event_type"] = "execution_request"
         with pytest.raises(Exception):
-            HilbertbenchSpanV10.model_validate(valid_span_dict)
+            HilbertbenchSpan.model_validate(valid_span_dict)
 
     def test_rejects_extra_fields(self, valid_span_dict):
         valid_span_dict["ghost_field"] = "not_allowed"
         with pytest.raises(Exception):
-            HilbertbenchSpanV10.model_validate(valid_span_dict)
+            HilbertbenchSpan.model_validate(valid_span_dict)
 
 
 # ── TestArtifact ──────────────────────────────────────────────────────────────
@@ -301,12 +301,12 @@ class TestSpan:
 class TestArtifact:
 
     def test_valid_construction(self, valid_artifact_dict):
-        artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+        artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
         assert artifact.kind == Kind.circuit_qasm
 
     def test_roundtrip(self, valid_artifact_dict):
-        artifact  = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
-        artifact2 = HilbertbenchArtifactMetadataV10.model_validate(artifact.model_dump())
+        artifact  = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
+        artifact2 = HilbertbenchArtifactMetadata.model_validate(artifact.model_dump())
         assert artifact == artifact2
 
     def test_all_kind_values_valid(self, valid_artifact_dict):
@@ -316,61 +316,61 @@ class TestArtifact:
             "parameters", "observables", "generic_blob",
         ]:
             valid_artifact_dict["kind"] = kind
-            artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
             assert artifact.kind == Kind(kind)
 
     def test_all_encoding_values_valid(self, valid_artifact_dict):
         for enc in ["json", "ndjson", "parquet", "numpy_binary", "openqasm", "plaintext"]:
             valid_artifact_dict["encoding"] = enc
-            artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
             assert artifact.encoding == Encoding(enc)
 
     def test_all_compression_values_valid(self, valid_artifact_dict):
         for comp in ["gzip", "zstd", "snappy"]:
             valid_artifact_dict["compression"] = comp
-            artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
             assert artifact.compression == Compression(comp)
 
     def test_compression_null_allowed(self, valid_artifact_dict):
         valid_artifact_dict["compression"] = None
-        artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+        artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
         assert artifact.compression is None
 
     def test_size_bytes_zero_allowed(self, valid_artifact_dict):
         valid_artifact_dict["size_bytes"] = 0
-        artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+        artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
         assert artifact.size_bytes == 0
 
     def test_producer_null_allowed(self, valid_artifact_dict):
         valid_artifact_dict["producer"] = None
-        artifact = HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+        artifact = HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
         assert artifact.producer is None
 
     def test_hash_pattern_enforced(self, valid_artifact_dict):
         valid_artifact_dict["artifact_hash"] = "md5:abc123"
         with pytest.raises(Exception):
-            HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
 
     def test_hash_wrong_length_rejected(self, valid_artifact_dict):
         valid_artifact_dict["artifact_hash"] = "sha256:" + "a" * 32  # too short
         with pytest.raises(Exception):
-            HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
 
     def test_rejects_negative_size(self, valid_artifact_dict):
         valid_artifact_dict["size_bytes"] = -1
         with pytest.raises(Exception):
-            HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
 
     def test_rejects_ref_count_zero(self, valid_artifact_dict):
         # minimum: 1 — an artifact with zero references is orphaned
         valid_artifact_dict["ref_count"] = 0
         with pytest.raises(Exception):
-            HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
 
     def test_rejects_invalid_kind(self, valid_artifact_dict):
         valid_artifact_dict["kind"] = "unknown_type"
         with pytest.raises(Exception):
-            HilbertbenchArtifactMetadataV10.model_validate(valid_artifact_dict)
+            HilbertbenchArtifactMetadata.model_validate(valid_artifact_dict)
 
 
 # ── TestCatalog ───────────────────────────────────────────────────────────────
@@ -378,12 +378,12 @@ class TestArtifact:
 class TestCatalog:
 
     def test_valid_construction(self, valid_catalog_dict):
-        catalog = HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+        catalog = HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
         assert len(catalog.artifacts) == 1
 
     def test_roundtrip(self, valid_catalog_dict):
-        catalog  = HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
-        catalog2 = HilbertbenchArtifactCatalogV10.model_validate(catalog.model_dump())
+        catalog  = HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
+        catalog2 = HilbertbenchArtifactCatalog.model_validate(catalog.model_dump())
         assert catalog == catalog2
 
     def test_multiple_artifacts(self, valid_catalog_dict, valid_artifact_dict):
@@ -391,11 +391,11 @@ class TestCatalog:
         second["artifact_hash"] = HASH_KEY2
         second["file_path"] = f"artifacts/bb/{'b' * 64}.qasm"
         valid_catalog_dict["artifacts"][HASH_KEY2] = second
-        catalog = HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+        catalog = HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
         assert len(catalog.artifacts) == 2
 
     def test_empty_artifacts_allowed(self):
-        catalog = HilbertbenchArtifactCatalogV10.model_validate({
+        catalog = HilbertbenchArtifactCatalog.model_validate({
             "hbcatalog_version": "1.0",
             "trace_id": TRACE_ID,
             "created_at": 1711234599000000000,
@@ -405,10 +405,10 @@ class TestCatalog:
 
     def test_artifact_values_are_validated(self, valid_catalog_dict):
         # Even though the key is not pattern-validated by Pydantic (see below),
-        # the VALUE must be a valid HilbertbenchArtifactMetadataV10
+        # the VALUE must be a valid HilbertbenchArtifactMetadata
         valid_catalog_dict["artifacts"][HASH_KEY]["size_bytes"] = -99
         with pytest.raises(Exception):
-            HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+            HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
 
     def test_artifact_key_format_not_enforced_by_pydantic(self, valid_catalog_dict,
                                                             valid_artifact_dict):
@@ -422,15 +422,15 @@ class TestCatalog:
         the schema was changed back to patternProperties.
         """
         valid_catalog_dict["artifacts"]["not-a-valid-hash"] = valid_artifact_dict
-        catalog = HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+        catalog = HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
         assert "not-a-valid-hash" in catalog.artifacts
 
     def test_rejects_wrong_version(self, valid_catalog_dict):
         valid_catalog_dict["hbcatalog_version"] = "2.0"
         with pytest.raises(Exception):
-            HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+            HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
 
     def test_rejects_extra_fields(self, valid_catalog_dict):
         valid_catalog_dict["surprise"] = True
         with pytest.raises(Exception):
-            HilbertbenchArtifactCatalogV10.model_validate(valid_catalog_dict)
+            HilbertbenchArtifactCatalog.model_validate(valid_catalog_dict)
