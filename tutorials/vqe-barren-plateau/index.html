@@ -1610,7 +1610,7 @@ HilbertBench distinguishes them.</p>
 with random initialization, the variance of the cost-function gradient
 with respect to any single parameter vanishes <strong>exponentially</strong> with the
 number of qubits <em>n</em>:</p>
-<p>$$\text{Var}\left[\frac{\partial C}{\partial \theta_k}\right] \leq \mathcal{O}!\left(\frac{1}{2^n}\right)$$</p>
+<div class="arithmatex">\[\text{Var}\left[\frac{\partial C}{\partial \theta_k}\right] \leq \mathcal{O}\!\left(\frac{1}{2^n}\right)\]</div>
 <p>For a 12-qubit circuit this is O(1/4096). Gradient-based optimizers receive
 near-zero updates — they are navigating a landscape that looks flat in
 every measurable direction. This is the <strong>barren plateau</strong>.</p>
@@ -1995,6 +1995,10 @@ evidence-backed diagnosis — in three added lines of code.</p>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

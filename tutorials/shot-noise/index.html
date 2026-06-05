@@ -1616,7 +1616,7 @@ cut more than 2 of the 4 edges. Increasing iterations does not help.</p>
 <p class="admonition-title">The physics of finite sampling</p>
 <p>An expectation value estimated from <em>S</em> shots has a statistical variance
 bounded below by:</p>
-<p>$$\text{Var}[\hat{C}] \geq \frac{1}{S}$$</p>
+<div class="arithmatex">\[\text{Var}[\hat{C}] \geq \frac{1}{S}\]</div>
 <p>This is the <strong>shot noise floor</strong> — irreducible variance from finite
 sampling, regardless of how good your circuit or optimizer is.</p>
 <p>If the variance of the cost trajectory across your optimization run is
@@ -1625,7 +1625,7 @@ floor. The optimizer has no way to distinguish a good parameter direction
 from a bad one.</p>
 <p>The <strong>signal-to-noise ratio</strong> (SNR) tells you how far above the floor
 your signal sits:</p>
-<p>$$\text{SNR} = \frac{\text{Var}[\text{outcome trajectory}]}{1/S_\text{mean}}$$</p>
+<div class="arithmatex">\[\text{SNR} = \frac{\text{Var}[\text{outcome trajectory}]}{1/S_\text{mean}}\]</div>
 <ul>
 <li><strong>SNR &lt; 1.5</strong> — shot noise dominated. Add more shots.</li>
 <li><strong>SNR 1.5 – 5</strong> — marginal. Consider more shots.</li>
@@ -2016,6 +2016,10 @@ target.</p>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>
