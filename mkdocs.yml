@@ -1,6 +1,9 @@
 site_name: HilbertBench
 site_description: Non-intrusive diagnostic framework for quantum machine learning
 site_author: HilbertBench Contributors
+site_url: https://mamuncseru.github.io/hilbertbench/
+repo_url: https://github.com/mamuncseru/hilbertbench
+repo_name: mamuncseru/hilbertbench
 
 theme:
   name: material
