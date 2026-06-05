@@ -610,6 +610,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="expressibility-vs-trainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · Expressibility vs Trainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hardware-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · How Hardware Noise Degrades Your Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1224,9 +1280,9 @@
 
 
 <h1 id="tutorials">Tutorials<a class="headerlink" href="#tutorials" title="Permanent link">&para;</a></h1>
-<p>Each tutorial takes a real quantum ML failure mode, adds HilbertBench with
-one code change, and walks through the diagnostic output with the science
-behind it.</p>
+<p>Each tutorial takes a real quantum ML failure mode or design question,
+adds HilbertBench with one code change, and walks through the diagnostic
+output with the science behind it.</p>
 <hr />
 <table>
 <thead>
@@ -1250,11 +1306,26 @@ behind it.</p>
 <td>Shot noise floor, SNR, shot budget</td>
 <td>15 min</td>
 </tr>
+<tr>
+<td>03</td>
+<td><a href="expressibility-vs-trainability/">Expressibility vs Trainability</a></td>
+<td>Active Mode, KL expressibility, tradeoff analysis</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="hardware-noise/">How Hardware Noise Degrades Your Results</a></td>
+<td>Circuit fidelity, gate error, noise profile</td>
+<td>20 min</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <p><strong>Prerequisites for all tutorials</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>hilbertbench<span class="o">[</span>qiskit,storage<span class="o">]</span><span class="w"> </span>scipy
+</code></pre></div>
+<p>Tutorial 04 additionally requires:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>qiskit-aer
 </code></pre></div>
 <p>Python 3.10+, Qiskit 1.0+.</p>
 

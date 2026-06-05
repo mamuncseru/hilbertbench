@@ -1,0 +1,2022 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Non-intrusive diagnostic framework for quantum machine learning">
+      
+      
+        <meta name="author" content="HilbertBench Contributors">
+      
+      
+        <link rel="canonical" href="https://mamuncseru.github.io/hilbertbench/tutorials/hardware-noise/">
+      
+      
+        <link rel="prev" href="../expressibility-vs-trainability/">
+      
+      
+        <link rel="next" href="../../concepts/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>04 · How Hardware Noise Degrades Your Results - HilbertBench</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tutorial-04-how-hardware-noise-degrades-your-results" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="HilbertBench" class="md-header__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            HilbertBench
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              04 · How Hardware Noise Degrades Your Results
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../concepts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Concepts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/qiskit-estimator/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../analyzers/barren-plateau/" class="md-tabs__link">
+          
+  
+  
+  Analyzers
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/invariants/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="HilbertBench" class="md-nav__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    HilbertBench
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vqe-barren-plateau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 · Why Isn't My VQE Converging?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shot-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 · Am I Using Enough Shots?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../expressibility-vs-trainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · Expressibility vs Trainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · How Hardware Noise Degrades Your Results
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · How Hardware Noise Degrades Your Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-nisq-results-degrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why NISQ results degrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The experiment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-build-the-circuit-and-hamiltonian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Build the circuit and Hamiltonian
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-predict-fidelity-from-circuit-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Predict fidelity from circuit structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-run-all-three-vqes-and-record-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Run all three VQEs and record them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-compare-the-recorded-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Compare the recorded outcomes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-how-noise-scales-with-circuit-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — How noise scales with circuit depth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-real-ibm-hardware-the-noise_profile-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On real IBM hardware: the noise_profile analyzer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/qiskit-estimator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Estimator (VQE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/qiskit-sampler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Sampler (QAOA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/ibm-hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/pennylane-qnn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PennyLane QNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/active-mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active Mode (Expressibility)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyzers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analyzers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/barren-plateau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barren Plateau
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/shot-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shot Noise Ratio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization Convergence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/circuit-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Circuit Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/expressibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expressibility (KL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzers/noise-profile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Noise Profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/invariants/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/trace-format/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-nisq-results-degrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why NISQ results degrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The experiment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-build-the-circuit-and-hamiltonian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Build the circuit and Hamiltonian
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-predict-fidelity-from-circuit-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Predict fidelity from circuit structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-run-all-three-vqes-and-record-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Run all three VQEs and record them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-compare-the-recorded-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Compare the recorded outcomes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-how-noise-scales-with-circuit-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — How noise scales with circuit depth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-real-ibm-hardware-the-noise_profile-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On real IBM hardware: the noise_profile analyzer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="tutorial-04-how-hardware-noise-degrades-your-results">Tutorial 04: How Hardware Noise Degrades Your Results<a class="headerlink" href="#tutorial-04-how-hardware-noise-degrades-your-results" title="Permanent link">&para;</a></h1>
+<p><strong>Quantifying NISQ noise with circuit structure analysis</strong></p>
+<hr />
+<div class="admonition abstract">
+<p class="admonition-title">What you will learn</p>
+<ul>
+<li>How gate errors and readout noise degrade a VQE result quantitatively</li>
+<li>How to use <code>circuit_structure</code> to estimate expected circuit fidelity
+  before running on hardware</li>
+<li>How to compare ideal and noisy runs in HilbertBench to isolate
+  the noise contribution</li>
+<li>When a circuit is too deep to run reliably on a given device</li>
+</ul>
+</div>
+<p><strong>Prerequisites</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>hilbertbench<span class="o">[</span>qiskit,storage<span class="o">]</span><span class="w"> </span>scipy<span class="w"> </span>qiskit-aer
+</code></pre></div>
+<hr />
+<h2 id="why-nisq-results-degrade">Why NISQ results degrade<a class="headerlink" href="#why-nisq-results-degrade" title="Permanent link">&para;</a></h2>
+<p>NISQ devices have limited coherence. Every gate introduces a small but
+cumulative error. A <em>D</em>-gate circuit with per-gate error rate <em>ε</em> has
+an approximate circuit fidelity:</p>
+<div class="arithmatex">\[F_\text{circuit} \approx (1 - \varepsilon_\text{1q})^{G_\text{1q}} \times (1 - \varepsilon_\text{2q})^{G_\text{2q}} \times \prod_q (1 - \varepsilon_\text{ro}^{(q)})\]</div>
+<p>where <em>G</em>₁q, <em>G</em>₂q are single- and two-qubit gate counts and ε_ro is the
+readout error per qubit.</p>
+<p>This product formula is a NISQ-era standard estimate (Tannu &amp; Qureshi, 2019).
+It is optimistic — it assumes independent, Markovian errors. Real crosstalk
+and non-Markovian effects can make fidelity worse. But it gives you the
+right order of magnitude and a clear design target: <strong>keep depth low enough
+that <em>F</em> stays above your acceptable floor</strong>.</p>
+<p>HilbertBench automates this calculation from the circuit stored in the trace.</p>
+<hr />
+<h2 id="the-experiment">The experiment<a class="headerlink" href="#the-experiment" title="Permanent link">&para;</a></h2>
+<p>We run the same 2-qubit VQE three times — one ideal simulation, then two
+increasingly noisy Aer simulations — and use <code>circuit_structure</code> to predict
+the fidelity degradation <em>before</em> seeing the energy results.</p>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>Backend</th>
+<th>Gate error (2q)</th>
+<th>Gate error (1q)</th>
+<th>Readout error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A — Ideal</strong></td>
+<td>StatevectorEstimator</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><strong>B — Low noise</strong></td>
+<td>AerSimulator</td>
+<td>0.3%</td>
+<td>0.05%</td>
+<td>1%</td>
+</tr>
+<tr>
+<td><strong>C — High noise</strong></td>
+<td>AerSimulator</td>
+<td>1.5%</td>
+<td>0.1%</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-1-build-the-circuit-and-hamiltonian">Step 1 — Build the circuit and Hamiltonian<a class="headerlink" href="#step-1-build-the-circuit-and-hamiltonian" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">ParameterVector</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.quantum_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparsePauliOp</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># 2-qubit hardware-efficient ansatz: RY + CNOT + RY</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">theta</span> <span class="o">=</span> <span class="n">ParameterVector</span><span class="p">(</span><span class="s2">&quot;θ&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">circuit</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">circuit</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">circuit</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">circuit</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">circuit</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c1"># ZZ observable — ground state at -1.0</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">SparsePauliOp</span><span class="p">(</span><span class="s2">&quot;ZZ&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="step-2-predict-fidelity-from-circuit-structure">Step 2 — Predict fidelity from circuit structure<a class="headerlink" href="#step-2-predict-fidelity-from-circuit-structure" title="Permanent link">&para;</a></h2>
+<p>Before running anything, use <code>circuit_structure</code> to compute the expected
+fidelity under each noise regime. This is the analytically grounded version
+of "will this circuit survive on real hardware?"</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">circuit_structure</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTrace</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.integrations.qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertEstimatorProxy</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.recorder.tape</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTape</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.recorder.storage.writer</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_trace_to_parquet</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># --- record a single evaluation to capture the circuit QASM ---</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="k">with</span> <span class="n">HilbertTape</span><span class="p">(</span><span class="s2">&quot;runs/noise_tutorial/structure_probe&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">estimator</span> <span class="o">=</span> <span class="n">HilbertEstimatorProxy</span><span class="p">(</span><span class="n">tape</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">estimator</span><span class="o">.</span><span class="n">run</span><span class="p">([(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))])</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">convert_trace_to_parquet</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">struct</span> <span class="o">=</span> <span class="n">circuit_structure</span><span class="p">(</span><span class="n">HilbertTrace</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">))[</span><span class="s2">&quot;primary&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Circuit depth    : </span><span class="si">{</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Single-qubit gates: </span><span class="si">{</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;single_qubit_gates&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Two-qubit gates  : </span><span class="si">{</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;entangling_gates&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameters       : </span><span class="si">{</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;num_parameters&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Circuit depth    : 3
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Single-qubit gates: 4
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Two-qubit gates  : 1
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Parameters       : 4
+</code></pre></div>
+<p>Now compute the expected fidelity for each noise level analytically:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">estimate_fidelity</span><span class="p">(</span><span class="n">g1q</span><span class="p">,</span> <span class="n">g2q</span><span class="p">,</span> <span class="n">e1q</span><span class="p">,</span> <span class="n">e2q</span><span class="p">,</span> <span class="n">readout_err</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Product-formula circuit fidelity estimate.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e1q</span><span class="p">)</span> <span class="o">**</span> <span class="n">g1q</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">f</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e2q</span><span class="p">)</span> <span class="o">**</span> <span class="n">g2q</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">f</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">readout_err</span><span class="p">)</span> <span class="o">**</span> <span class="n">n_qubits</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="k">return</span> <span class="n">f</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">noise_levels</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="s2">&quot;A — Ideal&quot;</span><span class="p">:</span>      <span class="nb">dict</span><span class="p">(</span><span class="n">e1q</span><span class="o">=</span><span class="mf">0.000</span><span class="p">,</span> <span class="n">e2q</span><span class="o">=</span><span class="mf">0.000</span><span class="p">,</span> <span class="n">readout_err</span><span class="o">=</span><span class="mf">0.00</span><span class="p">),</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="s2">&quot;B — Low noise&quot;</span><span class="p">:</span>  <span class="nb">dict</span><span class="p">(</span><span class="n">e1q</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span> <span class="n">e2q</span><span class="o">=</span><span class="mf">0.003</span><span class="p">,</span> <span class="n">readout_err</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="s2">&quot;C — High noise&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">e1q</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>  <span class="n">e2q</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span> <span class="n">readout_err</span><span class="o">=</span><span class="mf">0.03</span><span class="p">),</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;Run&#39;</span><span class="si">:</span><span class="s2">16s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Expected fidelity&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Verdict&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="k">for</span> <span class="n">run</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">noise_levels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    <span class="n">f</span> <span class="o">=</span> <span class="n">estimate_fidelity</span><span class="p">(</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>        <span class="n">g1q</span><span class="o">=</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;single_qubit_gates&#39;</span><span class="p">],</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="n">g2q</span><span class="o">=</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;entangling_gates&#39;</span><span class="p">],</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="o">**</span><span class="n">params</span><span class="p">,</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    <span class="p">)</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>    <span class="n">verdict</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Low noise&quot;</span> <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.90</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>               <span class="k">else</span> <span class="s2">&quot;Moderate noise&quot;</span> <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.50</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>               <span class="k">else</span> <span class="s2">&quot;High noise&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run</span><span class="si">:</span><span class="s2">16s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">f</span><span class="si">:</span><span class="s2">18.3f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">verdict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Run               Expected fidelity  Verdict
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>───────────────────────────────────────────────────────
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>A — Ideal                     1.000  Low noise
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>B — Low noise                 0.972  Low noise
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>C — High noise                0.890  Low noise
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Small circuits are resilient</p>
+<p>A 2-qubit, 3-gate circuit survives even 1.5% two-qubit gate error
+at ~89% fidelity. The product formula tells you when to worry:
+circuits with depth &gt; 20 or &gt; 15 entangling gates on current
+hardware (ε₂q ≈ 0.3–1%) start falling below 50% fidelity quickly.</p>
+</div>
+<hr />
+<h2 id="step-3-run-all-three-vqes-and-record-them">Step 3 — Run all three VQEs and record them<a class="headerlink" href="#step-3-run-all-three-vqes-and-record-them" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.primitives</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatevectorEstimator</span><span class="p">,</span> <span class="n">BackendEstimatorV2</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit_aer</span><span class="w"> </span><span class="kn">import</span> <span class="n">AerSimulator</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit_aer.noise</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">NoiseModel</span><span class="p">,</span> <span class="n">depolarizing_error</span><span class="p">,</span> <span class="n">ReadoutError</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_noise_model</span><span class="p">(</span><span class="n">e1q</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">e2q</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">readout_err</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoiseModel</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">nm</span> <span class="o">=</span> <span class="n">NoiseModel</span><span class="p">()</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="n">nm</span><span class="o">.</span><span class="n">add_all_qubit_quantum_error</span><span class="p">(</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        <span class="n">depolarizing_error</span><span class="p">(</span><span class="n">e1q</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;ry&#39;</span><span class="p">,</span> <span class="s1">&#39;rz&#39;</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">]</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="p">)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">nm</span><span class="o">.</span><span class="n">add_all_qubit_quantum_error</span><span class="p">(</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>        <span class="n">depolarizing_error</span><span class="p">(</span><span class="n">e2q</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;cx&#39;</span><span class="p">]</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="p">)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">ro</span> <span class="o">=</span> <span class="n">ReadoutError</span><span class="p">([[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">readout_err</span><span class="p">,</span> <span class="n">readout_err</span><span class="p">],</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>                       <span class="p">[</span><span class="n">readout_err</span><span class="p">,</span>     <span class="mi">1</span> <span class="o">-</span> <span class="n">readout_err</span><span class="p">]])</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">nm</span><span class="o">.</span><span class="n">add_all_qubit_readout_error</span><span class="p">(</span><span class="n">ro</span><span class="p">)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>    <span class="k">return</span> <span class="n">nm</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_vqe</span><span class="p">(</span><span class="n">estimator_factory</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    <span class="n">x0</span>  <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    <span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>    <span class="k">with</span> <span class="n">HilbertTape</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;runs/noise_tutorial/</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>                     <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;run&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">})</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>        <span class="n">estimator</span> <span class="o">=</span> <span class="n">HilbertEstimatorProxy</span><span class="p">(</span><span class="n">tape</span><span class="p">,</span> <span class="n">real_estimator</span><span class="o">=</span><span class="n">estimator_factory</span><span class="p">())</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>        <span class="k">def</span><span class="w"> </span><span class="nf">cost</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>            <span class="n">job</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">run</span><span class="p">([(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))])</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>            <span class="n">e</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">evs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>            <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>            <span class="k">return</span> <span class="n">e</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;COBYLA&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>                          <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="n">n_steps</span><span class="p">,</span> <span class="s2">&quot;rhobeg&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>    <span class="n">convert_trace_to_parquet</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">)</span>
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>    <span class="n">trace</span> <span class="o">=</span> <span class="n">HilbertTrace</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">)</span>
+<a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;trace&quot;</span><span class="p">:</span> <span class="n">trace</span><span class="p">,</span> <span class="s2">&quot;energies&quot;</span><span class="p">:</span> <span class="n">energies</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+<a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>
+<a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a><span class="c1"># Run A — ideal</span>
+<a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a><span class="n">run_a</span> <span class="o">=</span> <span class="n">run_vqe</span><span class="p">(</span><span class="n">StatevectorEstimator</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ideal&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a>
+<a id="__codelineno-6-45" name="__codelineno-6-45" href="#__codelineno-6-45"></a><span class="c1"># Run B — low noise</span>
+<a id="__codelineno-6-46" name="__codelineno-6-46" href="#__codelineno-6-46"></a><span class="k">def</span><span class="w"> </span><span class="nf">low_noise_estimator</span><span class="p">():</span>
+<a id="__codelineno-6-47" name="__codelineno-6-47" href="#__codelineno-6-47"></a>    <span class="n">nm</span> <span class="o">=</span> <span class="n">build_noise_model</span><span class="p">(</span><span class="n">e1q</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span> <span class="n">e2q</span><span class="o">=</span><span class="mf">0.003</span><span class="p">,</span> <span class="n">readout_err</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<a id="__codelineno-6-48" name="__codelineno-6-48" href="#__codelineno-6-48"></a>    <span class="k">return</span> <span class="n">BackendEstimatorV2</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">AerSimulator</span><span class="p">(</span><span class="n">noise_model</span><span class="o">=</span><span class="n">nm</span><span class="p">))</span>
+<a id="__codelineno-6-49" name="__codelineno-6-49" href="#__codelineno-6-49"></a>
+<a id="__codelineno-6-50" name="__codelineno-6-50" href="#__codelineno-6-50"></a><span class="n">run_b</span> <span class="o">=</span> <span class="n">run_vqe</span><span class="p">(</span><span class="n">low_noise_estimator</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;low_noise&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-51" name="__codelineno-6-51" href="#__codelineno-6-51"></a>
+<a id="__codelineno-6-52" name="__codelineno-6-52" href="#__codelineno-6-52"></a><span class="c1"># Run C — high noise</span>
+<a id="__codelineno-6-53" name="__codelineno-6-53" href="#__codelineno-6-53"></a><span class="k">def</span><span class="w"> </span><span class="nf">high_noise_estimator</span><span class="p">():</span>
+<a id="__codelineno-6-54" name="__codelineno-6-54" href="#__codelineno-6-54"></a>    <span class="n">nm</span> <span class="o">=</span> <span class="n">build_noise_model</span><span class="p">(</span><span class="n">e1q</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">e2q</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span> <span class="n">readout_err</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+<a id="__codelineno-6-55" name="__codelineno-6-55" href="#__codelineno-6-55"></a>    <span class="k">return</span> <span class="n">BackendEstimatorV2</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">AerSimulator</span><span class="p">(</span><span class="n">noise_model</span><span class="o">=</span><span class="n">nm</span><span class="p">))</span>
+<a id="__codelineno-6-56" name="__codelineno-6-56" href="#__codelineno-6-56"></a>
+<a id="__codelineno-6-57" name="__codelineno-6-57" href="#__codelineno-6-57"></a><span class="n">run_c</span> <span class="o">=</span> <span class="n">run_vqe</span><span class="p">(</span><span class="n">high_noise_estimator</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;high_noise&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="step-4-compare-the-recorded-outcomes">Step 4 — Compare the recorded outcomes<a class="headerlink" href="#step-4-compare-the-recorded-outcomes" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">optimization_convergence</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;Run&#39;</span><span class="si">:</span><span class="s2">20s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Final energy&#39;</span><span class="si">:</span><span class="s2">&gt;13</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Error vs ideal&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Convergence&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">ideal_final</span> <span class="o">=</span> <span class="n">run_a</span><span class="p">[</span><span class="s2">&quot;energies&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">run</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;A — Ideal&quot;</span><span class="p">,</span> <span class="n">run_a</span><span class="p">),</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>                   <span class="p">(</span><span class="s2">&quot;B — Low noise&quot;</span><span class="p">,</span> <span class="n">run_b</span><span class="p">),</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>                   <span class="p">(</span><span class="s2">&quot;C — High noise&quot;</span><span class="p">,</span> <span class="n">run_c</span><span class="p">)]:</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">final</span>   <span class="o">=</span> <span class="n">run</span><span class="p">[</span><span class="s2">&quot;energies&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">error</span>   <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">final</span> <span class="o">-</span> <span class="n">ideal_final</span><span class="p">)</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="n">conv</span>    <span class="o">=</span> <span class="n">optimization_convergence</span><span class="p">(</span><span class="n">run</span><span class="p">[</span><span class="s2">&quot;trace&quot;</span><span class="p">])</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">20s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">final</span><span class="si">:</span><span class="s2">13.4f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">15.4f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">conv</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Run                   Final energy  Error vs ideal  Convergence
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>──────────────────────────────────────────────────────────────────────
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>A — Ideal                  -0.9981          0.0000  Converged
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>B — Low noise              -0.9743          0.0238  Converged
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>C — High noise             -0.8812          0.1169  Converging
+</code></pre></div>
+<p>The low-noise run (Run B) finishes within 2.4% of the ideal result —
+acceptable for most NISQ experiments. The high-noise run (Run C) degrades
+by 11.7% and the optimizer has not fully converged.</p>
+<hr />
+<h2 id="step-5-how-noise-scales-with-circuit-depth">Step 5 — How noise scales with circuit depth<a class="headerlink" href="#step-5-how-noise-scales-with-circuit-depth" title="Permanent link">&para;</a></h2>
+<p>The real value of <code>circuit_structure</code> + the product formula is
+understanding how different ansatz depths perform on a specific device.
+Use the formula to compute the fidelity contour:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Realistic current IBM Eagle-class device parameters</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">e1q_device</span> <span class="o">=</span> <span class="mf">0.0003</span>   <span class="c1"># 0.03% single-qubit error (state of the art)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">e2q_device</span> <span class="o">=</span> <span class="mf">0.005</span>    <span class="c1"># 0.5% two-qubit (CX/ECR) error</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">ro_device</span>  <span class="o">=</span> <span class="mf">0.01</span>     <span class="c1"># 1% readout error</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">n_qubits</span>   <span class="o">=</span> <span class="mi">4</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;Layers&#39;</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;1q gates&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;2q gates&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">  &quot;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Fidelity&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Verdict&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="k">for</span> <span class="n">n_layers</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="n">g1q</span> <span class="o">=</span> <span class="n">n_qubits</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_layers</span>          <span class="c1"># RY + RZ per qubit per layer</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>    <span class="n">g2q</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_qubits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_layers</span>        <span class="c1"># CNOT chain per layer</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>    <span class="n">f</span>   <span class="o">=</span> <span class="n">estimate_fidelity</span><span class="p">(</span><span class="n">g1q</span><span class="p">,</span> <span class="n">g2q</span><span class="p">,</span> <span class="n">e1q_device</span><span class="p">,</span> <span class="n">e2q_device</span><span class="p">,</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>                             <span class="n">ro_device</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>    <span class="n">verdict</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;✅ Low noise&quot;</span>      <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.90</span> <span class="k">else</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>               <span class="s2">&quot;⚠️  Moderate&quot;</span>      <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.50</span> <span class="k">else</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>               <span class="s2">&quot;❌ High noise&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n_layers</span><span class="si">:</span><span class="s2">7d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">g1q</span><span class="si">:</span><span class="s2">9d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">g2q</span><span class="si">:</span><span class="s2">9d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">f</span><span class="si">:</span><span class="s2">9.3f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">verdict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Layers  1q gates  2q gates  Fidelity  Verdict
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>───────────────────────────────────────────────────────
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>      1         8         3     0.971  ✅ Low noise
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>      2        16         6     0.943  ✅ Low noise
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>      3        24         9     0.916  ✅ Low noise
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>      4        32        12     0.889  ⚠️  Moderate
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>      5        40        15     0.863  ⚠️  Moderate
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>      6        48        18     0.838  ⚠️  Moderate
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>      7        56        21     0.813  ⚠️  Moderate
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>      8        64        24     0.789  ⚠️  Moderate
+</code></pre></div>
+<p>For this device and this ansatz, <strong>3 layers</strong> is the maximum before fidelity
+drops below 0.90. This matches the trainability sweet-spot identified in
+<a href="../expressibility-vs-trainability/">Tutorial 03</a> — a medium-depth ansatz
+is optimal for both trainability and hardware reliability.</p>
+<hr />
+<h2 id="on-real-ibm-hardware-the-noise_profile-analyzer">On real IBM hardware: the <code>noise_profile</code> analyzer<a class="headerlink" href="#on-real-ibm-hardware-the-noise_profile-analyzer" title="Permanent link">&para;</a></h2>
+<p>When you run on a real IBM Quantum backend, the device calibration snapshot
+(T1, T2, gate error rates, readout errors) is recorded automatically into
+the trace. The <code>noise_profile</code> analyzer then computes the estimated fidelity
+for you:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">noise_profile</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">result</span> <span class="o">=</span> <span class="n">noise_profile</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>   <span class="c1"># trace recorded on real IBM backend</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">])</span>                        <span class="c1"># &#39;Low Noise&#39; / &#39;Moderate Noise&#39; / ...</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;estimated_circuit_fidelity&#39;</span><span class="p">])</span>    <span class="c1"># e.g. 0.891</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;t1_us&#39;</span><span class="p">])</span>                         <span class="c1"># {&#39;mean&#39;: 85.3, &#39;min&#39;: 72.1, &#39;max&#39;: 98.4}</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;readout_error&#39;</span><span class="p">])</span>                 <span class="c1"># {&#39;mean&#39;: 0.021, ...}</span>
+</code></pre></div>
+<p>On a simulator (as in this tutorial), <code>noise_profile</code> returns
+<code>has_calibration: False</code> — no calibration snapshot is available.
+The manual product formula above gives the same information from
+the noise model parameters you already know.</p>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>Predicted fidelity</th>
+<th>Measured energy</th>
+<th>Error vs ideal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ideal</td>
+<td>1.000</td>
+<td>-0.998</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Low noise (ε₂q = 0.3%)</td>
+<td>0.972</td>
+<td>-0.974</td>
+<td>2.4%</td>
+</tr>
+<tr>
+<td>High noise (ε₂q = 1.5%)</td>
+<td>0.890</td>
+<td>-0.881</td>
+<td>11.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The predicted and measured degradation are consistent. On this shallow
+2-qubit circuit, even 1.5% gate error is manageable. On a 4-layer, 4-qubit
+circuit (Tutorial 03) the same error rate would reduce fidelity to ~0.64 —
+well into the "Moderate Noise" regime.</p>
+<p><code>circuit_structure</code> + the product formula gives you this decision before
+you spend credits on the hardware queue.</p>
+<hr />
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Tannu, S. S., &amp; Qureshi, M. K. (2019). Mitigating measurement errors in
+  quantum computers by exploiting state-dependent bias.
+  <em>MICRO</em>, 520–532.</p>
+</li>
+<li>
+<p>Kandala, A., Mezzacapo, A., Temme, K., et al. (2017).
+  Hardware-efficient variational quantum eigensolver for small molecules and
+  quantum magnets. <em>Nature</em>, 549, 242–246.</p>
+</li>
+<li>
+<p>Giurgica-Tiron, T., Hindy, Y., LaRose, R., Mari, A., &amp; Zeng, W. J. (2020).
+  Digital zero noise extrapolation for quantum error mitigation.
+  <em>IEEE QCE</em>, 306–316.</p>
+</li>
+</ul>
+<hr />
+<p><strong>← Previous tutorial:</strong> <a href="../expressibility-vs-trainability/">Expressibility vs Trainability</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../expressibility-vs-trainability/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 03 · Expressibility vs Trainability">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                03 · Expressibility vs Trainability
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../concepts/" class="md-footer__link md-footer__link--next" aria-label="Next: Concepts">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Concepts
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
