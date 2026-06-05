@@ -34,7 +34,7 @@ import numpy as np
 
 # import hilbertbench modules
 #
-from hilbertbench.analysis._util import TraceLike, as_trace
+from hilbertbench.analysis._util import TraceLike, as_trace, bootstrap_ci
 
 #------------------------------------------------------------------------------
 #
@@ -60,6 +60,9 @@ DEFAULT_PLATEAU_THRESHOLD = 0.005
 def detect_barren_plateau(
     trace: TraceLike,
     threshold: float = DEFAULT_PLATEAU_THRESHOLD,
+    n_boot: int = 1000,
+    ci: float = 0.95,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """
     function: detect_barren_plateau
@@ -68,21 +71,29 @@ def detect_barren_plateau(
      trace:     a HilbertTrace or run-directory path
      threshold: variance below this value is classified as a barren
                 plateau (default: DEFAULT_PLATEAU_THRESHOLD)
+     n_boot:    bootstrap resamples for the variance CI (0 disables)
+     ci:        confidence level for the interval (default 0.95)
+     seed:      RNG seed for the bootstrap
 
     return:
      a dict with keys:
-      status           'Trainable' | 'Barren Plateau Detected'
-                       | 'Insufficient Data'
-      variance         variance of the outcome distribution, or None
-      std_dev          standard deviation, or None
-      num_evaluations  number of numeric outcome values considered
-      threshold        the threshold used for classification
+      status             'Trainable' | 'Barren Plateau Detected'
+                         | 'Insufficient Data'
+      variance           variance of the outcome distribution, or None
+      std_dev            standard deviation, or None
+      num_evaluations    number of numeric outcome values considered
+      threshold          the threshold used for classification
+      variance_ci        [low, high] bootstrap CI on the variance
+      confidence_level   the CI level used (e.g. 0.95)
+      verdict_confidence 'high' if the CI is wholly one side of the
+                         threshold, 'low' if it straddles it, else None
 
     description:
-     Computes the variance of all numeric execution outcomes in the
-     trace and classifies ansatz trainability. A variance below the
-     threshold signals exponential concentration of the gradient
-     landscape (a barren plateau).
+     Computes the variance of all numeric execution outcomes and
+     classifies ansatz trainability. A bootstrap confidence interval is
+     attached to the variance, and the verdict confidence is reported
+     as low when that interval straddles the decision threshold —
+     transparency over definitive attribution (proposal Section 2.6).
     """
 
     # resolve the trace object
@@ -97,11 +108,14 @@ def detect_barren_plateau(
     #
     if outcomes.size == 0:
         return {
-            "status":          "Insufficient Data",
-            "variance":        None,
-            "std_dev":         None,
-            "num_evaluations": 0,
-            "threshold":       threshold,
+            "status":             "Insufficient Data",
+            "variance":           None,
+            "std_dev":            None,
+            "num_evaluations":    0,
+            "threshold":          threshold,
+            "variance_ci":        [None, None],
+            "confidence_level":   ci,
+            "verdict_confidence": None,
         }
 
     # compute variance and classify
@@ -113,14 +127,28 @@ def detect_barren_plateau(
         else "Barren Plateau Detected"
     )
 
+    # bootstrap a confidence interval on the variance
+    #
+    low, high = bootstrap_ci(outcomes, np.var, n_boot=n_boot, ci=ci, seed=seed)
+
+    # report verdict confidence: low if the CI straddles the threshold
+    #
+    verdict_confidence = None
+    if low is not None and high is not None:
+        straddles = low < threshold < high
+        verdict_confidence = "low" if straddles else "high"
+
     # exit gracefully
     #
     return {
-        "status":          status,
-        "variance":        variance,
-        "std_dev":         float(np.std(outcomes)),
-        "num_evaluations": int(outcomes.size),
-        "threshold":       threshold,
+        "status":             status,
+        "variance":           variance,
+        "std_dev":            float(np.std(outcomes)),
+        "num_evaluations":    int(outcomes.size),
+        "threshold":          threshold,
+        "variance_ci":        [low, high],
+        "confidence_level":   ci,
+        "verdict_confidence": verdict_confidence,
     }
 #
 # end of function

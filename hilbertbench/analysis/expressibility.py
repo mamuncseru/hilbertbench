@@ -42,7 +42,7 @@ import numpy as np
 
 # import hilbertbench modules
 #
-from hilbertbench.analysis._util import TraceLike, as_trace
+from hilbertbench.analysis._util import TraceLike, as_trace, bootstrap_ci
 
 #------------------------------------------------------------------------------
 #
@@ -146,6 +146,8 @@ def kl_expressibility(
     num_bins: int = 75,
     max_pairs: int = 5000,
     seed: Optional[int] = None,
+    n_boot: int = 500,
+    ci: float = 0.95,
 ) -> dict[str, Any]:
     """
     function: kl_expressibility
@@ -188,10 +190,12 @@ def kl_expressibility(
             "status": (
                 "Requires Active Mode trace (mode != 'active')"
             ),
-            "kl_divergence": None,
-            "num_states":    0,
-            "num_pairs":     0,
-            "num_qubits":    None,
+            "kl_divergence":    None,
+            "num_states":       0,
+            "num_pairs":        0,
+            "num_qubits":       None,
+            "kl_ci":            [None, None],
+            "confidence_level": ci,
         }
 
     # collect statevectors from all completed spans
@@ -209,10 +213,12 @@ def kl_expressibility(
             "status": (
                 "Insufficient Data (need >= 2 statevectors)"
             ),
-            "kl_divergence": None,
-            "num_states":    len(states),
-            "num_pairs":     0,
-            "num_qubits":    None,
+            "kl_divergence":    None,
+            "num_states":       len(states),
+            "num_pairs":        0,
+            "num_qubits":       None,
+            "kl_ci":            [None, None],
+            "confidence_level": ci,
         }
 
     # infer qubit count from the statevector dimension
@@ -233,24 +239,25 @@ def kl_expressibility(
         overlap = np.vdot(states[i], states[j])
         fidelities[k] = float(np.abs(overlap) ** 2)
 
-    # histogram the empirical fidelity distribution
+    # precompute the Haar reference once for the shared bin edges
     #
     bin_edges = np.linspace(0.0, 1.0, num_bins + 1)
-    p_ansatz, _ = np.histogram(
-        fidelities, bins=bin_edges, density=False
-    )
-    p_ansatz = p_ansatz / np.sum(p_ansatz)
-
-    # compute Haar reference probabilities for the same bins
-    #
     p_haar = _haar_probabilities(bin_edges, dim)
-
-    # compute KL divergence with epsilon smoothing to avoid log(0)
-    #
     eps = 1e-10
-    p_a = np.where(p_ansatz == 0, eps, p_ansatz)
     p_h = np.where(p_haar == 0, eps, p_haar)
-    kl = float(np.sum(p_a * np.log(p_a / p_h)))
+
+    # KL of an empirical fidelity sample against the Haar reference
+    #
+    def kl_of(fids: np.ndarray) -> float:
+        p, _ = np.histogram(fids, bins=bin_edges, density=False)
+        p = p / np.sum(p)
+        p_a = np.where(p == 0, eps, p)
+        return float(np.sum(p_a * np.log(p_a / p_h)))
+
+    # point estimate and bootstrap confidence interval
+    #
+    kl = kl_of(fidelities)
+    low, high = bootstrap_ci(fidelities, kl_of, n_boot=n_boot, ci=ci, seed=seed)
 
     # classify expressibility by KL divergence
     #
@@ -264,11 +271,13 @@ def kl_expressibility(
     # exit gracefully
     #
     return {
-        "status":        status,
-        "kl_divergence": kl,
-        "num_states":    n,
-        "num_pairs":     pairs,
-        "num_qubits":    num_qubits,
+        "status":           status,
+        "kl_divergence":    kl,
+        "num_states":       n,
+        "num_pairs":        pairs,
+        "num_qubits":       num_qubits,
+        "kl_ci":            [low, high],
+        "confidence_level": ci,
     }
 #
 # end of function

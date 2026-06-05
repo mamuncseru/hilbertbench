@@ -33,6 +33,7 @@ from hilbertbench.analysis._util import TraceLike, as_trace
 from hilbertbench.analysis.circuit import circuit_structure
 from hilbertbench.analysis.expressibility import kl_expressibility
 from hilbertbench.analysis.measurement import shot_noise_ratio
+from hilbertbench.analysis.noise import noise_profile
 from hilbertbench.analysis.optimization import optimization_convergence
 from hilbertbench.analysis.trainability import detect_barren_plateau
 
@@ -52,6 +53,7 @@ __all__ = [
     "optimization_convergence",
     "circuit_structure",
     "kl_expressibility",
+    "noise_profile",
     "summary",
 ]
 
@@ -94,6 +96,7 @@ def summary(trace: TraceLike) -> dict[str, Any]:
         "measurement":  shot_noise_ratio(t),
         "optimization": optimization_convergence(t),
         "circuit":      circuit_structure(t),
+        "noise":        noise_profile(t),
     }
 #
 # end of function

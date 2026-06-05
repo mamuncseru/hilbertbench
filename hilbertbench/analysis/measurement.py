@@ -33,7 +33,7 @@ import numpy as np
 
 # import hilbertbench modules
 #
-from hilbertbench.analysis._util import TraceLike, as_trace
+from hilbertbench.analysis._util import TraceLike, as_trace, bootstrap_ci
 
 #------------------------------------------------------------------------------
 #
@@ -84,6 +84,9 @@ def _collect_shots(trace) -> list[int]:
 def shot_noise_ratio(
     trace: TraceLike,
     default_shots: Optional[int] = None,
+    n_boot: int = 1000,
+    ci: float = 0.95,
+    seed: Optional[int] = None,
 ) -> dict[str, Any]:
     """
     function: shot_noise_ratio
@@ -124,17 +127,22 @@ def shot_noise_ratio(
     #
     if outcomes.size < 2:
         return {
-            "status":             "Insufficient Data",
-            "empirical_variance": None,
-            "theoretical_floor":  None,
-            "estimated_snr":      None,
-            "mean_shots":         None,
-            "num_evaluations":    int(outcomes.size),
+            "status":                "Insufficient Data",
+            "empirical_variance":    None,
+            "empirical_variance_ci": [None, None],
+            "theoretical_floor":     None,
+            "estimated_snr":         None,
+            "mean_shots":            None,
+            "num_evaluations":       int(outcomes.size),
+            "confidence_level":      ci,
         }
 
-    # compute empirical variance of the outcome trajectory
+    # compute empirical variance of the outcome trajectory with a CI
     #
     empirical_variance = float(np.var(outcomes))
+    var_low, var_high = bootstrap_ci(
+        outcomes, np.var, n_boot=n_boot, ci=ci, seed=seed
+    )
 
     # collect recorded shot counts; apply default when provided
     #
@@ -150,11 +158,13 @@ def shot_noise_ratio(
                 "Shot count not recorded "
                 "(pass default_shots to estimate SNR)"
             ),
-            "empirical_variance": empirical_variance,
-            "theoretical_floor":  None,
-            "estimated_snr":      None,
-            "mean_shots":         None,
-            "num_evaluations":    int(outcomes.size),
+            "empirical_variance":    empirical_variance,
+            "empirical_variance_ci": [var_low, var_high],
+            "theoretical_floor":     None,
+            "estimated_snr":         None,
+            "mean_shots":            None,
+            "num_evaluations":       int(outcomes.size),
+            "confidence_level":      ci,
         }
 
     # compute the shot-noise floor and signal-to-noise ratio
@@ -179,12 +189,14 @@ def shot_noise_ratio(
     # exit gracefully
     #
     return {
-        "status":             status,
-        "empirical_variance": empirical_variance,
-        "theoretical_floor":  theoretical_floor,
-        "estimated_snr":      float(snr),
-        "mean_shots":         mean_shots,
-        "num_evaluations":    int(outcomes.size),
+        "status":                status,
+        "empirical_variance":    empirical_variance,
+        "empirical_variance_ci": [var_low, var_high],
+        "theoretical_floor":     theoretical_floor,
+        "estimated_snr":         float(snr),
+        "mean_shots":            mean_shots,
+        "num_evaluations":       int(outcomes.size),
+        "confidence_level":      ci,
     }
 #
 # end of function
