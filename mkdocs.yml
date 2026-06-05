@@ -7,6 +7,7 @@ repo_name: mamuncseru/hilbertbench
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - scheme: default
       primary: indigo
@@ -43,6 +44,7 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
+  - md_in_html
   - toc:
       permalink: true
 
@@ -52,6 +54,10 @@ plugins:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - Tutorials:
+    - Overview: tutorials/index.md
+    - "01 · Why Isn't My VQE Converging?": tutorials/vqe-barren-plateau.md
+    - "02 · Am I Using Enough Shots?": tutorials/shot-noise.md
   - Concepts: concepts.md
   - Guides:
     - Qiskit Estimator (VQE): guides/qiskit-estimator.md

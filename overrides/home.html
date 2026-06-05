@@ -1,0 +1,686 @@
+{% extends "main.html" %}
+
+{% block content %}
+<style>
+  /* ── Remove MkDocs container constraints on the home page ── */
+  .md-content__inner {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     HERO
+  ──────────────────────────────────────────────────────────── */
+  .hb-hero {
+    background: linear-gradient(135deg, #080818 0%, #13105c 40%, #2d1b69 75%, #1a0533 100%);
+    color: #fff;
+    padding: 5.5rem 2rem 5rem;
+    overflow: hidden;
+    position: relative;
+  }
+  .hb-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 65% 50%, rgba(124,77,255,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hb-hero__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 820px) {
+    .hb-hero__inner { grid-template-columns: 1fr; }
+    .hb-hero__code  { display: none; }
+  }
+  .hb-hero__badge {
+    display: inline-block;
+    background: rgba(124,77,255,.25);
+    border: 1px solid rgba(124,77,255,.5);
+    border-radius: 999px;
+    padding: .25rem .85rem;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #c4b5fd;
+    margin-bottom: 1.4rem;
+  }
+  .hb-hero h1 {
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 1.2rem;
+    color: #fff;
+  }
+  .hb-hero h1 em {
+    font-style: normal;
+    color: #a78bfa;
+  }
+  .hb-hero__sub {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #c4b5fd;
+    margin: 0 0 2.2rem;
+    max-width: 480px;
+  }
+  .hb-hero__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .hb-btn {
+    display: inline-block;
+    padding: .75rem 1.75rem;
+    border-radius: 8px;
+    font-size: .95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .hb-btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .hb-btn--primary {
+    background: #7c3aed;
+    color: #fff !important;
+    box-shadow: 0 4px 20px rgba(124,58,237,.45);
+  }
+  .hb-btn--primary:hover { box-shadow: 0 8px 28px rgba(124,58,237,.6); }
+  .hb-btn--outline {
+    background: transparent;
+    color: #c4b5fd !important;
+    border: 1.5px solid rgba(196,181,253,.45);
+  }
+  .hb-btn--outline:hover { border-color: #c4b5fd; }
+
+  /* macOS-style code window */
+  .hb-window {
+    background: #0f0f1a;
+    border-radius: 14px;
+    box-shadow: 0 32px 64px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.07);
+    overflow: hidden;
+    font-size: .85rem;
+  }
+  .hb-window__bar {
+    background: #1e1e30;
+    padding: .7rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .hb-window__dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .hb-window__dot:nth-child(1) { background: #ff5f57; }
+  .hb-window__dot:nth-child(2) { background: #ffbd2e; }
+  .hb-window__dot:nth-child(3) { background: #28ca41; }
+  .hb-window__title {
+    flex: 1;
+    text-align: center;
+    font-size: .75rem;
+    color: #666;
+    letter-spacing: .04em;
+  }
+  .hb-window pre {
+    margin: 0;
+    padding: 1.4rem 1.6rem 1.6rem;
+    background: transparent !important;
+    color: #cdd6f4;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .hb-window .kw  { color: #cba6f7; }  /* keywords */
+  .hb-window .fn  { color: #89b4fa; }  /* functions */
+  .hb-window .st  { color: #a6e3a1; }  /* strings */
+  .hb-window .cm  { color: #585b70; }  /* comments */
+  .hb-window .hl  { color: #f38ba8; }  /* highlight (the change) */
+  .hb-window .num { color: #fab387; }  /* numbers */
+  .hb-window .add {
+    display: block;
+    background: rgba(166,227,161,.06);
+    border-left: 3px solid #a6e3a1;
+    margin: 0 -1.6rem;
+    padding: 0 1.6rem 0 calc(1.6rem - 3px);
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     SHARED SECTION STYLES
+  ──────────────────────────────────────────────────────────── */
+  .hb-section {
+    padding: 5rem 2rem;
+  }
+  .hb-section--alt {
+    background: var(--md-code-bg-color, #f8f8f8);
+  }
+  .hb-section__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .hb-section__label {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #7c3aed;
+    margin-bottom: .6rem;
+  }
+  .hb-section h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin: 0 0 .75rem;
+    color: var(--md-default-fg-color, #1a1a2e);
+  }
+  .hb-section__desc {
+    font-size: 1.05rem;
+    color: var(--md-default-fg-color--light, #555);
+    max-width: 560px;
+    line-height: 1.7;
+    margin: 0 0 3rem;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     THREE PILLARS
+  ──────────────────────────────────────────────────────────── */
+  .hb-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 720px) { .hb-pillars { grid-template-columns: 1fr; } }
+  .hb-pillar {
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--md-default-fg-color--lightest, #e8e8e8);
+    background: var(--md-default-bg-color, #fff);
+    transition: box-shadow .2s;
+  }
+  .hb-pillar:hover { box-shadow: 0 8px 30px rgba(0,0,0,.1); }
+  .hb-pillar__icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .hb-pillar h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 .5rem;
+    color: var(--md-default-fg-color, #111);
+  }
+  .hb-pillar p {
+    font-size: .92rem;
+    line-height: 1.65;
+    color: var(--md-default-fg-color--light, #555);
+    margin: 0;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     SIX ANALYZERS
+  ──────────────────────────────────────────────────────────── */
+  .hb-analyzers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 860px) { .hb-analyzers-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px)  { .hb-analyzers-grid { grid-template-columns: 1fr; } }
+  .hb-analyzer-card {
+    padding: 1.6rem;
+    border-radius: 12px;
+    background: var(--md-default-bg-color, #fff);
+    border: 1px solid var(--md-default-fg-color--lightest, #e8e8e8);
+    transition: box-shadow .2s, transform .2s;
+  }
+  .hb-analyzer-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,.1);
+    transform: translateY(-3px);
+  }
+  .hb-analyzer-card__icon { font-size: 1.6rem; margin-bottom: .8rem; }
+  .hb-analyzer-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 .4rem;
+    color: var(--md-default-fg-color, #111);
+  }
+  .hb-analyzer-card__desc {
+    font-size: .87rem;
+    line-height: 1.55;
+    color: var(--md-default-fg-color--light, #555);
+    margin: 0 0 .9rem;
+  }
+  .hb-analyzer-card__verdict {
+    font-family: monospace;
+    font-size: .78rem;
+    background: var(--md-code-bg-color, #f5f5f5);
+    padding: .35rem .7rem;
+    border-radius: 6px;
+    color: #7c3aed;
+    display: inline-block;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     TUTORIALS TEASER
+  ──────────────────────────────────────────────────────────── */
+  .hb-tut-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 680px) { .hb-tut-grid { grid-template-columns: 1fr; } }
+  .hb-tut-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--md-default-fg-color--lightest, #e8e8e8);
+    background: var(--md-default-bg-color, #fff);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .hb-tut-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,.12);
+    transform: translateY(-3px);
+    text-decoration: none;
+  }
+  .hb-tut-card__header {
+    padding: 2rem 2rem 1.5rem;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    color: white;
+  }
+  .hb-tut-card__num {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #a5b4fc;
+    margin-bottom: .4rem;
+  }
+  .hb-tut-card__header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+    line-height: 1.35;
+  }
+  .hb-tut-card__body {
+    padding: 1.4rem 2rem 1.8rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+  }
+  .hb-tut-card__desc {
+    font-size: .92rem;
+    line-height: 1.65;
+    color: var(--md-default-fg-color--light, #555);
+    margin: 0;
+    flex: 1;
+  }
+  .hb-tut-card__link {
+    font-size: .88rem;
+    font-weight: 600;
+    color: #7c3aed;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+  }
+  .hb-tut-card__link:hover { text-decoration: underline; }
+  .hb-tut-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .hb-tut-tag {
+    font-size: .72rem;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    background: var(--md-code-bg-color, #f0f0f0);
+    color: var(--md-default-fg-color--light, #555);
+    font-weight: 500;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     QUICK START
+  ──────────────────────────────────────────────────────────── */
+  .hb-quickstart {
+    background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+    color: white;
+    padding: 5rem 2rem;
+  }
+  .hb-quickstart .hb-section__label { color: #a78bfa; }
+  .hb-quickstart h2 { color: #fff; }
+  .hb-quickstart .hb-section__desc { color: #c4b5fd; }
+  .hb-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 860px) { .hb-steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .hb-steps { grid-template-columns: 1fr; } }
+  .hb-step {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    padding: 1.6rem;
+  }
+  .hb-step__num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #a78bfa;
+    line-height: 1;
+    margin-bottom: .6rem;
+  }
+  .hb-step h4 {
+    font-size: .95rem;
+    font-weight: 700;
+    margin: 0 0 .4rem;
+    color: #e2e8f0;
+  }
+  .hb-step p {
+    font-size: .85rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.55;
+  }
+  .hb-step code {
+    font-family: monospace;
+    background: rgba(255,255,255,.1);
+    padding: .1em .35em;
+    border-radius: 4px;
+    font-size: .8rem;
+    color: #a6e3a1;
+  }
+</style>
+
+{# ══════════════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════════════ #}
+<section class="hb-hero">
+  <div class="hb-hero__inner">
+
+    <div class="hb-hero__text">
+      <div class="hb-hero__badge">Quantum ML Diagnostics</div>
+      <h1>Diagnose quantum ML.<br><em>Without changing<br>your code.</em></h1>
+      <p class="hb-hero__sub">
+        Wrap one object. Record every circuit execution.
+        Six built-in analyzers tell you exactly what is going wrong —
+        barren plateaus, shot noise, stalled convergence, and more.
+      </p>
+      <div class="hb-hero__actions">
+        <a href="getting-started/" class="hb-btn hb-btn--primary">Get started →</a>
+        <a href="tutorials/" class="hb-btn hb-btn--outline">View tutorials</a>
+      </div>
+    </div>
+
+    <div class="hb-hero__code">
+      <div class="hb-window">
+        <div class="hb-window__bar">
+          <div class="hb-window__dot"></div>
+          <div class="hb-window__dot"></div>
+          <div class="hb-window__dot"></div>
+          <span class="hb-window__title">vqe_experiment.py</span>
+        </div>
+        <pre><span class="cm"># Before: standard Qiskit VQE</span>
+estimator = <span class="fn">StatevectorEstimator</span>()
+
+<span class="cm"># After: add two imports, wrap one object</span>
+<span class="kw">from</span> hilbertbench.integrations.qiskit <span class="kw">import</span> <span class="fn">HilbertEstimatorProxy</span>
+<span class="kw">from</span> hilbertbench.recorder.tape <span class="kw">import</span> <span class="fn">HilbertTape</span>
+
+<span class="add"><span class="kw">with</span> <span class="fn">HilbertTape</span>(<span class="st">"runs/my_vqe"</span>) <span class="kw">as</span> tape:</span>
+<span class="add">    estimator = <span class="hl">HilbertEstimatorProxy</span>(tape)  <span class="cm"># ← only change</span></span>
+    <span class="cm"># ... your optimizer loop, completely unchanged ...</span>
+
+<span class="cm"># Analyze after the run</span>
+trace = <span class="fn">HilbertTrace</span>(tape.dir_path)
+result = <span class="fn">detect_barren_plateau</span>(trace)
+<span class="cm"># {'status': 'Trainable', 'variance': 0.215, ...}</span></pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{# ══════════════════════════════════════════════════════════════
+   THREE GUARANTEES
+══════════════════════════════════════════════════════════════ #}
+<section class="hb-section">
+  <div class="hb-section__inner">
+    <div class="hb-section__label">Design Principles</div>
+    <h2>Built for scientific reproducibility</h2>
+    <p class="hb-section__desc">
+      Every design decision protects the integrity of your experimental record.
+    </p>
+    <div class="hb-pillars">
+
+      <div class="hb-pillar">
+        <div class="hb-pillar__icon">🔬</div>
+        <h3>Non-intrusive by design</h3>
+        <p>
+          The proxy intercepts results without modifying them.
+          It never re-executes circuits, never changes shot counts,
+          and never injects synthetic jobs into your hardware queue.
+          Your algorithm runs exactly as if HilbertBench were not there.
+        </p>
+      </div>
+
+      <div class="hb-pillar">
+        <div class="hb-pillar__icon">🔒</div>
+        <h3>Cryptographically sealed traces</h3>
+        <p>
+          Every trace is append-only during recording and sealed with
+          a SHA-256 hash on close. Tampering is detectable.
+          Share a run directory with a collaborator and they can verify
+          the evidence has not changed — before or after publication.
+        </p>
+      </div>
+
+      <div class="hb-pillar">
+        <div class="hb-pillar__icon">📊</div>
+        <h3>Evidence, not verdicts</h3>
+        <p>
+          The trace stores raw facts: circuits submitted, parameters bound,
+          outcomes observed. Diagnostic conclusions are computed at read time
+          and never written back. Re-analyze any trace with different
+          thresholds or new algorithms — the evidence is permanent.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{# ══════════════════════════════════════════════════════════════
+   SIX ANALYZERS
+══════════════════════════════════════════════════════════════ #}
+<section class="hb-section hb-section--alt">
+  <div class="hb-section__inner">
+    <div class="hb-section__label">Built-in Diagnostics</div>
+    <h2>Six diagnostic axes. One function call each.</h2>
+    <p class="hb-section__desc">
+      Pass a run directory or a <code>HilbertTrace</code> object.
+      Every analyzer returns a plain dict — compose them freely or run all
+      at once with <code>summary(trace)</code>.
+    </p>
+    <div class="hb-analyzers-grid">
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">⚗️</div>
+        <h3>Barren Plateau</h3>
+        <p class="hb-analyzer-card__desc">
+          Is the cost-landscape variance exponentially vanishing?
+          Detects the signature of untrainable parameterized circuits
+          (McClean et al., 2018).
+        </p>
+        <span class="hb-analyzer-card__verdict">detect_barren_plateau(trace)</span>
+      </div>
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">📡</div>
+        <h3>Shot Noise Ratio</h3>
+        <p class="hb-analyzer-card__desc">
+          Is the optimizer chasing signal or chasing noise?
+          Computes the ratio of empirical outcome variance to the
+          theoretical 1/shots shot-noise floor.
+        </p>
+        <span class="hb-analyzer-card__verdict">shot_noise_ratio(trace)</span>
+      </div>
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">📈</div>
+        <h3>Optimization Convergence</h3>
+        <p class="hb-analyzer-card__desc">
+          Is the parameter trajectory still moving?
+          Tracks the late-to-early movement ratio and the outcome
+          envelope across the full training run.
+        </p>
+        <span class="hb-analyzer-card__verdict">optimization_convergence(trace)</span>
+      </div>
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">🔭</div>
+        <h3>Circuit Structure</h3>
+        <p class="hb-analyzer-card__desc">
+          How deep, how many qubits, what gate composition?
+          Parses the stored OpenQASM to report depth, entangling
+          fraction, and trainable parameter count.
+        </p>
+        <span class="hb-analyzer-card__verdict">circuit_structure(trace)</span>
+      </div>
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">🌐</div>
+        <h3>Expressibility (KL)</h3>
+        <p class="hb-analyzer-card__desc">
+          How uniformly does the ansatz cover Hilbert space?
+          KL divergence of the empirical fidelity distribution against
+          the Haar-random reference (Sim et al., 2019).
+        </p>
+        <span class="hb-analyzer-card__verdict">kl_expressibility(active_trace)</span>
+      </div>
+
+      <div class="hb-analyzer-card">
+        <div class="hb-analyzer-card__icon">⚡</div>
+        <h3>Noise Profile</h3>
+        <p class="hb-analyzer-card__desc">
+          What hardware noise did the run experience?
+          Reads the calibration snapshot (T1, T2, readout error)
+          and estimates the circuit fidelity under the NISQ model.
+        </p>
+        <span class="hb-analyzer-card__verdict">noise_profile(trace)</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{# ══════════════════════════════════════════════════════════════
+   TUTORIALS
+══════════════════════════════════════════════════════════════ #}
+<section class="hb-section">
+  <div class="hb-section__inner">
+    <div class="hb-section__label">Learn by Doing</div>
+    <h2>End-to-end tutorials</h2>
+    <p class="hb-section__desc">
+      Each tutorial takes a real quantum ML failure mode, adds
+      HilbertBench with one code change, and walks through the
+      diagnostic output with the science behind it.
+    </p>
+    <div class="hb-tut-grid">
+
+      <a href="tutorials/vqe-barren-plateau/" class="hb-tut-card">
+        <div class="hb-tut-card__header">
+          <div class="hb-tut-card__num">Tutorial 01</div>
+          <h3>Why Isn't My VQE Converging?<br>Diagnosing Barren Plateaus</h3>
+        </div>
+        <div class="hb-tut-card__body">
+          <p class="hb-tut-card__desc">
+            A 4-qubit hardware-efficient ansatz flatlines after a few
+            optimizer steps. HilbertBench reveals a variance of 0.0007 —
+            a barren plateau. Compare it side-by-side against a
+            shallow trainable circuit.
+          </p>
+          <div class="hb-tut-tags">
+            <span class="hb-tut-tag">VQE</span>
+            <span class="hb-tut-tag">Qiskit</span>
+            <span class="hb-tut-tag">Barren Plateau</span>
+            <span class="hb-tut-tag">20 min</span>
+          </div>
+          <span class="hb-tut-card__link">Read tutorial →</span>
+        </div>
+      </a>
+
+      <a href="tutorials/shot-noise/" class="hb-tut-card">
+        <div class="hb-tut-card__header">
+          <div class="hb-tut-card__num">Tutorial 02</div>
+          <h3>Am I Using Enough Shots?<br>Diagnosing Shot Noise</h3>
+        </div>
+        <div class="hb-tut-card__body">
+          <p class="hb-tut-card__desc">
+            A QAOA optimizer fails to find good solutions with 16 shots.
+            HilbertBench shows SNR = 0.75 — the optimizer is chasing
+            noise, not signal. Increasing to 1024 shots raises SNR
+            to 38.9 and restores convergence.
+          </p>
+          <div class="hb-tut-tags">
+            <span class="hb-tut-tag">QAOA</span>
+            <span class="hb-tut-tag">Qiskit</span>
+            <span class="hb-tut-tag">Shot Noise</span>
+            <span class="hb-tut-tag">15 min</span>
+          </div>
+          <span class="hb-tut-card__link">Read tutorial →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+{# ══════════════════════════════════════════════════════════════
+   QUICK START
+══════════════════════════════════════════════════════════════ #}
+<section class="hb-quickstart">
+  <div class="hb-section__inner">
+    <div class="hb-section__label">Quick Start</div>
+    <h2>Running in under 5 minutes</h2>
+    <p class="hb-section__desc">
+      No restructuring. No new primitives to learn. Just one swap
+      and your existing code is fully instrumented.
+    </p>
+    <div class="hb-steps">
+
+      <div class="hb-step">
+        <div class="hb-step__num">01</div>
+        <h4>Install</h4>
+        <p><code>pip install hilbertbench[qiskit,storage]</code></p>
+      </div>
+
+      <div class="hb-step">
+        <div class="hb-step__num">02</div>
+        <h4>Open a tape</h4>
+        <p>Wrap your script in <code>with HilbertTape("runs/") as tape:</code></p>
+      </div>
+
+      <div class="hb-step">
+        <div class="hb-step__num">03</div>
+        <h4>Swap the proxy</h4>
+        <p>Replace <code>StatevectorEstimator()</code> with <code>HilbertEstimatorProxy(tape)</code></p>
+      </div>
+
+      <div class="hb-step">
+        <div class="hb-step__num">04</div>
+        <h4>Analyze</h4>
+        <p>Call <code>detect_barren_plateau(trace)</code> — or any of the six analyzers</p>
+      </div>
+
+    </div>
+    <a href="getting-started/" class="hb-btn hb-btn--primary">Read the full guide →</a>
+  </div>
+</section>
+{% endblock %}

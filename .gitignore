@@ -80,3 +80,4 @@ hilbertbench/models/*.py
 # Allow versioned model stubs
 !hilbertbench/models/__init__.py
 !hilbertbench/models/v1_0.py
+site/
