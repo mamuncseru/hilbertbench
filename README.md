@@ -112,7 +112,7 @@ report = summary(trace)   # runs all analyzers, returns one dict
 ## Documentation
 
 Full documentation — concepts, guides, analyzer reference:
-**[mamuncseru.github.io/hilbertbench](https://mamuncseru.github.io/hilbertbench/)**
+**[hilbertbench.readthedocs.io](https://hilbertbench.readthedocs.io/)**
 *(or run `mkdocs serve` locally after `pip install -r requirements-docs.txt`)*
 
 ---
