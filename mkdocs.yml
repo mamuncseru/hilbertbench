@@ -1,0 +1,68 @@
+site_name: HilbertBench
+site_description: Non-intrusive diagnostic framework for quantum machine learning
+site_author: HilbertBench Contributors
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - tables
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Concepts: concepts.md
+  - Guides:
+    - Qiskit Estimator (VQE): guides/qiskit-estimator.md
+    - Qiskit Sampler (QAOA): guides/qiskit-sampler.md
+    - IBM Hardware: guides/ibm-hardware.md
+    - PennyLane QNN: guides/pennylane-qnn.md
+    - Active Mode (Expressibility): guides/active-mode.md
+  - Analyzers:
+    - Barren Plateau: analyzers/barren-plateau.md
+    - Shot Noise Ratio: analyzers/shot-noise.md
+    - Optimization Convergence: analyzers/optimization.md
+    - Circuit Structure: analyzers/circuit-structure.md
+    - Expressibility (KL): analyzers/expressibility.md
+    - Noise Profile: analyzers/noise-profile.md
+  - Reference:
+    - Invariants: reference/invariants.md
+    - Trace Format: reference/trace-format.md
