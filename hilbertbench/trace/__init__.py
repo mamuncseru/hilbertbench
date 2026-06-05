@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 #
-# file: hilbertbench/recorder/__init__.py
+# file: hilbertbench/trace/__init__.py
 #
 # revision history:
 #  20260604 (am): cleaned up to project coding standards
 #
-# Public surface of the recorder sub-package.
+# hilbertbench.trace — the unified, public data API for recorded runs.
+#
+#   from hilbertbench.trace import HilbertTrace, SpanView
 #------------------------------------------------------------------------------
 
-# import recorder components
+# import trace components
 #
-from hilbertbench.recorder.tape import HilbertTape, TapeClosedError, SpanHandle
+from hilbertbench.trace.span import SpanView
+from hilbertbench.trace.trace import HilbertTrace
 
 #------------------------------------------------------------------------------
 #
@@ -20,7 +23,7 @@ from hilbertbench.recorder.tape import HilbertTape, TapeClosedError, SpanHandle
 
 # define the public API
 #
-__all__ = ["HilbertTape", "TapeClosedError", "SpanHandle"]
+__all__ = ["HilbertTrace", "SpanView"]
 
 #
 # end of file

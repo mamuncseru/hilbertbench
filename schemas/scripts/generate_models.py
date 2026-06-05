@@ -47,11 +47,12 @@ ENUM_CHECKS = [
     ("span",     "Status",      ["COMPLETED", "FAILED", "PARTIAL", "IN_FLIGHT"]),
 ]
 
+# UPDATED: Removed V10 suffixes
 ROOT_MODELS = [
     ("trace",    "HilbertbenchTraceManifest"),
-    ("span",     "HilbertbenchSpanV10"),
-    ("artifact", "HilbertbenchArtifactMetadataV10"),
-    ("catalog",  "HilbertbenchArtifactCatalogV10"),
+    ("span",     "HilbertbenchSpan"),
+    ("artifact", "HilbertbenchArtifactMetadata"),
+    ("catalog",  "HilbertbenchArtifactCatalog"),
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://hilbertbench.org/schemas/v1.0/catalog.json",
-  "title": "HilbertBench Artifact Catalog v1.0",
+  "title": "HilbertBench Artifact Catalog",
   "description": "The central registry mapping SHA-256 hashes to their artifact metadata records. Ensures O(1) lookups.",
   "type": "object",
   "additionalProperties": false,
@@ -28,13 +28,8 @@
     },
     "artifacts": {
       "type": "object",
-      "description": "A dictionary mapping 64-character SHA-256 hashes to their artifact metadata.",
-      "patternProperties": {
-        "^sha256:[a-f0-9]{64}$": {
-          "$ref": "artifact.json"
-        }
-      },
-      "additionalProperties": false
+      "description": "Keys are sha256:<hash> by convention. Key format and key==artifact_hash integrity enforced by reader/verify.py.",
+      "additionalProperties": { "$ref": "artifact.json" }
     }
   }
 }

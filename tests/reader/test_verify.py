@@ -56,10 +56,11 @@ def test_verify_detects_tampered_artifact(valid_run: Path):
     to make their quantum benchmark look better.
     """
     artifact_dir = valid_run / "artifacts"
-    
-    # Grab the physical QASM file we saved in the fixture
-    artifact_file = next(artifact_dir.iterdir())
-    
+
+    # Artifacts use 2-char sharding: artifacts/<shard>/<hash>.<ext>
+    # iterdir() returns shard *directories*, so we must rglob for the actual file.
+    artifact_file = next(f for f in artifact_dir.rglob("*") if f.is_file())
+
     # Tamper with the physical file!
     artifact_file.write_text("OPENQASM 3.0;\nqubit[2] q;\n// I CHEATED AND REMOVED THE NOISE")
     
@@ -70,8 +71,37 @@ def test_verify_detects_tampered_artifact(valid_run: Path):
 def test_verify_detects_missing_events_file(valid_run: Path):
     """If events.jsonl is deleted, the trace is invalid."""
     (valid_run / "events.jsonl").unlink()
-    
+
     with pytest.raises(TraceValidationError, match="Missing events.jsonl"):
+        verify_trace_directory(valid_run)
+
+
+def test_integrity_seal_present_and_valid(valid_run: Path):
+    """A sealed trace carries an integrity_seal that matches events.jsonl."""
+    trace = json.loads((valid_run / "trace.json").read_text())
+    seal = trace["integrity_seal"]
+    assert seal is not None
+    assert seal["event_stream_checksum"].startswith("sha256:")
+    assert seal["artifact_count"] >= 1
+    # Clean trace verifies (seal check is exercised inside verify_trace_directory)
+    assert verify_trace_directory(valid_run) is True
+
+
+def test_verify_detects_event_stream_tampering(valid_run: Path):
+    """
+    Modifying events.jsonl in a way that still passes causal/reference checks
+    (e.g. flipping a backend_id that no check inspects) must still be caught by
+    the integrity seal's byte-level checksum.
+    """
+    events_file = valid_run / "events.jsonl"
+    lines = events_file.read_text().splitlines()
+
+    span = json.loads(lines[0])
+    span["backend_id"] = "FAKED_BACKEND"  # causally valid, but changes the bytes
+    lines[0] = json.dumps(span)
+    events_file.write_text("\n".join(lines) + "\n")
+
+    with pytest.raises(TraceValidationError, match="checksum mismatch"):
         verify_trace_directory(valid_run)
 
 

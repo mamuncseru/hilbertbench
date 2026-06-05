@@ -20,6 +20,10 @@ dist/
 
 # demo artifacts
 demo_traces/
+runs/
+
+# archived demo directory (kept locally, not tracked)
+old_demo/
 
 # Packaging
 pip-wheel-metadata/

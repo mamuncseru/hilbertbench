@@ -41,7 +41,49 @@ class Event(BaseModel):
     """
 
 
-class HilbertbenchSpanV10(BaseModel):
+class Kind(Enum):
+    execution_outcome = "execution_outcome"
+    parameters = "parameters"
+    observables = "observables"
+    generic_blob = "generic_blob"
+
+
+class Encoding(Enum):
+    json = "json"
+    plaintext = "plaintext"
+
+
+class InlineArtifact(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    kind: Kind
+    """
+    Semantic type. Only per-span, non-structural kinds are valid inline. Circuits and calibration snapshots must remain in the file store.
+    """
+    encoding: Encoding
+    """
+    Serialization format of the data field. Always text-safe for JSONL embedding.
+    """
+    data: str
+    """
+    The artifact content, serialized as a UTF-8 string. For 'json' encoding: a JSON-encoded value (number, array, or object). For 'plaintext': raw text.
+    """
+    size_bytes: Annotated[int, Field(ge=0)]
+    """
+    Byte length of the data string. Allows fast size checks without re-serializing.
+    """
+    created_at: int
+    """
+    UTC nanoseconds when this artifact was recorded.
+    """
+    producer: str | None = None
+    """
+    Framework that serialized the artifact (e.g., 'qiskit', 'pennylane').
+    """
+
+
+class HilbertbenchSpan(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -78,3 +120,7 @@ class HilbertbenchSpanV10(BaseModel):
     """
     events: Annotated[list[Event], Field(min_length=1)]
     tags: dict[str, Any] | None = None
+    inline_artifacts: dict[str, Any] | None = None
+    """
+    Small, per-span artifacts embedded directly in the span record to avoid per-artifact file I/O. Keys are 'sha256:<hex>' content hashes; values are the artifact data and metadata. Use for outcomes, parameters, and observables. Structural artifacts (circuits, calibration) remain in the file store.
+    """

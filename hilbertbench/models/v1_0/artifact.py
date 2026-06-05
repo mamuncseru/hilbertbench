@@ -37,7 +37,7 @@ class Compression(Enum):
     NoneType_None = None
 
 
-class HilbertbenchArtifactMetadataV10(BaseModel):
+class HilbertbenchArtifactMetadata(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )

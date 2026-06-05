@@ -9,28 +9,30 @@ from hilbertbench.models.v1_0.trace import (
     Status as TraceStatus,
 )
 from hilbertbench.models.v1_0.span import (
-    HilbertbenchSpanV10,
+    HilbertbenchSpan,
     Event,
+    InlineArtifact,
     Status as SpanStatus,
 )
 from hilbertbench.models.v1_0.artifact import (
-    HilbertbenchArtifactMetadataV10,
+    HilbertbenchArtifactMetadata,
     Kind,
     Encoding,
     Compression,
 )
 from hilbertbench.models.v1_0.catalog import (
-    HilbertbenchArtifactCatalogV10,
+    HilbertbenchArtifactCatalog,
 )
 
 __all__ = [
     "HilbertbenchTraceManifest",
-    "HilbertbenchSpanV10",
-    "HilbertbenchArtifactMetadataV10",
-    "HilbertbenchArtifactCatalogV10",
+    "HilbertbenchSpan",
+    "HilbertbenchArtifactMetadata",
+    "HilbertbenchArtifactCatalog",
     "ClientEnvironment",
     "IntegritySeal",
     "Event",
+    "InlineArtifact",
     "Kind",
     "Encoding",
     "Compression",

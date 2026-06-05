@@ -245,10 +245,13 @@ class TestAttach:
     ) -> None:
         with HilbertTape(runs) as tape:
             aid = tape.attach_artifact(small_file, kind=Kind.generic_blob, encoding=Encoding.numpy_binary)
-        copied = list((tape.dir_path / "artifacts").iterdir())
-        assert len(copied) == 1
-        # aid is sha256:..., strip the prefix for filename
-        assert aid.replace("sha256:", "") in copied[0].name
+        hash_hex = aid.replace("sha256:", "")
+        # Artifacts use 2-char sharding: artifacts/<shard>/<full_hash>.<ext>
+        shard_dir = tape.dir_path / "artifacts" / hash_hex[:2]
+        assert shard_dir.is_dir()
+        files = list(shard_dir.iterdir())
+        assert len(files) == 1
+        assert hash_hex in files[0].name
 
     def test_catalog_json_written_on_close(
         self, runs: Path, small_file: Path

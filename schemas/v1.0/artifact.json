@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://hilbertbench.org/schemas/v1.0/artifact.json",
-  "title": "HilbertBench Artifact Metadata v1.0",
+  "title": "HilbertBench Artifact Metadata",
   "description": "Metadata record for a content-addressed, immutable data object. This record lives in the catalog, pointing to a raw physical file on disk.",
   "type": "object",
   "additionalProperties": false,

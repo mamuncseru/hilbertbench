@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict
 from . import artifact
 
 
-class HilbertbenchArtifactCatalogV10(BaseModel):
+class HilbertbenchArtifactCatalog(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -27,7 +27,7 @@ class HilbertbenchArtifactCatalogV10(BaseModel):
     """
     UTC nanoseconds when this catalog was finalized/sealed.
     """
-    artifacts: dict[str, artifact.HilbertbenchArtifactMetadataV10]
+    artifacts: dict[str, artifact.HilbertbenchArtifactMetadata]
     """
     Keys are sha256:<hash> by convention. Key format and key==artifact_hash integrity enforced by reader/verify.py.
     """

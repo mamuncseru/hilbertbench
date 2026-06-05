@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://hilbertbench.org/schemas/v1.0/span.json",
-  "title": "HilbertBench Span v1.0",
+  "title": "HilbertBench Span",
   "description": "A causal execution unit containing top-level physical evidence and an immutable sequence of execution-boundary events.",
   "type": "object",
   "additionalProperties": false,
@@ -73,6 +73,13 @@
     "tags": {
       "type": ["object", "null"],
       "additionalProperties": { "type": "string" }
+    },
+    "inline_artifacts": {
+      "type": ["object", "null"],
+      "description": "Small, per-span artifacts embedded directly in the span record to avoid per-artifact file I/O. Keys are 'sha256:<hex>' content hashes; values are the artifact data and metadata. Use for outcomes, parameters, and observables. Structural artifacts (circuits, calibration) remain in the file store.",
+      "additionalProperties": {
+        "$ref": "#/$defs/inline_artifact"
+      }
     }
   },
   "$defs": {
@@ -106,6 +113,55 @@
           "type": ["object", "null"],
           "additionalProperties": true,
           "description": "POLICY: Must only contain scalar, non-reproducibility-critical metadata (e.g., queue position, API latency). Physical math and arrays MUST go in payload_ref/outcome_ref."
+        }
+      }
+    },
+    "inline_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "encoding",
+        "data",
+        "size_bytes",
+        "created_at"
+      ],
+      "description": "An artifact whose content is embedded directly in the span record rather than written to a separate file. The sha256 hash of the data string is the key in inline_artifacts.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "execution_outcome",
+            "parameters",
+            "observables",
+            "generic_blob"
+          ],
+          "description": "Semantic type. Only per-span, non-structural kinds are valid inline. Circuits and calibration snapshots must remain in the file store."
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "json",
+            "plaintext"
+          ],
+          "description": "Serialization format of the data field. Always text-safe for JSONL embedding."
+        },
+        "data": {
+          "type": "string",
+          "description": "The artifact content, serialized as a UTF-8 string. For 'json' encoding: a JSON-encoded value (number, array, or object). For 'plaintext': raw text."
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Byte length of the data string. Allows fast size checks without re-serializing."
+        },
+        "created_at": {
+          "type": "integer",
+          "description": "UTC nanoseconds when this artifact was recorded."
+        },
+        "producer": {
+          "type": ["string", "null"],
+          "description": "Framework that serialized the artifact (e.g., 'qiskit', 'pennylane')."
         }
       }
     }
