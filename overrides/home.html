@@ -271,7 +271,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
-  @media (max-width: 680px) { .hb-tut-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .hb-tut-grid { grid-template-columns: 1fr; } }
   .hb-tut-card {
     border-radius: 14px;
     overflow: hidden;
@@ -633,6 +633,49 @@ result = <span class="fn">detect_barren_plateau</span>(trace)
             <span class="hb-tut-tag">Qiskit</span>
             <span class="hb-tut-tag">Shot Noise</span>
             <span class="hb-tut-tag">15 min</span>
+          </div>
+          <span class="hb-tut-card__link">Read tutorial →</span>
+        </div>
+      </a>
+
+      <a href="tutorials/expressibility-vs-trainability/" class="hb-tut-card">
+        <div class="hb-tut-card__header">
+          <div class="hb-tut-card__num">Tutorial 03</div>
+          <h3>Expressibility vs Trainability:<br>Measuring the Tradeoff</h3>
+        </div>
+        <div class="hb-tut-card__body">
+          <p class="hb-tut-card__desc">
+            Holmes et al. (2022) proved that high expressibility implies
+            barren plateaus. Here we measure both axes on shallow, medium,
+            and deep ansatze and find the sweet spot — in three added lines
+            of code.
+          </p>
+          <div class="hb-tut-tags">
+            <span class="hb-tut-tag">Active Mode</span>
+            <span class="hb-tut-tag">Expressibility</span>
+            <span class="hb-tut-tag">Qiskit</span>
+            <span class="hb-tut-tag">25 min</span>
+          </div>
+          <span class="hb-tut-card__link">Read tutorial →</span>
+        </div>
+      </a>
+
+      <a href="tutorials/hardware-noise/" class="hb-tut-card">
+        <div class="hb-tut-card__header">
+          <div class="hb-tut-card__num">Tutorial 04</div>
+          <h3>How Hardware Noise Degrades<br>Your Results</h3>
+        </div>
+        <div class="hb-tut-card__body">
+          <p class="hb-tut-card__desc">
+            Use <code>circuit_structure</code> to predict fidelity degradation
+            before touching the hardware queue. Compare ideal vs. noisy Aer
+            runs and build the depth-vs-fidelity contour for your device.
+          </p>
+          <div class="hb-tut-tags">
+            <span class="hb-tut-tag">Noise</span>
+            <span class="hb-tut-tag">Aer</span>
+            <span class="hb-tut-tag">Circuit Fidelity</span>
+            <span class="hb-tut-tag">20 min</span>
           </div>
           <span class="hb-tut-card__link">Read tutorial →</span>
         </div>

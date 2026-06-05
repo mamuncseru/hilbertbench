@@ -64,6 +64,8 @@ nav:
     - Overview: tutorials/index.md
     - "01 · Why Isn't My VQE Converging?": tutorials/vqe-barren-plateau.md
     - "02 · Am I Using Enough Shots?": tutorials/shot-noise.md
+    - "03 · Expressibility vs Trainability": tutorials/expressibility-vs-trainability.md
+    - "04 · How Hardware Noise Degrades Your Results": tutorials/hardware-noise.md
   - Concepts: concepts.md
   - Guides:
     - Qiskit Estimator (VQE): guides/qiskit-estimator.md
