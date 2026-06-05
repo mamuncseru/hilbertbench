@@ -68,14 +68,7 @@ pip install hilbertbench[full]               # everything
 
 ## Where to go next
 
-<div class="grid cards" markdown>
-
 - **[Getting Started](getting-started.md)** — install, run your first trace, read the output in 10 minutes
-
 - **[Concepts](concepts.md)** — understand how passive recording works, what a span is, and why the trace is trustworthy
-
 - **[Analyzers](analyzers/barren-plateau.md)** — what each diagnostic measures and how to read its output
-
 - **[Guides](guides/qiskit-estimator.md)** — end-to-end walkthroughs for VQE, QAOA, IBM hardware, and PennyLane
-
-</div>
