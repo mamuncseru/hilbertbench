@@ -92,4 +92,16 @@
          <loc>https://mamuncseru.github.io/hilbertbench/reference/trace-format/</loc>
          <lastmod>2026-06-05</lastmod>
     </url>
+    <url>
+         <loc>https://mamuncseru.github.io/hilbertbench/tutorials/</loc>
+         <lastmod>2026-06-05</lastmod>
+    </url>
+    <url>
+         <loc>https://mamuncseru.github.io/hilbertbench/tutorials/shot-noise/</loc>
+         <lastmod>2026-06-05</lastmod>
+    </url>
+    <url>
+         <loc>https://mamuncseru.github.io/hilbertbench/tutorials/vqe-barren-plateau/</loc>
+         <lastmod>2026-06-05</lastmod>
+    </url>
 </urlset>
