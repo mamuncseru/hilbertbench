@@ -3,6 +3,8 @@
 # file: hilbertbench/analysis/measurement.py
 #
 # revision history:
+#  20260610 (am): derive the noise floor from recorded target
+#                 precision when no shot counts were recorded
 #  20260604 (am): cleaned up to project coding standards
 #
 # Measurement-strategy diagnostics (Diagnostic Axis: Measurement).
@@ -81,6 +83,39 @@ def _collect_shots(trace) -> list[int]:
 # end of function
 
 
+def _collect_precisions(trace) -> list[float]:
+    """
+    function: _collect_precisions
+
+    arguments:
+     trace: a resolved HilbertTrace object
+
+    return:
+     list of target precisions from EXECUTION_COMPLETED events
+
+    description:
+     Estimator runs request a target precision p rather than a shot
+     count; the corresponding shot-noise floor is p^2 (shots ~ 1/p^2).
+     Returns an empty list when no precisions are recorded.
+    """
+
+    # collect precisions from all completed spans
+    #
+    precisions: list[float] = []
+    for span in trace.completed():
+        attrs = span.event_attributes("EXECUTION_COMPLETED")
+        if attrs and attrs.get("precision"):
+            p = float(attrs["precision"])
+            if p > 0:
+                precisions.append(p)
+
+    # exit gracefully
+    #
+    return precisions
+#
+# end of function
+
+
 def shot_noise_ratio(
     trace: TraceLike,
     default_shots: Optional[int] = None,
@@ -105,11 +140,14 @@ def shot_noise_ratio(
       estimated_snr       empirical_variance / theoretical_floor
                           (None if unknown)
       mean_shots          mean shot count used (None if unknown)
+      shots_source        'recorded' | 'default' | 'precision' | None
       num_evaluations     number of numeric outcomes considered
 
     description:
      Compares the variance of the outcome trajectory against the
-     shot-noise floor (1/shots). Classification thresholds:
+     shot-noise floor (1/shots). When no shot counts were recorded
+     but target precisions were (estimator runs), the floor is
+     derived as precision^2. Classification thresholds:
       SNR < 1.5  -> Shot Noise Dominated
       SNR < 5.0  -> Marginal
       SNR >= 5.0 -> Signal Clear
@@ -133,6 +171,7 @@ def shot_noise_ratio(
             "theoretical_floor":     None,
             "estimated_snr":         None,
             "mean_shots":            None,
+            "shots_source":          None,
             "num_evaluations":       int(outcomes.size),
             "confidence_level":      ci,
         }
@@ -147,12 +186,33 @@ def shot_noise_ratio(
     # collect recorded shot counts; apply default when provided
     #
     shots = _collect_shots(t)
+    shots_source = "recorded" if shots else None
     if not shots and default_shots is not None:
         shots = [default_shots]
+        shots_source = "default"
 
-    # return when shot count is unknown
+    # establish the shot-noise floor: from shot counts when known,
+    # otherwise from the recorded target precision (floor = p^2)
     #
-    if not shots:
+    theoretical_floor = None
+    mean_shots = None
+    if shots:
+        mean_shots = float(np.mean(shots))
+        theoretical_floor = 1.0 / mean_shots
+    else:
+        precisions = _collect_precisions(t)
+        if precisions:
+            shots_source = "precision"
+            theoretical_floor = float(
+                np.mean([p * p for p in precisions])
+            )
+            mean_shots = float(
+                np.mean([1.0 / (p * p) for p in precisions])
+            )
+
+    # return when the measurement budget is unknown
+    #
+    if theoretical_floor is None:
         return {
             "status": (
                 "Shot count not recorded "
@@ -163,14 +223,13 @@ def shot_noise_ratio(
             "theoretical_floor":     None,
             "estimated_snr":         None,
             "mean_shots":            None,
+            "shots_source":          None,
             "num_evaluations":       int(outcomes.size),
             "confidence_level":      ci,
         }
 
-    # compute the shot-noise floor and signal-to-noise ratio
+    # compute the signal-to-noise ratio against the floor
     #
-    mean_shots = float(np.mean(shots))
-    theoretical_floor = 1.0 / mean_shots
     snr = (
         empirical_variance / theoretical_floor
         if theoretical_floor > 0
@@ -195,6 +254,7 @@ def shot_noise_ratio(
         "theoretical_floor":     theoretical_floor,
         "estimated_snr":         float(snr),
         "mean_shots":            mean_shots,
+        "shots_source":          shots_source,
         "num_evaluations":       int(outcomes.size),
         "confidence_level":      ci,
     }
