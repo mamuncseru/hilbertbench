@@ -24,7 +24,8 @@
 #       span.circuit             # circuit QASM text
 #
 #   trace.numeric_outcomes()     # flat np.array of every scalar outcome
-#   trace.calibration()          # device T1/T2/readout dict, or None
+#   trace.calibration()          # latest device T1/T2/readout dict, or None
+#   trace.calibration_history()  # chronological snapshots (drift evidence)
 #   trace.verify()               # cryptographic + causal integrity check
 #
 # Built-in analyzers consume HilbertTrace; so can any user with numpy/pandas.
@@ -583,20 +584,56 @@ class HilbertTrace:
          none
 
         return:
-         the device calibration snapshot (T1/T2/readout/gate errors),
-         or None if no calibration artifact is present
+         the most recent device calibration snapshot (T1/T2/readout/
+         gate errors), or None if no calibration artifact is present
 
         description:
-         Searches the catalog for a 'calibration_snapshot' artifact and
-         resolves its content. Ideal sims produce no calibration.
+         Returns the last entry of calibration_history(). A run on a
+         drifting device may carry several snapshots; the latest one
+         is the most representative of the device state. Ideal sims
+         produce no calibration.
         """
 
-        # search the catalog for a calibration_snapshot artifact
+        # return the newest snapshot from the history
         #
+        history = self.calibration_history()
+        return history[-1]["calibration"] if history else None
+    #
+    # end of method
+
+    def calibration_history(self) -> list:
+        """
+        method: calibration_history
+
+        arguments:
+         none
+
+        return:
+         a list of {"captured_at": ns_timestamp, "calibration": dict}
+         entries sorted by capture time; empty for ideal-sim traces
+
+        description:
+         Resolves every 'calibration_snapshot' artifact in the catalog.
+         The recorder attaches a new snapshot only when the device
+         calibration content changes, so multiple entries indicate
+         calibration drift during the run — the timestamps let an
+         analyzer correlate loss changes with device recalibration.
+        """
+
+        # collect every calibration_snapshot artifact with its time
+        #
+        history = []
         for ref, meta in self.catalog.items():
             if meta.get("kind") == "calibration_snapshot":
-                return self._resolve_ref({}, ref)
-        return None
+                history.append({
+                    "captured_at": meta.get("created_at"),
+                    "calibration": self._resolve_ref({}, ref),
+                })
+
+        # sort by capture time for stable chronological order
+        #
+        history.sort(key=lambda h: h["captured_at"] or 0)
+        return history
     #
     # end of method
 
