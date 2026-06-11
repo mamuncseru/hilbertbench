@@ -22,6 +22,9 @@ dist/
 demo_traces/
 runs/
 
+# paper artifacts
+paper/
+
 # archived demo directory (kept locally, not tracked)
 old_demo/
 
@@ -81,3 +84,8 @@ hilbertbench/models/*.py
 !hilbertbench/models/__init__.py
 !hilbertbench/models/v1_0.py
 site/
+
+# experiment outputs (traces and result JSON are archived on Zenodo)
+experiments/traces/
+experiments/results/
+blinded/
