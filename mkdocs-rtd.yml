@@ -1,0 +1,88 @@
+# ReadTheDocs configuration: the REFERENCE site (API-level docs,
+# analyzer internals, trace format, architecture, test catalog).
+# The learning site (tutorials, concept guides) is built separately
+# from mkdocs.yml and deployed to GitHub Pages.
+
+site_name: HilbertBench Reference
+site_description: API reference, analyzer internals, trace format, and test catalog
+site_author: HilbertBench Contributors
+site_url: https://hilbertbench.readthedocs.io/
+repo_url: https://github.com/mamuncseru/hilbertbench
+repo_name: mamuncseru/hilbertbench
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - tables
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - End-to-End Guide: end-to-end.md
+  - Analyzers:
+    - Barren Plateau: analyzers/barren-plateau.md
+    - Shot Noise Ratio: analyzers/shot-noise.md
+    - Optimization Convergence: analyzers/optimization.md
+    - Circuit Structure: analyzers/circuit-structure.md
+    - Expressibility (KL): analyzers/expressibility.md
+    - Noise Profile: analyzers/noise-profile.md
+  - Reference:
+    - Invariants: reference/invariants.md
+    - Trace Format: reference/trace-format.md
+    - Test Catalog: reference/test-catalog.md
+  - Architecture:
+    - Invariants (full): architecture/001_invariants.md
+    - Principles: architecture/002_principles.md
+    - Extension Rules: architecture/003_extension_rules.md
+    - Versioning: architecture/004_versioning.md
+  - Design Decisions:
+    - Overview: design_decisions/README.md
+    - "ADR-0001 · Trace Atomicity": design_decisions/0001_trace_atomicity.md
+    - "ADR-0002 · Evidence vs Interpretation": design_decisions/0002_evidence_vs_interpretation.md
+  - Tutorials & Guides ↗: https://mamuncseru.github.io/hilbertbench/
