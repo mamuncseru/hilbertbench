@@ -101,8 +101,13 @@ Four end-to-end tutorials, each diagnosing a real quantum ML failure mode:
 
 | Resource | Contents |
 |---|---|
-| **[mamuncseru.github.io/hilbertbench](https://mamuncseru.github.io/hilbertbench/)** | Tutorials, landing page, concept guides |
-| **[hilbertbench.readthedocs.io](https://hilbertbench.readthedocs.io)** | API reference, analyzer docs, trace format |
+| **[End-to-End Guide](docs/end-to-end.md)** | The whole tool in one document — top-down, layered, no quantum background assumed |
+| **[mamuncseru.github.io/hilbertbench](https://mamuncseru.github.io/hilbertbench/)** | Learning site: getting started, tutorials, concept guides |
+| **[hilbertbench.readthedocs.io](https://hilbertbench.readthedocs.io)** | Reference site: analyzer internals, trace format, architecture, and the [test catalog](docs/reference/test-catalog.md) — all 319 tests explained |
+
+The learning site builds from `mkdocs.yml`, the reference site from
+`mkdocs-rtd.yml`. After adding tests, refresh the catalog with
+`python tools/gen_test_catalog.py`.
 
 ---
 
