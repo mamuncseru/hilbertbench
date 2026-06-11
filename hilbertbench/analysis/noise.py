@@ -3,6 +3,9 @@
 # file: hilbertbench/analysis/noise.py
 #
 # revision history:
+#  20260610 (am): scope calibration to the qubits the circuit actually
+#                 used; device-wide means wildly mispredict on large
+#                 devices (found in the ibm_marrakesh smoke test)
 #  20260605 (am): initial version
 #
 # Noise and error-mitigation diagnostics (Diagnostic Axis: Noise).
@@ -97,27 +100,29 @@ def _parse_calibration(cal: dict) -> dict:
      cal: the calibration snapshot dict (backend.properties().to_dict())
 
     return:
-     dict of per-qubit lists (t1, t2, readout) and gate-error lists
-     split into single-qubit and multi-qubit
+     dict with per-qubit value maps (t1, t2, readout keyed by qubit
+     index) and gate-error lists of (qubit_tuple, error) split into
+     single-qubit and multi-qubit
 
     description:
-     Flattens the BackendProperties structure into plain lists. T1/T2
-     are reported in microseconds by Qiskit's to_dict().
+     Flattens the BackendProperties structure while preserving which
+     qubit each value belongs to, so callers can scope statistics to
+     the qubits a circuit actually used. T1/T2 are in microseconds.
     """
 
-    # collect per-qubit coherence and readout values
+    # collect per-qubit coherence and readout values by index
     #
-    t1, t2, readout = [], [], []
-    for q in cal.get("qubits", []):
+    t1, t2, readout = {}, {}, {}
+    for idx, q in enumerate(cal.get("qubits", [])):
         params = {p["name"]: p["value"] for p in q}
         if "T1" in params:
-            t1.append(params["T1"])
+            t1[idx] = params["T1"]
         if "T2" in params:
-            t2.append(params["T2"])
+            t2[idx] = params["T2"]
         if "readout_error" in params:
-            readout.append(params["readout_error"])
+            readout[idx] = params["readout_error"]
 
-    # collect gate errors, split by arity
+    # collect gate errors with their qubit tuples, split by arity
     #
     err_1q, err_2q = [], []
     for g in cal.get("gates", []):
@@ -125,11 +130,11 @@ def _parse_calibration(cal: dict) -> dict:
         gate_error = params.get("gate_error")
         if gate_error is None:
             continue
-        arity = len(g.get("qubits", []))
-        if arity == 1:
-            err_1q.append(gate_error)
-        elif arity >= 2:
-            err_2q.append(gate_error)
+        qubits = tuple(g.get("qubits", []))
+        if len(qubits) == 1:
+            err_1q.append((qubits, gate_error))
+        elif len(qubits) >= 2:
+            err_2q.append((qubits, gate_error))
 
     # exit gracefully
     #
@@ -154,6 +159,9 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
       status                    noise verdict or guard message
       backend_name              device name from the snapshot
       num_qubits_calibrated     qubits present in the snapshot
+      scope                     'active_qubits' | 'device_wide' —
+                                which qubits the statistics cover
+      active_qubits             qubit indices the circuit used
       t1_us / t2_us             coherence-time stats (mean/min/max, us)
       readout_error             readout-error stats
       gate_error_1q_mean        mean single-qubit gate error
@@ -166,8 +174,12 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
      Summarises the recorded device calibration and, using the circuit
      structure, estimates the run's circuit fidelity as
        (1-e1q)^n1q * (1-e2q)^n2q * (1-readout)^n_measured
-     classifying the result into low / moderate / dominated noise. The
-     dominant error source is whichever factor removes the most fidelity.
+     classifying the result into low / moderate / dominated noise.
+     All statistics are scoped to the qubits the recorded circuit
+     actually used when those are known — device-wide averages over a
+     large device (including its worst edges) mispredict the run's
+     exposure by orders of magnitude. Falls back to device-wide
+     values when the active qubits cannot be determined.
     """
 
     # resolve the trace and fetch the calibration snapshot
@@ -182,6 +194,8 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
             "status": "No calibration recorded (ideal simulator)",
             "backend_name": None,
             "num_qubits_calibrated": 0,
+            "scope": None,
+            "active_qubits": [],
             "t1_us": _stats([]), "t2_us": _stats([]),
             "readout_error": _stats([]),
             "gate_error_1q_mean": None, "gate_error_2q_mean": None,
@@ -190,17 +204,45 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
             "dominant_error_source": None,
         }
 
-    # parse calibration and summarise the device
-    #
-    p = _parse_calibration(cal)
-    mean_1q = float(np.mean(p["err_1q"])) if p["err_1q"] else 0.0
-    mean_2q = float(np.mean(p["err_2q"])) if p["err_2q"] else 0.0
-    mean_ro = float(np.mean(p["readout"])) if p["readout"] else 0.0
-
-    # pull circuit structure to weight the errors by usage
+    # pull circuit structure first: it tells us which qubits the run
+    # actually touched, which sets the calibration scope
     #
     cs = circuit_structure(t)
     prim = cs.get("primary")
+    active = set(prim.get("active_qubits") or []) if prim else set()
+
+    # scope helpers: prefer values on the active qubits, fall back to
+    # the whole device when the filter would leave nothing
+    #
+    def _scoped_qubit_values(values: dict) -> list:
+        if active:
+            scoped = [v for k, v in values.items() if k in active]
+            if scoped:
+                return scoped
+        return list(values.values())
+
+    def _scoped_gate_errors(pairs: list) -> list:
+        if active:
+            scoped = [e for qs, e in pairs if set(qs) <= active]
+            if scoped:
+                return scoped
+        return [e for _, e in pairs]
+
+    # parse calibration and compute scoped statistics
+    #
+    p = _parse_calibration(cal)
+    t1_vals = _scoped_qubit_values(p["t1"])
+    t2_vals = _scoped_qubit_values(p["t2"])
+    ro_vals = _scoped_qubit_values(p["readout"])
+    e1_vals = _scoped_gate_errors(p["err_1q"])
+    e2_vals = _scoped_gate_errors(p["err_2q"])
+    mean_1q = float(np.mean(e1_vals)) if e1_vals else 0.0
+    mean_2q = float(np.mean(e2_vals)) if e2_vals else 0.0
+    mean_ro = float(np.mean(ro_vals)) if ro_vals else 0.0
+    scope = "active_qubits" if active else "device_wide"
+
+    # weight the errors by circuit usage
+    #
     fidelity = None
     dominant = None
     circuit_summary = None
@@ -250,9 +292,11 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
         "status": status,
         "backend_name": p["backend_name"],
         "num_qubits_calibrated": len(p["t1"]),
-        "t1_us": _stats(p["t1"]),
-        "t2_us": _stats(p["t2"]),
-        "readout_error": _stats(p["readout"]),
+        "scope": scope,
+        "active_qubits": sorted(active),
+        "t1_us": _stats(t1_vals),
+        "t2_us": _stats(t2_vals),
+        "readout_error": _stats(ro_vals),
         "gate_error_1q_mean": mean_1q,
         "gate_error_2q_mean": mean_2q,
         "circuit": circuit_summary,
