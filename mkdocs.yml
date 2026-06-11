@@ -60,6 +60,7 @@ extra_javascript:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - End-to-End Guide: end-to-end.md
   - Tutorials:
     - Overview: tutorials/index.md
     - "01 · Why Isn't My VQE Converging?": tutorials/vqe-barren-plateau.md
@@ -73,13 +74,4 @@ nav:
     - IBM Hardware: guides/ibm-hardware.md
     - PennyLane QNN: guides/pennylane-qnn.md
     - Active Mode (Expressibility): guides/active-mode.md
-  - Analyzers:
-    - Barren Plateau: analyzers/barren-plateau.md
-    - Shot Noise Ratio: analyzers/shot-noise.md
-    - Optimization Convergence: analyzers/optimization.md
-    - Circuit Structure: analyzers/circuit-structure.md
-    - Expressibility (KL): analyzers/expressibility.md
-    - Noise Profile: analyzers/noise-profile.md
-  - Reference:
-    - Invariants: reference/invariants.md
-    - Trace Format: reference/trace-format.md
+  - API Reference ↗: https://hilbertbench.readthedocs.io
