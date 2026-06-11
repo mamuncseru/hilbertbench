@@ -3,6 +3,8 @@
 # file: hilbertbench/integrations/qiskit.py
 #
 # revision history:
+#  20260610 (am): robust backend resolution + rate-limited calibration
+#                 refresh so drifting devices yield a snapshot history
 #  20260604 (am): cleaned up to project coding standards
 #
 # Transparent proxy integration for Qiskit. Wraps standard Backends, Jobs,
@@ -15,9 +17,11 @@
 # import system modules
 #
 import copy
+import hashlib
 import json
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
@@ -49,18 +53,77 @@ from hilbertbench.recorder.tape import HilbertTape
 #
 __FILE__ = os.path.basename(__file__)
 
+# minimum seconds between calibration re-queries on a live backend;
+# keeps the per-execution overhead amortised well below the 5ms budget
+# while still catching intra-run device recalibration (drift)
+#
+CALIBRATION_REFRESH_S = 600.0
+
 #------------------------------------------------------------------------------
 #
 # functions are listed here
 #
 #------------------------------------------------------------------------------
 
-def _serialize_calibration(backend: Any) -> Optional[str]:
+def _resolve_backend(primitive: Any) -> Optional[Any]:
+    """
+    function: _resolve_backend
+
+    arguments:
+     primitive: a Qiskit primitive, a Backend, or None
+
+    return:
+     the underlying Backend object, or None if not resolvable
+
+    description:
+     Locates the backend behind a V2 primitive. Handles the three
+     conventions in the wild: a 'backend' property (qiskit
+     BackendEstimatorV2/BackendSamplerV2), a 'backend()' bound method
+     (qiskit-ibm-runtime primitives), and a private '_backend'
+     attribute (qiskit-aer primitives). A Backend passed directly is
+     returned as-is. Statevector primitives resolve to None.
+    """
+
+    # nothing to resolve
+    #
+    if primitive is None:
+        return None
+
+    # a backend passed directly exposes the Backend API surface
+    #
+    if hasattr(primitive, "target") or hasattr(primitive, "properties"):
+        return primitive
+
+    # the public attribute may be a property value or a bound method
+    # (qiskit-ibm-runtime primitives expose backend() as a method)
+    #
+    backend = getattr(primitive, "backend", None)
+    if callable(backend):
+        try:
+            backend = backend()
+        except Exception:
+            backend = None
+    if backend is not None:
+        return backend
+
+    # fall back to the private attribute used by qiskit-aer primitives
+    #
+    return getattr(primitive, "_backend", None)
+#
+# end of function
+
+
+def _serialize_calibration(
+    backend: Any,
+    refresh: bool = False,
+) -> Optional[str]:
     """
     function: _serialize_calibration
 
     arguments:
      backend: a Qiskit backend object, or None
+     refresh: when True, ask the provider to bypass its local cache
+              (IBM runtime backends cache properties between calls)
 
     return:
      a JSON string of calibration data, or None
@@ -77,18 +140,28 @@ def _serialize_calibration(backend: Any) -> Optional[str]:
     if backend is None:
         return None
 
-    # attempt to fetch BackendProperties
+    # attempt to fetch BackendProperties, bypassing the provider cache
+    # on refresh so calibration drift is actually observable
     #
     try:
-        props = backend.properties()
+        if refresh:
+            try:
+                props = backend.properties(refresh=True)
+            except TypeError:
+                props = backend.properties()
+        else:
+            props = backend.properties()
     except Exception:
         props = None
 
-    # serialise to JSON if properties are available
+    # serialise to JSON if properties expose a real dict; anything
+    # else (mocks, exotic providers) is rejected rather than recorded
     #
     if props is not None and hasattr(props, "to_dict"):
         try:
-            return json.dumps(props.to_dict(), default=str)
+            as_dict = props.to_dict()
+            if isinstance(as_dict, dict):
+                return json.dumps(as_dict, default=str)
         except Exception:
             return None
 
@@ -99,36 +172,97 @@ def _serialize_calibration(backend: Any) -> Optional[str]:
 # end of function
 
 
-def _capture_calibration_snapshot(
-    tape: HilbertTape,
-    backend: Any,
-) -> None:
+def _resolve_shot_evidence(
+    estimator: Any,
+    pub: Any,
+    run_kwargs: dict,
+) -> dict:
     """
-    function: _capture_calibration_snapshot
+    function: _resolve_shot_evidence
 
     arguments:
-     tape:    the HilbertTape to attach the calibration artifact to
-     backend: the Qiskit backend to extract calibration from, or None
+     estimator:  the wrapped V2 estimator primitive
+     pub:        the PUB being recorded
+     run_kwargs: the kwargs the user passed to run()
+
+    return:
+     dict with 'shots' and/or 'precision' keys when resolvable,
+     empty otherwise
+
+    description:
+     Resolves the measurement budget the user requested for a PUB —
+     this is intent, so it belongs in the trace. Precision comes from
+     the PUB's fourth element, then the run() kwarg, then the
+     estimator's default_precision option; shots come from the
+     default_shots option (qiskit-ibm-runtime). Without this evidence
+     the shot-noise analyzer cannot establish a noise floor for
+     estimator-based runs.
+    """
+
+    # resolve the requested precision (PUB > run kwarg > option)
+    #
+    evidence: dict = {}
+    precision = None
+    if isinstance(pub, tuple) and len(pub) > 3 and pub[3] is not None:
+        precision = pub[3]
+    elif run_kwargs.get("precision") is not None:
+        precision = run_kwargs["precision"]
+    options = getattr(estimator, "options", None)
+    if precision is None:
+        default_precision = getattr(options, "default_precision", None)
+        if (
+            isinstance(default_precision, float)
+            and default_precision > 0
+        ):
+            precision = default_precision
+
+    # resolve a configured shot count (qiskit-ibm-runtime option)
+    #
+    default_shots = getattr(options, "default_shots", None)
+    if isinstance(default_shots, (int, np.integer)) and default_shots > 0:
+        evidence["shots"] = int(default_shots)
+
+    # record the precision when it resolved to a usable number
+    #
+    if precision is not None:
+        try:
+            precision = float(precision)
+            if precision > 0:
+                evidence["precision"] = precision
+        except (TypeError, ValueError):
+            pass
+
+    # exit gracefully
+    #
+    return evidence
+#
+# end of function
+
+
+def _attach_calibration_json(
+    tape: HilbertTape,
+    cal_json: str,
+) -> None:
+    """
+    function: _attach_calibration_json
+
+    arguments:
+     tape:     the HilbertTape to attach the calibration artifact to
+     cal_json: the serialised calibration JSON string
 
     return:
      none
 
     description:
-     Captures a backend's calibration as a 'calibration_snapshot'
-     artifact in the file store (deduplicated via content hash; one
-     snapshot per backend per run). Silently does nothing for ideal
-     simulators. Called once per proxy via a captured-flag guard.
+     Writes a calibration JSON string into the file store as a
+     'calibration_snapshot' artifact. Silently does nothing if the
+     tape is closed or the attach fails (recording must never break
+     the user's run).
     """
 
     # skip if tape is already closed
     #
     if getattr(tape, "_closed", True):
-        return
-
-    # fetch and validate the calibration JSON
-    #
-    cal_json = _serialize_calibration(backend)
-    if not cal_json:
         return
 
     # write to a temp file and attach to the tape
@@ -153,6 +287,61 @@ def _capture_calibration_snapshot(
 
     except Exception:
         pass
+#
+# end of function
+
+
+def _maybe_capture_calibration(
+    proxy: Any,
+    tape: HilbertTape,
+    primitive: Any,
+) -> None:
+    """
+    function: _maybe_capture_calibration
+
+    arguments:
+     proxy:     a Hilbert proxy carrying calibration capture state
+                (calibration_refresh_s, _cal_next_check, _cal_last_hash)
+     tape:      the HilbertTape to attach snapshots to
+     primitive: the wrapped primitive or backend to resolve
+
+    return:
+     none
+
+    description:
+     Rate-limited calibration capture. The backend is queried at most
+     once per calibration_refresh_s window, and a new artifact is
+     attached only when the calibration content actually changed — so
+     a drifting device yields a snapshot history while a stable device
+     costs a single artifact. Only device metadata is queried; no
+     circuits are executed (INV-001).
+    """
+
+    # rate-limit the backend query
+    #
+    now = time.monotonic()
+    if now < proxy._cal_next_check:
+        return
+    first = proxy._cal_last_hash is None
+    proxy._cal_next_check = now + proxy.calibration_refresh_s
+
+    # serialise; bypass the provider cache on re-checks so drift in
+    # the device calibration is actually observable
+    #
+    cal_json = _serialize_calibration(
+        _resolve_backend(primitive),
+        refresh=not first,
+    )
+    if not cal_json:
+        return
+
+    # attach only when the calibration content changed
+    #
+    digest = hashlib.sha256(cal_json.encode("utf-8")).hexdigest()
+    if digest == proxy._cal_last_hash:
+        return
+    proxy._cal_last_hash = digest
+    _attach_calibration_json(tape, cal_json)
 #
 # end of function
 
@@ -331,6 +520,13 @@ class HilbertQiskitBackendProxy:
         self._backend = real_backend
         self._tape = tape
         self._backend_name = getattr(real_backend, "name", "unknown")
+
+        # calibration capture state: queries are rate-limited and a
+        # snapshot is attached only when the content hash changes
+        #
+        self.calibration_refresh_s = CALIBRATION_REFRESH_S
+        self._cal_next_check = 0.0
+        self._cal_last_hash: Optional[str] = None
     #
     # end of method
 
@@ -373,6 +569,10 @@ class HilbertQiskitBackendProxy:
          tape, then records the job submission span. Returns a proxy
          that intercepts .result() for outcome capture.
         """
+
+        # capture/refresh the calibration snapshot (rate-limited)
+        #
+        _maybe_capture_calibration(self, self._tape, self._backend)
 
         # normalise input to a list and serialise to QASM
         #
@@ -464,7 +664,7 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
 
         description:
          Stores the tape and the underlying estimator. Initialises the
-         calibration-captured flag to ensure snapshots are taken once.
+         calibration capture state (rate limit + content hash).
         """
         super().__init__()
 
@@ -477,9 +677,12 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
             else StatevectorEstimator()
         )
 
-        # flag ensures calibration is captured only once per run
+        # calibration capture state: queries are rate-limited and a
+        # snapshot is attached only when the content hash changes
         #
-        self._calibration_captured = False
+        self.calibration_refresh_s = CALIBRATION_REFRESH_S
+        self._cal_next_check = 0.0
+        self._cal_last_hash: Optional[str] = None
     #
     # end of method
 
@@ -510,12 +713,18 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
 
         description:
          Required by Qiskit optimizers that deepcopy primitives. The
-         tape reference is shared (not copied) intentionally.
+         tape reference is shared (not copied) intentionally, and the
+         calibration capture state is carried over so a deepcopy does
+         not trigger a redundant backend query.
         """
-        return HilbertEstimatorProxy(
+        clone = HilbertEstimatorProxy(
             tape=self.tape,
             real_estimator=copy.deepcopy(self.real_estimator, memo),
         )
+        clone.calibration_refresh_s = self.calibration_refresh_s
+        clone._cal_next_check = self._cal_next_check
+        clone._cal_last_hash = self._cal_last_hash
+        return clone
     #
     # end of method
 
@@ -564,14 +773,10 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
          the batch (INV-007 is honoured at the batch level).
         """
 
-        # capture calibration snapshot once per run
+        # capture/refresh the calibration snapshot (rate-limited;
+        # handles property-, method-, and private-attr backend access)
         #
-        if not self._calibration_captured:
-            self._calibration_captured = True
-            _capture_calibration_snapshot(
-                self.tape,
-                getattr(self.real_estimator, "backend", None),
-            )
+        _maybe_capture_calibration(self, self.tape, self.real_estimator)
 
         # execute the batch via the real estimator
         #
@@ -673,12 +878,14 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
                         except Exception:
                             pass
 
-                    # emit the completion event
+                    # emit the completion event with the measurement
+                    # budget the user requested (shots / precision)
                     #
-                    span.add_event(
-                        "EXECUTION_COMPLETED",
-                        {"batch_index": i},
-                    )
+                    attrs = {"batch_index": i}
+                    attrs.update(_resolve_shot_evidence(
+                        self.real_estimator, pub, kwargs,
+                    ))
+                    span.add_event("EXECUTION_COMPLETED", attrs)
 
             except Exception as e:
                 print(
@@ -733,7 +940,7 @@ class HilbertSamplerProxy(BaseSamplerV2):
 
         description:
          Stores the tape and the underlying sampler. Initialises the
-         calibration-captured flag to ensure snapshots are taken once.
+         calibration capture state (rate limit + content hash).
         """
         super().__init__()
 
@@ -746,9 +953,12 @@ class HilbertSamplerProxy(BaseSamplerV2):
             else StatevectorSampler()
         )
 
-        # flag ensures calibration is captured only once per run
+        # calibration capture state: queries are rate-limited and a
+        # snapshot is attached only when the content hash changes
         #
-        self._calibration_captured = False
+        self.calibration_refresh_s = CALIBRATION_REFRESH_S
+        self._cal_next_check = 0.0
+        self._cal_last_hash: Optional[str] = None
     #
     # end of method
 
@@ -779,12 +989,18 @@ class HilbertSamplerProxy(BaseSamplerV2):
 
         description:
          Required by Qiskit optimizers that deepcopy primitives. The
-         tape reference is shared (not copied) intentionally.
+         tape reference is shared (not copied) intentionally, and the
+         calibration capture state is carried over so a deepcopy does
+         not trigger a redundant backend query.
         """
-        return HilbertSamplerProxy(
+        clone = HilbertSamplerProxy(
             tape=self.tape,
             real_sampler=copy.deepcopy(self.real_sampler, memo),
         )
+        clone.calibration_refresh_s = self.calibration_refresh_s
+        clone._cal_next_check = self._cal_next_check
+        clone._cal_last_hash = self._cal_last_hash
+        return clone
     #
     # end of method
 
@@ -832,14 +1048,10 @@ class HilbertSamplerProxy(BaseSamplerV2):
          the batch (INV-007 is honoured at the batch level).
         """
 
-        # capture calibration snapshot once per run
+        # capture/refresh the calibration snapshot (rate-limited;
+        # handles property-, method-, and private-attr backend access)
         #
-        if not self._calibration_captured:
-            self._calibration_captured = True
-            _capture_calibration_snapshot(
-                self.tape,
-                getattr(self.real_sampler, "backend", None),
-            )
+        _maybe_capture_calibration(self, self.tape, self.real_sampler)
 
         # execute the batch via the real sampler
         #
