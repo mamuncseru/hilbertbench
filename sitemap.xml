@@ -2,114 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/concepts/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
+    </url>
+    <url>
+         <loc>https://mamuncseru.github.io/hilbertbench/end-to-end/</loc>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/getting-started/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/barren-plateau/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/circuit-structure/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/expressibility/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/noise-profile/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/optimization/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/analyzers/shot-noise/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/architecture/001_invariants/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/architecture/002_principles/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/architecture/003_extension_rules/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/architecture/004_versioning/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/design_decisions/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/design_decisions/0001_trace_atomicity/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/design_decisions/0002_evidence_vs_interpretation/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/guides/active-mode/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/guides/ibm-hardware/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/guides/pennylane-qnn/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/guides/qiskit-estimator/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/guides/qiskit-sampler/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/reference/invariants/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
+    </url>
+    <url>
+         <loc>https://mamuncseru.github.io/hilbertbench/reference/test-catalog/</loc>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/reference/trace-format/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/tutorials/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/tutorials/expressibility-vs-trainability/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/tutorials/hardware-noise/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/tutorials/shot-noise/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
     <url>
          <loc>https://mamuncseru.github.io/hilbertbench/tutorials/vqe-barren-plateau/</loc>
-         <lastmod>2026-06-05</lastmod>
+         <lastmod>2026-06-11</lastmod>
     </url>
 </urlset>

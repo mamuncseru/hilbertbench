@@ -1,0 +1,3890 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Non-intrusive diagnostic framework for quantum machine learning">
+      
+      
+        <meta name="author" content="HilbertBench Contributors">
+      
+      
+        <link rel="canonical" href="https://mamuncseru.github.io/hilbertbench/reference/test-catalog/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Test Catalog - HilbertBench</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#test-catalog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="HilbertBench" class="md-header__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            HilbertBench
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Test Catalog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../end-to-end/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  End-to-End Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../concepts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Concepts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/qiskit-estimator/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://hilbertbench.readthedocs.io" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference ↗
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="HilbertBench" class="md-nav__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    HilbertBench
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../end-to-end/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    End-to-End Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/vqe-barren-plateau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 · Why Isn't My VQE Converging?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/shot-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 · Am I Using Enough Shots?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/expressibility-vs-trainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · Expressibility vs Trainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hardware-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · How Hardware Noise Degrades Your Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/qiskit-estimator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Estimator (VQE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/qiskit-sampler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Sampler (QAOA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/ibm-hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/pennylane-qnn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PennyLane QNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/active-mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active Mode (Expressibility)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://hilbertbench.readthedocs.io" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#testsactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/active/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/active/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_active_modepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_active_mode.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testsanalysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/analysis/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/analysis/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_builtin_analyzerspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_builtin_analyzers.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_confidencepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_confidence.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_noisepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_noise.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_optimization_and_circuitpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_optimization_and_circuit.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testscompliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/compliance/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/compliance/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_backward_compatibilitypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_backward_compatibility.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_execution_paritypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_execution_parity.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_invariantspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_invariants.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_schema_roundtrippy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_schema_roundtrip.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testse2e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/e2e/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/e2e/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_full_algorithmspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_full_algorithms.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_phenomenologypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_phenomenology.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_qiskit_aerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_qiskit_aer.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testsintegrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/integrations/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/integrations/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_pennylanepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_pennylane.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_pennylane_measurementspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_pennylane_measurements.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_pennylane_qasm_reproducibilitypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_pennylane_qasm_reproducibility.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_qiskitpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_qiskit.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_qiskit_calibrationpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_qiskit_calibration.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_qiskit_samplerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_qiskit_sampler.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testsreader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/reader/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/reader/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_verifypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_verify.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testsrecorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/recorder/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/recorder/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_inline_artifactspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_inline_artifacts.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_invariantspy_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_invariants.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_storagepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_storage.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test_tapepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_tape.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teststools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/tools/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/tools/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_blind_corpuspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_blind_corpus.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teststrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/trace/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tests/trace/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test_hilberttracepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_hilberttrace.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="test-catalog">Test Catalog<a class="headerlink" href="#test-catalog" title="Permanent link">&para;</a></h1>
+<p>Every test in the suite, what it verifies, and why its area
+exists. Generated by <code>tools/gen_test_catalog.py</code> — regenerate
+after adding tests.</p>
+<p><strong>Total test functions: 319</strong> (run them with
+<code>python -m pytest tests/ -q</code>).</p>
+<h2 id="testsactive"><code>tests/active/</code><a class="headerlink" href="#testsactive" title="Permanent link">&para;</a></h2>
+<p>Active Mode is the opt-in interventional path (expressibility probing). These tests check the probe records correctly, labels the trace as active, and that analyzers needing interventional data refuse passive traces.</p>
+<h3 id="test_active_modepy">test_active_mode.py<a class="headerlink" href="#test_active_modepy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for Active Mode probing and the kl_expressibility analyzer they feed. Active Mode runs real circuits, so these use small ansätze and modest sample counts. The headline physics check is directional: a rigid ansatz must score a larger Haar KL divergence than an expressive one.</em></p>
+<p><strong>TestProbeCore</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_records_active_mode_trace</code></td>
+<td>Records active mode trace</td>
+</tr>
+<tr>
+<td><code>test_trace_verifies</code></td>
+<td>Trace verifies</td>
+</tr>
+<tr>
+<td><code>test_seed_reproducible</code></td>
+<td>Seed reproducible — Same seed → identical sampled parameters → identical statevectors</td>
+</tr>
+<tr>
+<td><code>test_statevector_round_trips</code></td>
+<td>Statevector round trips</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestQiskitProbe</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_qiskit_probe_stores_circuit_qasm</code></td>
+<td>Qiskit probe stores circuit qasm</td>
+</tr>
+<tr>
+<td><code>test_qiskit_circuit_structure_visible</code></td>
+<td>Qiskit circuit structure visible — decomposed → real gates visible, depth &gt; 1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPennyLaneProbe</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_pennylane_probe</code></td>
+<td>Pennylane probe</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestExpressibility</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_rigid_more_than_expressive</code></td>
+<td>Directional physics: rigid ansatz has larger Haar KL than expressive.</td>
+</tr>
+<tr>
+<td><code>test_expressive_ansatz_low_kl</code></td>
+<td>StronglyEntanglingLayers is known to be highly expressive.</td>
+</tr>
+<tr>
+<td><code>test_num_qubits_inferred</code></td>
+<td>Num qubits inferred</td>
+</tr>
+<tr>
+<td><code>test_passive_trace_guard</code></td>
+<td>Expressibility on a passive trace returns a guard, not a number.</td>
+</tr>
+<tr>
+<td><code>test_insufficient_states</code></td>
+<td>Insufficient states</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testsanalysis"><code>tests/analysis/</code><a class="headerlink" href="#testsanalysis" title="Permanent link">&para;</a></h2>
+<p>Each analyzer is tested against constructed ground-truth traces: plant a known condition, assert the verdict and the quantitative evidence (variance, SNR, KL, fidelity) with their confidence intervals. Includes regression tests for hardware-format (ISA) circuits and active-qubit calibration scoping.</p>
+<h3 id="test_builtin_analyzerspy">test_builtin_analyzers.py<a class="headerlink" href="#test_builtin_analyzerspy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the function-based analysis layer (hilbertbench.analysis). Traces are built deterministically with the tape; no quantum execution.</em></p>
+<p><strong>TestBarrenPlateau</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_trainable</code></td>
+<td>Trainable</td>
+</tr>
+<tr>
+<td><code>test_barren_plateau</code></td>
+<td>Barren plateau</td>
+</tr>
+<tr>
+<td><code>test_insufficient_data</code></td>
+<td>Insufficient data — span with no numeric outcome (counts dict)</td>
+</tr>
+<tr>
+<td><code>test_custom_threshold</code></td>
+<td>Custom threshold</td>
+</tr>
+<tr>
+<td><code>test_accepts_path_and_trace_object</code></td>
+<td>Accepts path and trace object</td>
+</tr>
+<tr>
+<td><code>test_variance_matches_numpy</code></td>
+<td>Variance matches numpy</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestShotNoise</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_with_recorded_shots</code></td>
+<td>With recorded shots — high trajectory variance, low shots → signal clear</td>
+</tr>
+<tr>
+<td><code>test_shot_noise_dominated</code></td>
+<td>Shot noise dominated — tiny trajectory variance, many shots → buried in noise</td>
+</tr>
+<tr>
+<td><code>test_no_shots_recorded</code></td>
+<td>No shots recorded</td>
+</tr>
+<tr>
+<td><code>test_default_shots_fallback</code></td>
+<td>Default shots fallback</td>
+</tr>
+<tr>
+<td><code>test_precision_fallback</code></td>
+<td>Precision fallback — estimator runs record target precision, not shots; the floor</td>
+</tr>
+<tr>
+<td><code>test_recorded_shots_win_over_precision</code></td>
+<td>Recorded shots win over precision</td>
+</tr>
+<tr>
+<td><code>test_insufficient_data</code></td>
+<td>Insufficient data</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSummary</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_combined_report</code></td>
+<td>Combined report</td>
+</tr>
+<tr>
+<td><code>test_summary_accepts_path</code></td>
+<td>Summary accepts path</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCustomAnalysis</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_user_can_write_own_analysis</code></td>
+<td>A user composes their own diagnostic on the same trace API.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_confidencepy">test_confidence.py<a class="headerlink" href="#test_confidencepy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the statistical-uncertainty measures added to the analyzers (proposal Section 2.6: "reported with statistical uncertainty and confidence measures, emphasizing transparency over definitive attribution").</em></p>
+<p><strong>TestBootstrapCI</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_ci_brackets_statistic</code></td>
+<td>Ci brackets statistic</td>
+</tr>
+<tr>
+<td><code>test_degenerate_inputs_return_none</code></td>
+<td>Degenerate inputs return none</td>
+</tr>
+<tr>
+<td><code>test_n_boot_zero_disables</code></td>
+<td>N boot zero disables</td>
+</tr>
+<tr>
+<td><code>test_reproducible_with_seed</code></td>
+<td>Reproducible with seed</td>
+</tr>
+<tr>
+<td><code>test_wider_ci_for_higher_level</code></td>
+<td>Wider ci for higher level</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestBarrenPlateauConfidence</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_ci_brackets_variance</code></td>
+<td>Ci brackets variance</td>
+</tr>
+<tr>
+<td><code>test_clear_trainable_high_confidence</code></td>
+<td>Clear trainable high confidence</td>
+</tr>
+<tr>
+<td><code>test_clear_barren_high_confidence</code></td>
+<td>Clear barren high confidence</td>
+</tr>
+<tr>
+<td><code>test_near_threshold_low_confidence</code></td>
+<td>Near threshold low confidence — variance engineered to sit right at the 0.005 threshold</td>
+</tr>
+<tr>
+<td><code>test_n_boot_zero_skips_ci</code></td>
+<td>N boot zero skips ci</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestShotNoiseConfidence</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_empirical_variance_ci_present</code></td>
+<td>Empirical variance ci present</td>
+</tr>
+<tr>
+<td><code>test_ci_present_even_without_shots</code></td>
+<td>Ci present even without shots</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_noisepy">test_noise.py<a class="headerlink" href="#test_noisepy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the noise-profile analyzer (Diagnostic Axis: Noise). Calibration data only exists on real/fake hardware backends, so these use Qiskit's FakeManilaV2 (which ships realistic T1/T2/readout/gate-error data) and assert ideal simulators degrade gracefully to a no-calibration result.</em></p>
+<p><strong>TestDeviceSummary</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_reports_calibration_stats</code></td>
+<td>Reports calibration stats</td>
+</tr>
+<tr>
+<td><code>test_gate_errors_present</code></td>
+<td>Gate errors present</td>
+</tr>
+<tr>
+<td><code>test_estimated_fidelity_in_unit_interval</code></td>
+<td>Estimated fidelity in unit interval</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestIdealSimulator</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_no_calibration_status</code></td>
+<td>No calibration status</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestDepthInteraction</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_fidelity_decreases_with_depth</code></td>
+<td>Fidelity decreases with depth</td>
+</tr>
+<tr>
+<td><code>test_dominant_error_shifts_to_two_qubit_gates</code></td>
+<td>Dominant error shifts to two qubit gates — shallow circuit: readout dominates the small infidelity</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCalibrationScoping</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_stats_scoped_to_active_qubits</code></td>
+<td>Stats scoped to active qubits — the awful qubit 2 must not contaminate any statistic</td>
+</tr>
+<tr>
+<td><code>test_fidelity_uses_scoped_errors</code></td>
+<td>Fidelity uses scoped errors — 1 sx + 1 cx on good qubits: fidelity must stay high; the</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_optimization_and_circuitpy">test_optimization_and_circuit.py<a class="headerlink" href="#test_optimization_and_circuitpy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the optimization-loop (Axis 4) and circuit-structure analyzers.</em></p>
+<p><strong>TestOptimizationConvergence</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_converging_trajectory</code></td>
+<td>Converging trajectory</td>
+</tr>
+<tr>
+<td><code>test_constant_step_still_improving</code></td>
+<td>Constant step still improving</td>
+</tr>
+<tr>
+<td><code>test_converging_path_length_positive</code></td>
+<td>Converging path length positive</td>
+</tr>
+<tr>
+<td><code>test_insufficient_data</code></td>
+<td>Insufficient data</td>
+</tr>
+<tr>
+<td><code>test_outcome_envelope_reported</code></td>
+<td>Outcome envelope reported — cost should drop from start to finish</td>
+</tr>
+<tr>
+<td><code>test_accepts_path_and_trace</code></td>
+<td>Accepts path and trace</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCircuitStructure</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_bell_circuit</code></td>
+<td>Bell circuit</td>
+</tr>
+<tr>
+<td><code>test_bell_depth</code></td>
+<td>Bell depth — h on q0 (layer 1) then cx q0,q1 (layer 2) → depth 2</td>
+</tr>
+<tr>
+<td><code>test_parametric_circuit</code></td>
+<td>Parametric circuit</td>
+</tr>
+<tr>
+<td><code>test_no_qasm_circuit</code></td>
+<td>No qasm circuit — Trace with only inline outcomes, no circuit_qasm artifact</td>
+</tr>
+<tr>
+<td><code>test_entangling_fraction_bounds</code></td>
+<td>Entangling fraction bounds</td>
+</tr>
+<tr>
+<td><code>test_isa_circuit_physical_qubits</code></td>
+<td>Isa circuit physical qubits — Regression: hardware ISA circuits previously parsed as empty</td>
+</tr>
+<tr>
+<td><code>test_isa_circuit_depth</code></td>
+<td>Isa circuit depth — sx, rz, sx, rz stack on $0 (layers 1-4), cx joins <span class="arithmatex">\(0/\)</span>1 → 5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testscompliance"><code>tests/compliance/</code><a class="headerlink" href="#testscompliance" title="Permanent link">&para;</a></h2>
+<p>Architecture-level checks that the documented invariants (INV-001 and friends) hold end to end — the contract the paper and the docs promise.</p>
+<h3 id="test_backward_compatibilitypy">test_backward_compatibility.py<a class="headerlink" href="#test_backward_compatibilitypy" title="Permanent link">&para;</a></h3>
+<p><em>These fixtures are FROZEN. They represent real v1.0 traces that must remain parseable for the lifetime of the project. Never update these dicts — if a model change breaks them, that is a BREAKING CHANGE and requires a schema version bump.</em></p>
+<p><strong>TestGoldenRecords</strong> — These must NEVER fail. Failure = breaking change.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_golden_trace_always_parses</code></td>
+<td>Golden trace always parses</td>
+</tr>
+<tr>
+<td><code>test_golden_span_always_parses</code></td>
+<td>Golden span always parses</td>
+</tr>
+<tr>
+<td><code>test_golden_artifact_always_parses</code></td>
+<td>Golden artifact always parses</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_execution_paritypy">test_execution_parity.py<a class="headerlink" href="#test_execution_paritypy" title="Permanent link">&para;</a></h3>
+<p><em>Validates the proposal's central "1:1 Execution Parity" claim (§2.1): wrapping a primitive with HilbertBench must NOT change what reaches the backend — same number of executions, same circuits, same shots — and must NOT change the results. This is what makes the recorder a non-confounding observer.</em></p>
+<p><strong>TestEstimatorParity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_backend_called_once_per_user_call</code></td>
+<td>Backend called once per user call — No silent extra executions: the backend saw exactly the same calls.</td>
+</tr>
+<tr>
+<td><code>test_pubs_unchanged</code></td>
+<td>Pubs unchanged — The parameter bindings submitted to the backend are bit-identical.</td>
+</tr>
+<tr>
+<td><code>test_results_identical</code></td>
+<td>Results identical</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSamplerParity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_backend_called_once_per_user_call</code></td>
+<td>Backend called once per user call</td>
+</tr>
+<tr>
+<td><code>test_shots_unchanged</code></td>
+<td>Shots unchanged — No silent shot inflation: every backed call kept the requested 256.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPennyLaneParity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_device_executed_same_number_of_times</code></td>
+<td>Device executed same number of times</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestOverhead</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_estimator_overhead_under_budget</code></td>
+<td>Per-call recording overhead must stay small (proposal target: &lt;5ms). We assert a generous CI-safe ceiling; the demo reports the real number (typically well under 1ms on a workstation).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_invariantspy">test_invariants.py<a class="headerlink" href="#test_invariantspy" title="Permanent link">&para;</a></h3>
+<p><strong>TestINV003</strong> — INV-003: models are auto-generated, never manually edited.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_all_generated_files_have_header</code></td>
+<td>All generated files have header</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestINV004</strong> — INV-004: models must only import stdlib + pydantic.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_no_forbidden_imports</code></td>
+<td>No forbidden imports</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_schema_roundtrippy">test_schema_roundtrip.py<a class="headerlink" href="#test_schema_roundtrippy" title="Permanent link">&para;</a></h3>
+<p><em>Validates that all Pydantic v2 models correctly enforce schema constraints. Tests are organized by model. Negative tests confirm bad data is rejected.</em></p>
+<p><strong>TestTraceManifest</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_valid_construction</code></td>
+<td>Valid construction</td>
+</tr>
+<tr>
+<td><code>test_roundtrip</code></td>
+<td>Roundtrip</td>
+</tr>
+<tr>
+<td><code>test_mode_enum</code></td>
+<td>Mode enum</td>
+</tr>
+<tr>
+<td><code>test_status_enum</code></td>
+<td>Status enum</td>
+</tr>
+<tr>
+<td><code>test_all_status_values_valid</code></td>
+<td>All status values valid</td>
+</tr>
+<tr>
+<td><code>test_all_mode_values_valid</code></td>
+<td>All mode values valid</td>
+</tr>
+<tr>
+<td><code>test_null_timestamp_end_allowed</code></td>
+<td>Null timestamp end allowed</td>
+</tr>
+<tr>
+<td><code>test_null_integrity_seal_allowed</code></td>
+<td>Null integrity seal allowed</td>
+</tr>
+<tr>
+<td><code>test_optional_fields_absent</code></td>
+<td>Optional fields absent — timestamp_end, integrity_seal, tags are all optional</td>
+</tr>
+<tr>
+<td><code>test_rejects_wrong_version</code></td>
+<td>Rejects wrong version</td>
+</tr>
+<tr>
+<td><code>test_rejects_extra_fields</code></td>
+<td>Rejects extra fields</td>
+</tr>
+<tr>
+<td><code>test_rejects_invalid_mode</code></td>
+<td>Rejects invalid mode</td>
+</tr>
+<tr>
+<td><code>test_rejects_invalid_status</code></td>
+<td>Rejects invalid status</td>
+</tr>
+<tr>
+<td><code>test_requires_client_environment</code></td>
+<td>Requires client environment</td>
+</tr>
+<tr>
+<td><code>test_client_environment_requires_version</code></td>
+<td>Client environment requires version</td>
+</tr>
+<tr>
+<td><code>test_tags_arbitrary_strings</code></td>
+<td>Tags arbitrary strings</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSpan</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_valid_construction</code></td>
+<td>Valid construction</td>
+</tr>
+<tr>
+<td><code>test_roundtrip</code></td>
+<td>Roundtrip</td>
+</tr>
+<tr>
+<td><code>test_events_preserved</code></td>
+<td>Events preserved</td>
+</tr>
+<tr>
+<td><code>test_trace_id_matches_parent</code></td>
+<td>Trace id matches parent</td>
+</tr>
+<tr>
+<td><code>test_sequence_number_zero_allowed</code></td>
+<td>Sequence number zero allowed</td>
+</tr>
+<tr>
+<td><code>test_sequence_number_large_value</code></td>
+<td>Sequence number large value</td>
+</tr>
+<tr>
+<td><code>test_all_status_values_valid</code></td>
+<td>All status values valid</td>
+</tr>
+<tr>
+<td><code>test_null_outcome_ref_allowed</code></td>
+<td>Null outcome ref allowed</td>
+</tr>
+<tr>
+<td><code>test_null_parent_span_id_allowed</code></td>
+<td>Null parent span id allowed — Null parent_span_id = root span</td>
+</tr>
+<tr>
+<td><code>test_event_type_open_pattern</code></td>
+<td>Event type open pattern — event_type is open pattern ^[A-Z_]+$ — custom types must be allowed</td>
+</tr>
+<tr>
+<td><code>test_event_attributes_allow_arbitrary_scalars</code></td>
+<td>Event attributes allow arbitrary scalars</td>
+</tr>
+<tr>
+<td><code>test_event_null_attributes_allowed</code></td>
+<td>Event null attributes allowed</td>
+</tr>
+<tr>
+<td><code>test_rejects_negative_sequence_number</code></td>
+<td>Rejects negative sequence number</td>
+</tr>
+<tr>
+<td><code>test_rejects_empty_events</code></td>
+<td>Rejects empty events — minItems: 1 — a span with no events is invalid</td>
+</tr>
+<tr>
+<td><code>test_rejects_lowercase_event_type</code></td>
+<td>Rejects lowercase event type — event_type pattern is ^[A-Z_]+$ — lowercase must be rejected</td>
+</tr>
+<tr>
+<td><code>test_rejects_extra_fields</code></td>
+<td>Rejects extra fields</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestArtifact</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_valid_construction</code></td>
+<td>Valid construction</td>
+</tr>
+<tr>
+<td><code>test_roundtrip</code></td>
+<td>Roundtrip</td>
+</tr>
+<tr>
+<td><code>test_all_kind_values_valid</code></td>
+<td>All kind values valid</td>
+</tr>
+<tr>
+<td><code>test_all_encoding_values_valid</code></td>
+<td>All encoding values valid</td>
+</tr>
+<tr>
+<td><code>test_all_compression_values_valid</code></td>
+<td>All compression values valid</td>
+</tr>
+<tr>
+<td><code>test_compression_null_allowed</code></td>
+<td>Compression null allowed</td>
+</tr>
+<tr>
+<td><code>test_size_bytes_zero_allowed</code></td>
+<td>Size bytes zero allowed</td>
+</tr>
+<tr>
+<td><code>test_producer_null_allowed</code></td>
+<td>Producer null allowed</td>
+</tr>
+<tr>
+<td><code>test_hash_pattern_enforced</code></td>
+<td>Hash pattern enforced</td>
+</tr>
+<tr>
+<td><code>test_hash_wrong_length_rejected</code></td>
+<td>Hash wrong length rejected</td>
+</tr>
+<tr>
+<td><code>test_rejects_negative_size</code></td>
+<td>Rejects negative size</td>
+</tr>
+<tr>
+<td><code>test_rejects_ref_count_zero</code></td>
+<td>Rejects ref count zero — minimum: 1 — an artifact with zero references is orphaned</td>
+</tr>
+<tr>
+<td><code>test_rejects_invalid_kind</code></td>
+<td>Rejects invalid kind</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCatalog</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_valid_construction</code></td>
+<td>Valid construction</td>
+</tr>
+<tr>
+<td><code>test_roundtrip</code></td>
+<td>Roundtrip</td>
+</tr>
+<tr>
+<td><code>test_multiple_artifacts</code></td>
+<td>Multiple artifacts</td>
+</tr>
+<tr>
+<td><code>test_empty_artifacts_allowed</code></td>
+<td>Empty artifacts allowed</td>
+</tr>
+<tr>
+<td><code>test_artifact_values_are_validated</code></td>
+<td>Artifact values are validated — Even though the key is not pattern-validated by Pydantic (see below),</td>
+</tr>
+<tr>
+<td><code>test_artifact_key_format_not_enforced_by_pydantic</code></td>
+<td>catalog.json uses additionalProperties (not patternProperties) so Pydantic accepts any string key at runtime. Key format and key==artifact_hash integrity is the responsibility of reader/verify.py, not the Pydantic model. This is a deliberate design tradeoff — see design_decisions/0003. This test documents and pins the behaviour. If it starts raising, the schema was changed back to patternProperties.</td>
+</tr>
+<tr>
+<td><code>test_rejects_wrong_version</code></td>
+<td>Rejects wrong version</td>
+</tr>
+<tr>
+<td><code>test_rejects_extra_fields</code></td>
+<td>Rejects extra fields</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testse2e"><code>tests/e2e/</code><a class="headerlink" href="#testse2e" title="Permanent link">&para;</a></h2>
+<p>Full journeys: record a realistic workload, seal, reopen, analyze — the integration surface a real user touches.</p>
+<h3 id="test_full_algorithmspy">test_full_algorithms.py<a class="headerlink" href="#test_full_algorithmspy" title="Permanent link">&para;</a></h3>
+<p><em>Tier 3 end-to-end regression tests. Each test runs a complete algorithm for a small number of steps and verifies: - The trace is sealed and complete - The expected number of spans were recorded - Inline artifacts contain the correct data kinds</em></p>
+<p><strong>TestVQERegression</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_vqe_trace_complete</code></td>
+<td>Runs 5 steps of gradient-based VQE on the simple H = Z⊗Z Hamiltonian. Verifies: spans created, outcome + parameters + observables captured.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestQAOARegression</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_qaoa_bitstrings_recorded</code></td>
+<td>Runs a 2-qubit QAOA-like circuit for 3 angles and records bitstring outcomes. Verifies that counts are captured inline with proper structure.</td>
+</tr>
+<tr>
+<td><code>test_qaoa_multiple_angle_sets</code></td>
+<td>Multiple parameter sets in one PUB → one span total.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestQNNRegression</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_qnn_training_trace_complete</code></td>
+<td>Trains a 2-qubit QNN for 5 steps on a 4-point dataset. Verifies: spans recorded, outcomes + params captured, trace sealed.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCrossFramework</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_both_frameworks_produce_valid_traces</code></td>
+<td>Evaluate Z⊗Z expectation value using both frameworks. Both traces should be valid, sealed, and contain outcome data.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_phenomenologypy">test_phenomenology.py<a class="headerlink" href="#test_phenomenologypy" title="Permanent link">&para;</a></h3>
+<p><em>Phenomenological validation (proposal Section 2.6): plant a known QML phenomenon in synthetic ground-truth circuits and confirm the detector attributes it correctly from trace evidence alone.</em></p>
+<p><strong>TestBarrenPlateauValidation</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_wide_deep_circuit_flagged_barren</code></td>
+<td>Wide deep circuit flagged barren</td>
+</tr>
+<tr>
+<td><code>test_shallow_control_is_trainable</code></td>
+<td>Shallow control is trainable</td>
+</tr>
+<tr>
+<td><code>test_variance_collapses_with_width</code></td>
+<td>The planted property: variance must shrink as width grows.</td>
+</tr>
+<tr>
+<td><code>test_trace_is_active_mode</code></td>
+<td>Landscape probing is a controlled, opt-in active diagnostic.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_qiskit_aerpy">test_qiskit_aer.py<a class="headerlink" href="#test_qiskit_aerpy" title="Permanent link">&para;</a></h3>
+<p><em>End-to-End verification using a REAL Qiskit Aer simulator. Proves the transparent proxy works with actual quantum execution without breaking standard QML workflows.</em></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_real_qml_parameterized_circuit</code></td>
+<td>Runs a real parameterized circuit (typical of QML/VQE) through the AerSimulator, verifying the proxy handles real Qiskit objects.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testsintegrations"><code>tests/integrations/</code><a class="headerlink" href="#testsintegrations" title="Permanent link">&para;</a></h2>
+<p>The proxies (Qiskit Estimator/Sampler, backend.run, PennyLane) must be perfectly transparent to the wrapped framework (1:1 execution parity, INV-001) while recording faithfully. This area also covers calibration-snapshot capture across all three backend-access conventions found in the wild, drift refresh, and shot/precision evidence.</p>
+<h3 id="test_pennylanepy">test_pennylane.py<a class="headerlink" href="#test_pennylanepy" title="Permanent link">&para;</a></h3>
+<p><em>Verifies the dynamic proxy integration for PennyLane. Tests that strict ML type-checks are preserved and synchronous executions are correctly logged as single, unified spans.</em></p>
+<p><strong>TestPennyLaneProxyTransparency</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_dynamic_inheritance</code></td>
+<td>Crucial for PennyLane QNodes: The proxy must pass isinstance().</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPennyLaneExecutionLifecycle</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_synchronous_execution_span</code></td>
+<td>PennyLane evaluates synchronously. We should get exactly ONE span.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPennyLaneExceptionVisibility</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_synchronous_exception_handling</code></td>
+<td>Verifies INV-007 for synchronous failures.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_pennylane_measurementspy">test_pennylane_measurements.py<a class="headerlink" href="#test_pennylane_measurementspy" title="Permanent link">&para;</a></h3>
+<p><em>Tier 2 integration tests for HilbertPennyLaneDeviceProxy covering all common PennyLane measurement types: expval, probs, counts, sample, state. Also verifies exception handling and backend_id propagation.</em></p>
+<p><strong>TestMeasurementTypes</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_expval_inline</code></td>
+<td>Expval inline</td>
+</tr>
+<tr>
+<td><code>test_probs_inline</code></td>
+<td>Probs inline</td>
+</tr>
+<tr>
+<td><code>test_counts_inline</code></td>
+<td>Counts inline — counts is a bitstring → int dict; "00" should dominate</td>
+</tr>
+<tr>
+<td><code>test_sample_inline</code></td>
+<td>Sample inline</td>
+</tr>
+<tr>
+<td><code>test_state_inline_as_complex_pairs</code></td>
+<td>State inline as complex pairs — Stored as [[real, imag], ...] — first amplitude should be [1.0, 0.0]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSpanStructure</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_four_events_per_span</code></td>
+<td>EXECUTION_REQUEST + DEVICE_EXECUTE_STARTED + EXECUTION_COMPLETED + EXECUTION_RESULT</td>
+</tr>
+<tr>
+<td><code>test_device_started_event_has_num_tapes</code></td>
+<td>Device started event has num tapes</td>
+</tr>
+<tr>
+<td><code>test_parameters_captured_per_span</code></td>
+<td>Parameters captured per span</td>
+</tr>
+<tr>
+<td><code>test_observables_captured</code></td>
+<td>Observables captured</td>
+</tr>
+<tr>
+<td><code>test_payload_ref_resolves_to_circuit_qasm</code></td>
+<td>The circuit is now a templated QASM in the file store (deduplicated), so payload_ref must resolve from the catalog, not inline.</td>
+</tr>
+<tr>
+<td><code>test_circuit_qasm_deduplicates_across_steps</code></td>
+<td>Many evaluations of the same circuit structure produce one QASM file.</td>
+</tr>
+<tr>
+<td><code>test_backend_id_set</code></td>
+<td>Backend id set</td>
+</tr>
+<tr>
+<td><code>test_span_status_completed</code></td>
+<td>Span status completed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPennyLaneExceptions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_device_exception_creates_failed_span</code></td>
+<td>When the device raises, a FAILED span with ERROR event is recorded.</td>
+</tr>
+<tr>
+<td><code>test_exception_propagates_to_caller</code></td>
+<td>Exception propagates to caller</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestNoFilePollution</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_all_measurements_stay_inline</code></td>
+<td>expval, probs, counts, sample — none should write .npy files.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_pennylane_qasm_reproducibilitypy">test_pennylane_qasm_reproducibility.py<a class="headerlink" href="#test_pennylane_qasm_reproducibilitypy" title="Permanent link">&para;</a></h3>
+<p><em>Proves that the templated OpenQASM stored for PennyLane traces is </em>useful<em>: template + recorded parameters reconstructs a valid circuit whose outcome matches what was recorded — verified by re-executing through Qiskit (a different framework), proving the QASM is portable and complete.</em></p>
+<p><strong>TestTemplateHelper</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_placeholders_replace_numeric_literals</code></td>
+<td>Placeholders replace numeric literals</td>
+</tr>
+<tr>
+<td><code>test_wire_indices_untouched</code></td>
+<td>Wire indices untouched — wire indices live in [...] not (...) — must not become placeholders</td>
+</tr>
+<tr>
+<td><code>test_multi_param_gate</code></td>
+<td>Multi param gate</td>
+</tr>
+<tr>
+<td><code>test_template_stable_across_values</code></td>
+<td>Template stable across values</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestQASMRoundTrip</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_template_plus_params_reproduces_outcome</code></td>
+<td>The core guarantee: bind(template, params) reproduces the recorded expval.</td>
+</tr>
+<tr>
+<td><code>test_single_qubit_rotation_round_trip</code></td>
+<td>Minimal case: one RY rotation, check exact reproduction.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_qiskitpy">test_qiskit.py<a class="headerlink" href="#test_qiskitpy" title="Permanent link">&para;</a></h3>
+<p><em>Verifies the transparent proxy integration for Qiskit. Tests that circuits are serialized, spans are split (async mirroring), and all underlying framework exceptions are properly propagated (INV-007).</em></p>
+<p><strong>TestProxyTransparency</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_backend_proxy_passthrough</code></td>
+<td>Backend proxy passthrough — The proxy must perfectly imitate the underlying backend properties</td>
+</tr>
+<tr>
+<td><code>test_job_proxy_passthrough</code></td>
+<td>Job proxy passthrough</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestAsyncLifecycle</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_successful_run_and_result</code></td>
+<td>Successful run and result — 1. Trigger the run (SUBMIT SPAN)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestExceptionVisibility</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_run_exception_visibility</code></td>
+<td>Run exception visibility — Simulate a crash during circuit translation/submission</td>
+</tr>
+<tr>
+<td><code>test_result_exception_visibility</code></td>
+<td>Result exception visibility — Simulate a timeout while waiting for an IBM cloud job</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_qiskit_calibrationpy">test_qiskit_calibration.py<a class="headerlink" href="#test_qiskit_calibrationpy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for calibration-snapshot capture. Calibration data (T1, T2, readout error, gate errors) only exists on real/fake hardware backends, never on ideal simulators — so these tests use Qiskit's FakeManilaV2 which ships realistic calibration data, and assert that ideal simulators produce no snapshot.</em></p>
+<p><strong>TestSerializeCalibration</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_extracts_t1_t2_readout</code></td>
+<td>Extracts t1 t2 readout</td>
+</tr>
+<tr>
+<td><code>test_none_backend_returns_none</code></td>
+<td>None backend returns none</td>
+</tr>
+<tr>
+<td><code>test_backend_without_properties_returns_none</code></td>
+<td>Backend without properties returns none</td>
+</tr>
+<tr>
+<td><code>test_backend_raising_properties_returns_none</code></td>
+<td>Backend raising properties returns none</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestEstimatorCalibrationCapture</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_snapshot_captured</code></td>
+<td>Snapshot captured</td>
+</tr>
+<tr>
+<td><code>test_snapshot_captured_once_across_runs</code></td>
+<td>Snapshot captured once across runs — Content-addressed: identical calibration → one artifact regardless of run count</td>
+</tr>
+<tr>
+<td><code>test_ideal_simulator_produces_no_snapshot</code></td>
+<td>Ideal simulator produces no snapshot</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSamplerCalibrationCapture</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_snapshot_captured</code></td>
+<td>Snapshot captured</td>
+</tr>
+<tr>
+<td><code>test_ideal_sampler_produces_no_snapshot</code></td>
+<td>Ideal sampler produces no snapshot</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestResolveBackend</strong> — The three conventions in the wild: qiskit BackendEstimatorV2 exposes .backend as a property, qiskit-ibm-runtime primitives expose backend() as a bound method, and qiskit-aer primitives only hold ._backend.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_property_style</code></td>
+<td>Property style</td>
+</tr>
+<tr>
+<td><code>test_method_style_runtime_convention</code></td>
+<td>Method style runtime convention</td>
+</tr>
+<tr>
+<td><code>test_private_attr_aer_convention</code></td>
+<td>Private attr aer convention</td>
+</tr>
+<tr>
+<td><code>test_backend_passed_directly</code></td>
+<td>Backend passed directly</td>
+</tr>
+<tr>
+<td><code>test_statevector_primitive_resolves_to_none</code></td>
+<td>Statevector primitive resolves to none</td>
+</tr>
+<tr>
+<td><code>test_none_resolves_to_none</code></td>
+<td>None resolves to none</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCalibrationRefresh</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_drift_yields_snapshot_history</code></td>
+<td>Drift yields snapshot history</td>
+</tr>
+<tr>
+<td><code>test_stable_calibration_attaches_once</code></td>
+<td>Stable calibration attaches once</td>
+</tr>
+<tr>
+<td><code>test_rate_limit_skips_query_inside_window</code></td>
+<td>Rate limit skips query inside window</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCalibrationHistory</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_single_snapshot_history</code></td>
+<td>Single snapshot history</td>
+</tr>
+<tr>
+<td><code>test_drift_history_is_chronological</code></td>
+<td>Drift history is chronological — calibration() returns the newest snapshot</td>
+</tr>
+<tr>
+<td><code>test_ideal_trace_has_empty_history</code></td>
+<td>Ideal trace has empty history</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_qiskit_samplerpy">test_qiskit_sampler.py<a class="headerlink" href="#test_qiskit_samplerpy" title="Permanent link">&para;</a></h3>
+<p><em>Tier 2 integration tests for HilbertSamplerProxy. Uses real Qiskit circuits but keeps them minimal (1–2 qubits, few shots).</em></p>
+<p><strong>TestSamplerBasic</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_one_span_per_pub</code></td>
+<td>Each PUB produces exactly one span.</td>
+</tr>
+<tr>
+<td><code>test_outcome_inline_with_counts</code></td>
+<td>Bitstring counts are stored inline as JSON, not as files.</td>
+</tr>
+<tr>
+<td><code>test_no_outcome_files_on_disk</code></td>
+<td>All data is inline — artifacts/ holds only QASM, not outcomes.</td>
+</tr>
+<tr>
+<td><code>test_circuit_deduplication</code></td>
+<td>Same circuit template across many shots produces only one QASM file.</td>
+</tr>
+<tr>
+<td><code>test_span_status_completed</code></td>
+<td>Span status completed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSamplerParametric</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_parameter_bindings_captured</code></td>
+<td>Parameter bindings captured — Should contain the parameter array flattened</td>
+</tr>
+<tr>
+<td><code>test_different_params_different_outcomes</code></td>
+<td>Different params different outcomes — theta=0: should be almost all '0'</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSamplerTransparency</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_job_result_unchanged</code></td>
+<td>The job returned by the proxy produces the same result as unproxied.</td>
+</tr>
+<tr>
+<td><code>test_shots_in_execution_completed_event</code></td>
+<td>EXECUTION_COMPLETED event carries the actual shot count.</td>
+</tr>
+<tr>
+<td><code>test_tape_closed_skips_recording</code></td>
+<td>After tape closes, proxy forwards calls but records nothing.</td>
+</tr>
+<tr>
+<td><code>test_deepcopy_preserves_tape</code></td>
+<td>Deepcopy preserves tape</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testsreader"><code>tests/reader/</code><a class="headerlink" href="#testsreader" title="Permanent link">&para;</a></h2>
+<p>Verification: <code>trace.verify()</code> must pass on honest traces and fail loudly on any tampering — the property the blinded validation protocol depends on.</p>
+<h3 id="test_verifypy">test_verify.py<a class="headerlink" href="#test_verifypy" title="Permanent link">&para;</a></h3>
+<p><em>Proves the cryptographic and causal verification engine. Guarantees that tampered data, missing files, or out-of-order execution spans are strictly rejected.</em></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_valid_trace_passes</code></td>
+<td>A perfectly clean trace should pass with True.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_tampered_artifact</code></td>
+<td>Simulates a malicious user altering their result file after the run to make their quantum benchmark look better.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_missing_events_file</code></td>
+<td>If events.jsonl is deleted, the trace is invalid.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_integrity_seal_present_and_valid</code></td>
+<td>A sealed trace carries an integrity_seal that matches events.jsonl.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_event_stream_tampering</code></td>
+<td>Modifying events.jsonl in a way that still passes causal/reference checks (e.g. flipping a backend_id that no check inspects) must still be caught by the integrity seal's byte-level checksum.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_causal_sequence_violation</code></td>
+<td>Simulates a logging error where sequence numbers are duplicated, or a user copy-pasting spans to fake execution data.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_dangling_artifact_references</code></td>
+<td>Simulates a span pointing to an artifact hash that doesn't exist in the catalog.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_verify_detects_child_before_parent_violation</code></td>
+<td>A child span cannot legally finish and flush to the logs BEFORE its parent span has been created. Causal arrows flow one way.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testsrecorder"><code>tests/recorder/</code><a class="headerlink" href="#testsrecorder" title="Permanent link">&para;</a></h2>
+<p>The recorder is the write path: <code>HilbertTape</code>, spans, events, and the content-addressed artifact store. These tests protect the append-only discipline (INV-002), atomic sealing, and the guarantee that every initiated span terminates explicitly (INV-007).</p>
+<h3 id="test_inline_artifactspy">test_inline_artifacts.py<a class="headerlink" href="#test_inline_artifactspy" title="Permanent link">&para;</a></h3>
+<p><em>Tier 1 unit tests for the two-tier storage system: - SpanHandle.attach_inline() correctness - Hash integrity (key == sha256 of data) - Routing enforcement (structural kinds rejected inline) - Inline data appears in JSONL, not in the file store - Parquet writer preserves inline_artifacts column</em></p>
+<p><strong>TestAttachInlineBasics</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_returns_sha256_hash</code></td>
+<td>Returns sha256 hash</td>
+</tr>
+<tr>
+<td><code>test_hash_matches_data</code></td>
+<td>Hash matches data</td>
+</tr>
+<tr>
+<td><code>test_size_bytes_matches_data</code></td>
+<td>Size bytes matches data</td>
+</tr>
+<tr>
+<td><code>test_all_fields_present</code></td>
+<td>All fields present</td>
+</tr>
+<tr>
+<td><code>test_same_data_same_hash_idempotent</code></td>
+<td>Same data same hash idempotent — dict is keyed by hash — still just one entry</td>
+</tr>
+<tr>
+<td><code>test_raises_after_tape_closed</code></td>
+<td>Raises after tape closed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestInlineKindEnforcement</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_circuit_qasm_rejected</code></td>
+<td>Circuit qasm rejected</td>
+</tr>
+<tr>
+<td><code>test_calibration_snapshot_rejected</code></td>
+<td>Calibration snapshot rejected</td>
+</tr>
+<tr>
+<td><code>test_execution_outcome_allowed</code></td>
+<td>Execution outcome allowed</td>
+</tr>
+<tr>
+<td><code>test_parameters_allowed</code></td>
+<td>Parameters allowed</td>
+</tr>
+<tr>
+<td><code>test_observables_allowed</code></td>
+<td>Observables allowed</td>
+</tr>
+<tr>
+<td><code>test_generic_blob_allowed</code></td>
+<td>Generic blob allowed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestStorageRouting</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_inline_artifact_not_written_to_disk</code></td>
+<td>Inline artifact not written to disk — artifacts directory must be empty (no files, not even shard dirs with files)</td>
+</tr>
+<tr>
+<td><code>test_inline_artifact_not_in_catalog</code></td>
+<td>Inline artifact not in catalog</td>
+</tr>
+<tr>
+<td><code>test_inline_appears_in_jsonl</code></td>
+<td>Inline appears in jsonl</td>
+</tr>
+<tr>
+<td><code>test_outcome_ref_resolves_from_inline</code></td>
+<td>Outcome ref resolves from inline</td>
+</tr>
+<tr>
+<td><code>test_structural_artifact_still_uses_file_store</code></td>
+<td>Structural artifact still uses file store</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestParquetWriterInline</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_inline_artifacts_column_written</code></td>
+<td>Inline artifacts column written</td>
+</tr>
+<tr>
+<td><code>test_inline_artifacts_data_round_trips</code></td>
+<td>Inline artifacts data round trips</td>
+</tr>
+<tr>
+<td><code>test_spans_without_inline_have_null_column</code></td>
+<td>Spans without inline have null column</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_invariantspy_1">test_invariants.py<a class="headerlink" href="#test_invariantspy_1" title="Permanent link">&para;</a></h3>
+<p><em>Tier 4 property / invariant tests. These test the eight architectural invariants stated in docs/architecture/001_invariants.md, plus hash integrity and storage-triage consistency properties.</em></p>
+<p><strong>TestINV001ObserverEffect</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_qiskit_estimator_does_not_alter_result</code></td>
+<td>Proxy result must be bitwise identical to unproxied result.</td>
+</tr>
+<tr>
+<td><code>test_pennylane_proxy_does_not_alter_result</code></td>
+<td>PennyLane proxy result must match direct device result.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestINV002TraceImmutability</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_write_after_close_raises</code></td>
+<td>Write after close raises</td>
+</tr>
+<tr>
+<td><code>test_attach_artifact_after_close_raises</code></td>
+<td>Attach artifact after close raises</td>
+</tr>
+<tr>
+<td><code>test_close_idempotent</code></td>
+<td>Close idempotent</td>
+</tr>
+<tr>
+<td><code>test_events_jsonl_append_only</code></td>
+<td>Span data is flushed immediately — JSONL length only grows.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP007IntegritySeal</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_seal_present_after_seal</code></td>
+<td>Seal present after seal</td>
+</tr>
+<tr>
+<td><code>test_seal_checksum_matches_events_file</code></td>
+<td>Seal checksum matches events file</td>
+</tr>
+<tr>
+<td><code>test_artifact_count_includes_inline</code></td>
+<td>Artifact count includes inline</td>
+</tr>
+<tr>
+<td><code>test_artifact_count_includes_filestore</code></td>
+<td>Artifact count includes filestore</td>
+</tr>
+<tr>
+<td><code>test_seal_absent_while_in_flight</code></td>
+<td>Before sealing, trace.json is CRASHED_IN_FLIGHT with no seal.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestINV007FailureVisibility</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_exception_span_has_error_event</code></td>
+<td>Exception span has error event</td>
+</tr>
+<tr>
+<td><code>test_error_event_captures_exception_type</code></td>
+<td>Error event captures exception type</td>
+</tr>
+<tr>
+<td><code>test_exception_propagates_to_caller</code></td>
+<td>Exception propagates to caller</td>
+</tr>
+<tr>
+<td><code>test_tape_sealed_with_errors_on_outer_exception</code></td>
+<td>Tape sealed with errors on outer exception</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP001HashIntegrity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_inline_artifact_keys_match_sha256</code></td>
+<td>Inline artifact keys match sha256</td>
+</tr>
+<tr>
+<td><code>test_all_spans_in_jsonl_pass_hash_check</code></td>
+<td>All spans in jsonl pass hash check</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP002FileStoreIntegrity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_attached_file_hash_matches_disk</code></td>
+<td>Attached file hash matches disk — Verify file on disk</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP003CatalogConsistency</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_catalog_entries_match_file_count</code></td>
+<td>Catalog entries match file count — Files on disk may be &lt; catalog entries if circuits are identical (dedup)</td>
+</tr>
+<tr>
+<td><code>test_inline_artifacts_not_counted_in_catalog</code></td>
+<td>Inline artifacts not counted in catalog</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP004SequenceNumbers</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_sequence_numbers_monotonic_and_unique</code></td>
+<td>Sequence numbers monotonic and unique</td>
+</tr>
+<tr>
+<td><code>test_nested_spans_both_get_unique_sequences</code></td>
+<td>Nested spans both get unique sequences</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP005NoCircuitInline</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_circuit_qasm_always_in_file_store</code></td>
+<td>Circuit qasm always in file store</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestPROP006OutcomeRefResolves</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_inline_outcome_ref_resolves</code></td>
+<td>Inline outcome ref resolves</td>
+</tr>
+<tr>
+<td><code>test_file_store_outcome_ref_resolves</code></td>
+<td>File store outcome ref resolves</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_storagepy">test_storage.py<a class="headerlink" href="#test_storagepy" title="Permanent link">&para;</a></h3>
+<p><em>Verifies the PyArrow Parquet conversion engine. Ensures columnar arrays maintain strict integrity against the JSON schema.</em></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_parquet_conversion_creates_file</code></td>
+<td>Parquet conversion creates file</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_parquet_schema_and_data_integrity</code></td>
+<td>Parquet schema and data integrity — Read it back into memory to verify column types</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_missing_jsonl_raises_error</code></td>
+<td>Missing jsonl raises error</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test_tapepy">test_tape.py<a class="headerlink" href="#test_tapepy" title="Permanent link">&para;</a></h3>
+<p><em>All I/O is isolated to tmp_path. All model types imported from hilbertbench.models public interface only — never from v1_0 directly. Adheres strictly to INV-001, INV-003, INV-004, and INV-007.</em></p>
+<p><strong>TestOpen</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_creates_run_directory</code></td>
+<td>Creates run directory</td>
+</tr>
+<tr>
+<td><code>test_dir_name_format</code></td>
+<td>Dir name format</td>
+</tr>
+<tr>
+<td><code>test_artifacts_subdir_exists</code></td>
+<td>Artifacts subdir exists</td>
+</tr>
+<tr>
+<td><code>test_trace_json_written_on_open</code></td>
+<td>Trace json written on open</td>
+</tr>
+<tr>
+<td><code>test_events_jsonl_created_on_open</code></td>
+<td>Events jsonl created on open</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestTraceLifecycle</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_sealed_success_on_clean_exit</code></td>
+<td>Sealed success on clean exit</td>
+</tr>
+<tr>
+<td><code>test_sealed_with_errors_on_exception</code></td>
+<td>Sealed with errors on exception</td>
+</tr>
+<tr>
+<td><code>test_timestamp_end_absent_while_open</code></td>
+<td>Timestamp end absent while open</td>
+</tr>
+<tr>
+<td><code>test_timestamp_end_present_after_close</code></td>
+<td>Timestamp end present after close</td>
+</tr>
+<tr>
+<td><code>test_tags_persisted</code></td>
+<td>Tags persisted</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSpans</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_span_flushed_immediately_on_close</code></td>
+<td>Span flushed immediately on close</td>
+</tr>
+<tr>
+<td><code>test_span_fields_present</code></td>
+<td>Span fields present</td>
+</tr>
+<tr>
+<td><code>test_span_nesting_parent_id</code></td>
+<td>Span nesting parent id — Inner span is closed and flushed first, so it is at index 0</td>
+</tr>
+<tr>
+<td><code>test_root_span_has_no_parent</code></td>
+<td>Root span has no parent</td>
+</tr>
+<tr>
+<td><code>test_sequence_numbers_monotonic_and_unique</code></td>
+<td>Sequence numbers monotonic and unique</td>
+</tr>
+<tr>
+<td><code>test_span_event_recorded</code></td>
+<td>Span event recorded — Should have REQUEST, CALIBRATION_CHECK, RESULT</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestThreadSafety</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_parallel_spans_do_not_cross_nest</code></td>
+<td>Per-thread span stack must be independent (threading.local check).</td>
+</tr>
+<tr>
+<td><code>test_events_jsonl_valid_under_concurrency</code></td>
+<td>Every line must be valid JSON after 10 concurrent span writers.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestAttach</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_artifact_copied_to_artifacts_dir</code></td>
+<td>Artifact copied to artifacts dir — Artifacts use 2-char sharding: artifacts/<shard>/<full_hash>.<ext></td>
+</tr>
+<tr>
+<td><code>test_catalog_json_written_on_close</code></td>
+<td>Catalog json written on close</td>
+</tr>
+<tr>
+<td><code>test_sha256_correct</code></td>
+<td>Sha256 correct</td>
+</tr>
+<tr>
+<td><code>test_size_bytes_correct</code></td>
+<td>Size bytes correct</td>
+</tr>
+<tr>
+<td><code>test_missing_file_raises</code></td>
+<td>Missing file raises</td>
+</tr>
+<tr>
+<td><code>test_compression_stored</code></td>
+<td>Compression stored</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestFreezeOnClose</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_span_after_close_raises</code></td>
+<td>Span after close raises</td>
+</tr>
+<tr>
+<td><code>test_attach_after_close_raises</code></td>
+<td>Attach after close raises</td>
+</tr>
+<tr>
+<td><code>test_close_idempotent</code></td>
+<td>Close idempotent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestExceptionPath</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_exception_span_written</code></td>
+<td>Exception span written — The exception occurred inside the span, so it should be FAILED</td>
+</tr>
+<tr>
+<td><code>test_original_exception_propagates</code></td>
+<td>Original exception propagates</td>
+</tr>
+<tr>
+<td><code>test_exception_attributes_captured</code></td>
+<td>Exception attributes captured</td>
+</tr>
+</tbody>
+</table>
+<h2 id="teststools"><code>tests/tools/</code><a class="headerlink" href="#teststools" title="Permanent link">&para;</a></h2>
+<p>The blinded-corpus protocol tool: leakage auditing, verbatim blinding with random IDs, SHA-256 answer-key commitments, and confusion-matrix scoring with Wilson intervals.</p>
+<h3 id="test_blind_corpuspy">test_blind_corpus.py<a class="headerlink" href="#test_blind_corpuspy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the blinded-corpus protocol tool (tools/blind_corpus.py): leakage audit, blinding round-trip, commitment verification, and confusion-matrix scoring.</em></p>
+<p><strong>TestAudit</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_clean_run_passes</code></td>
+<td>Clean run passes</td>
+</tr>
+<tr>
+<td><code>test_label_in_tags_is_flagged</code></td>
+<td>Label in tags is flagged</td>
+</tr>
+<tr>
+<td><code>test_label_in_dirname_is_flagged</code></td>
+<td>Label in dirname is flagged</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestBlind</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_blinding_roundtrip</code></td>
+<td>Blinding roundtrip — blinded copies + key + commitment + sheet all exist</td>
+</tr>
+<tr>
+<td><code>test_leaky_corpus_is_refused</code></td>
+<td>Leaky corpus is refused</td>
+</tr>
+<tr>
+<td><code>test_invalid_label_is_refused</code></td>
+<td>Invalid label is refused</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestScore</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_perfect_diagnosis_scores_one</code></td>
+<td>Perfect diagnosis scores one</td>
+</tr>
+<tr>
+<td><code>test_wrong_diagnosis_scores_zero</code></td>
+<td>Wrong diagnosis scores zero</td>
+</tr>
+<tr>
+<td><code>test_tampered_key_fails_commitment</code></td>
+<td>Tampered key fails commitment — flip the label so the tamper is guaranteed to change content</td>
+</tr>
+<tr>
+<td><code>test_wilson_interval_sane</code></td>
+<td>Wilson interval sane</td>
+</tr>
+</tbody>
+</table>
+<h2 id="teststrace"><code>tests/trace/</code><a class="headerlink" href="#teststrace" title="Permanent link">&para;</a></h2>
+<p><code>HilbertTrace</code> is the public read API. These tests guarantee that whatever the recorder wrote, the reader resolves back exactly — spans, outcomes, parameters, circuits, calibration history — without the caller knowing about storage details.</p>
+<h3 id="test_hilberttracepy">test_hilberttrace.py<a class="headerlink" href="#test_hilberttracepy" title="Permanent link">&para;</a></h3>
+<p><em>Tests for the HilbertTrace unified data API. Traces are built with the tape directly (no quantum execution) so the resolution logic — inline vs file-store, scalar vs array vs dict outcomes — is exercised deterministically.</em></p>
+<p><strong>TestConstruction</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_missing_directory_raises</code></td>
+<td>Missing directory raises</td>
+</tr>
+<tr>
+<td><code>test_directory_without_events_raises</code></td>
+<td>Directory without events raises</td>
+</tr>
+<tr>
+<td><code>test_repr</code></td>
+<td>Repr</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestMetadata</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_status_mode_tags</code></td>
+<td>Status mode tags</td>
+</tr>
+<tr>
+<td><code>test_integrity_seal_present</code></td>
+<td>Integrity seal present</td>
+</tr>
+<tr>
+<td><code>test_environment</code></td>
+<td>Environment</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestSpanAccess</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_len_and_iteration</code></td>
+<td>Len and iteration</td>
+</tr>
+<tr>
+<td><code>test_completed_filter</code></td>
+<td>Completed filter</td>
+</tr>
+<tr>
+<td><code>test_filter_by_backend</code></td>
+<td>Filter by backend</td>
+</tr>
+<tr>
+<td><code>test_dataframe_view</code></td>
+<td>Dataframe view</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestInlineResolution</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_outcome_resolves</code></td>
+<td>Outcome resolves</td>
+</tr>
+<tr>
+<td><code>test_parameters_resolve</code></td>
+<td>Parameters resolve</td>
+</tr>
+<tr>
+<td><code>test_observables_resolve</code></td>
+<td>Observables resolve</td>
+</tr>
+<tr>
+<td><code>test_missing_parameters_returns_none</code></td>
+<td>Missing parameters returns none</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestFileStoreResolution</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_circuit_resolves_from_file</code></td>
+<td>Circuit resolves from file</td>
+</tr>
+<tr>
+<td><code>test_outcome_inline_circuit_filestore_same_span</code></td>
+<td>A span may mix storage tiers: inline outcome + file-store circuit.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestNumericOutcomes</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_scalars</code></td>
+<td>Scalars</td>
+</tr>
+<tr>
+<td><code>test_arrays_flattened</code></td>
+<td>Arrays flattened</td>
+</tr>
+<tr>
+<td><code>test_counts_dict_skipped</code></td>
+<td>Sampler-style counts dicts are not numeric outcomes.</td>
+</tr>
+<tr>
+<td><code>test_variance_matches_manual</code></td>
+<td>Variance matches manual</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestCalibrationAndVerify</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_calibration_none_when_absent</code></td>
+<td>Calibration none when absent</td>
+</tr>
+<tr>
+<td><code>test_calibration_resolves_when_present</code></td>
+<td>Calibration resolves when present</td>
+</tr>
+<tr>
+<td><code>test_verify_passes_on_clean_trace</code></td>
+<td>Verify passes on clean trace</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TestLazyImport</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it verifies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_top_level_import</code></td>
+<td>Top level import</td>
+</tr>
+<tr>
+<td><code>test_unknown_attribute_raises</code></td>
+<td>Unknown attribute raises</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

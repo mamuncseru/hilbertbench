@@ -1,0 +1,2324 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Non-intrusive diagnostic framework for quantum machine learning">
+      
+      
+        <meta name="author" content="HilbertBench Contributors">
+      
+      
+        <link rel="canonical" href="https://mamuncseru.github.io/hilbertbench/end-to-end/">
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../tutorials/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>End-to-End Guide - HilbertBench</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hilbertbench-end-to-end" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="HilbertBench" class="md-header__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            HilbertBench
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              End-to-End Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  End-to-End Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../tutorials/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../concepts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Concepts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/qiskit-estimator/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://hilbertbench.readthedocs.io" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference ↗
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="HilbertBench" class="md-nav__button md-logo" aria-label="HilbertBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    HilbertBench
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mamuncseru/hilbertbench" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mamuncseru/hilbertbench
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    End-to-End Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    End-to-End Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-0-what-is-this-30-seconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 0 — What is this? (30 seconds)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-the-five-minute-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1 — The five-minute mental model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 1 — The five-minute mental model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-problem-does-it-solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What problem does it solve?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-non-intrusive-is-the-core-design-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why "non-intrusive" is the core design constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-evidence-not-verdicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why "evidence, not verdicts"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-step-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three-step workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-quickstart-run-it-yourself-in-two-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2 — Quickstart: run it yourself in two minutes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-how-recording-works-the-proxy-and-the-tape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3 — How recording works (the proxy and the tape)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 3 — How recording works (the proxy and the tape)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-intercept-at-the-execution-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why intercept at the execution boundary?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-what-one-execution-produces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How: what one execution produces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-anatomy-of-a-trace-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 4 — Anatomy of a trace directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-the-six-analyzers-what-why-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 5 — The six analyzers (what / why / how)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 5 — The six analyzers (what / why / how)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detect_barren_plateau-is-there-anything-to-learn-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detect_barren_plateau — is there anything to learn from?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shot_noise_ratio-signal-or-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shot_noise_ratio — signal, or static?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization_convergence-is-the-trajectory-still-moving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        optimization_convergence — is the trajectory still moving?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuit_structure-what-actually-ran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        circuit_structure — what actually ran?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kl_expressibility-how-much-of-the-space-can-the-model-reach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kl_expressibility — how much of the space can the model reach?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise_profile-how-hostile-was-the-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        noise_profile — how hostile was the machine?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-all-of-the-above" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        summary — all of the above
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6-passive-vs-active-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 6 — Passive vs Active Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-7-the-blinded-validation-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 7 — The blinded-validation toolkit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-8-the-experiments-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 8 — The experiments harness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-9-running-on-real-ibm-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 9 — Running on real IBM hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10-quality-assurance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 10 — Quality assurance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10-glossary-for-non-quantum-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossary for non-quantum readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/vqe-barren-plateau/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 · Why Isn't My VQE Converging?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/shot-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 · Am I Using Enough Shots?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/expressibility-vs-trainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · Expressibility vs Trainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/hardware-noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 · How Hardware Noise Degrades Your Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/qiskit-estimator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Estimator (VQE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/qiskit-sampler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qiskit Sampler (QAOA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/ibm-hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/pennylane-qnn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PennyLane QNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/active-mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active Mode (Expressibility)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://hilbertbench.readthedocs.io" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-0-what-is-this-30-seconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 0 — What is this? (30 seconds)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-the-five-minute-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1 — The five-minute mental model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 1 — The five-minute mental model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-problem-does-it-solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What problem does it solve?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-non-intrusive-is-the-core-design-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why "non-intrusive" is the core design constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-evidence-not-verdicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why "evidence, not verdicts"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-step-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three-step workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-quickstart-run-it-yourself-in-two-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2 — Quickstart: run it yourself in two minutes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-how-recording-works-the-proxy-and-the-tape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3 — How recording works (the proxy and the tape)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 3 — How recording works (the proxy and the tape)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-intercept-at-the-execution-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why intercept at the execution boundary?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-what-one-execution-produces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How: what one execution produces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-anatomy-of-a-trace-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 4 — Anatomy of a trace directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-the-six-analyzers-what-why-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 5 — The six analyzers (what / why / how)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 5 — The six analyzers (what / why / how)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detect_barren_plateau-is-there-anything-to-learn-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        detect_barren_plateau — is there anything to learn from?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shot_noise_ratio-signal-or-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shot_noise_ratio — signal, or static?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization_convergence-is-the-trajectory-still-moving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        optimization_convergence — is the trajectory still moving?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuit_structure-what-actually-ran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        circuit_structure — what actually ran?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kl_expressibility-how-much-of-the-space-can-the-model-reach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kl_expressibility — how much of the space can the model reach?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise_profile-how-hostile-was-the-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        noise_profile — how hostile was the machine?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-all-of-the-above" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        summary — all of the above
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6-passive-vs-active-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 6 — Passive vs Active Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-7-the-blinded-validation-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 7 — The blinded-validation toolkit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-8-the-experiments-harness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 8 — The experiments harness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-9-running-on-real-ibm-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 9 — Running on real IBM hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10-quality-assurance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 10 — Quality assurance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10-glossary-for-non-quantum-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossary for non-quantum readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="hilbertbench-end-to-end">HilbertBench, End to End<a class="headerlink" href="#hilbertbench-end-to-end" title="Permanent link">&para;</a></h1>
+<p>This is the one document to read if you want to understand the whole
+tool — what it is, why it is built the way it is, and how every piece
+works. It starts at 10,000 feet and descends one level at a time.
+Each level is self-contained: stop whenever you have enough depth.</p>
+<p>No quantum computing background is assumed. Quantum-specific terms
+are explained the first time they appear, and there is a
+<a href="#level-10-glossary-for-non-quantum-readers">glossary</a> at the end.</p>
+<hr />
+<h2 id="level-0-what-is-this-30-seconds">Level 0 — What is this? (30 seconds)<a class="headerlink" href="#level-0-what-is-this-30-seconds" title="Permanent link">&para;</a></h2>
+<p><strong>HilbertBench is a flight recorder for quantum machine learning
+experiments.</strong></p>
+<p>You add one line to your existing code. From then on, every circuit
+your program sends to a quantum computer (or simulator) — and every
+answer that comes back — is silently recorded into a tamper-evident
+file set called a <em>trace</em>. Afterwards, you (or anyone you send the
+trace to) can run built-in analyzers that diagnose <strong>why</strong> the
+experiment behaved the way it did: was the model untrainable? Were
+the measurements too noisy? Was the hardware having a bad day?</p>
+<p>The experiment itself is never touched. That is the whole point.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>your code ──► [HilbertBench proxy] ──► quantum computer
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                     │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                     ▼ (silently)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>              sealed trace on disk ──► analyzers ──► diagnosis
+</code></pre></div>
+<hr />
+<h2 id="level-1-the-five-minute-mental-model">Level 1 — The five-minute mental model<a class="headerlink" href="#level-1-the-five-minute-mental-model" title="Permanent link">&para;</a></h2>
+<h3 id="what-problem-does-it-solve">What problem does it solve?<a class="headerlink" href="#what-problem-does-it-solve" title="Permanent link">&para;</a></h3>
+<p>Quantum machine learning (QML) trains models the way classical ML
+trains neural networks — an optimizer adjusts parameters to minimize
+a loss. The difference: the "model" is a quantum circuit executed on
+a quantum processor, and the loss is estimated from repeated
+probabilistic measurements.</p>
+<p>These experiments fail in ways that look identical from the outside
+(the loss just stops improving) but have completely different causes:</p>
+<table>
+<thead>
+<tr>
+<th>Failure mode</th>
+<th>What is actually happening</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Barren plateau</strong></td>
+<td>The optimization landscape is exponentially flat — there is no gradient signal to follow</td>
+</tr>
+<tr>
+<td><strong>Shot starvation</strong></td>
+<td>Too few measurement repetitions — the optimizer is chasing statistical noise</td>
+</tr>
+<tr>
+<td><strong>Noise domination</strong></td>
+<td>Hardware errors destroy the computation before it can be measured</td>
+</tr>
+<tr>
+<td><strong>Nothing</strong></td>
+<td>The run is healthy and just needs more iterations</td>
+</tr>
+</tbody>
+</table>
+<p>Today, telling these apart is folklore: rerun with tweaks until
+something works. HilbertBench replaces that with evidence.</p>
+<h3 id="why-non-intrusive-is-the-core-design-constraint">Why "non-intrusive" is the core design constraint<a class="headerlink" href="#why-non-intrusive-is-the-core-design-constraint" title="Permanent link">&para;</a></h3>
+<p>Two reasons, one physical and one scientific:</p>
+<ol>
+<li><strong>The observer effect is real here.</strong> You cannot print
+   intermediate quantum states — measuring a quantum system changes
+   it. And inserting heavy diagnostics into a training loop changes
+   its <em>timing</em>, which on real superconducting hardware changes the
+   noise the experiment sees. A diagnostic tool that perturbs the
+   experiment becomes a confounding variable.</li>
+<li><strong>Paid hardware bills by the second.</strong> A tool that silently
+   re-executes circuits or adds measurements costs real money. Users
+   must be able to trust that recording is free of side effects.</li>
+</ol>
+<p>So HilbertBench enforces <strong>1:1 execution parity</strong>: it never
+re-executes circuits, never adds measurements, never changes shot
+counts, and adds negligible latency. It records exactly what was
+going to happen anyway. This is invariant INV-001, and the test
+suite enforces it.</p>
+<h3 id="why-evidence-not-verdicts">Why "evidence, not verdicts"<a class="headerlink" href="#why-evidence-not-verdicts" title="Permanent link">&para;</a></h3>
+<p>The recorder writes down <strong>facts</strong>: which circuit ran, with which
+parameters, what the device answered, what the machine's calibration
+was at that moment. It never writes conclusions into the trace.
+Diagnoses are computed at <em>read time</em> by analyzers, from the
+evidence. This separation (invariant INV-006) means:</p>
+<ul>
+<li>a better analyzer written next year can re-diagnose last year's
+  traces;</li>
+<li>two people can disagree about interpretation while agreeing on the
+  facts;</li>
+<li>a trace can be published, and strangers can do their own analysis —
+  the "data-only research" model.</li>
+</ul>
+<h3 id="the-three-step-workflow">The three-step workflow<a class="headerlink" href="#the-three-step-workflow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.recorder.tape</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTape</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.integrations.qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertEstimatorProxy</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">summary</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTrace</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># 1. RECORD: wrap your estimator — the only change to your code</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">with</span> <span class="n">HilbertTape</span><span class="p">(</span><span class="s2">&quot;runs/my_experiment&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">estimator</span> <span class="o">=</span> <span class="n">HilbertEstimatorProxy</span><span class="p">(</span><span class="n">tape</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="o">...</span>  <span class="c1"># your training loop, completely unchanged</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># 2. SEAL: leaving the `with` block seals the trace (SHA-256)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># 3. ANALYZE: anyone, anywhere, any time later</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">trace</span> <span class="o">=</span> <span class="n">HilbertTrace</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">trace</span><span class="p">))</span>
+</code></pre></div>
+<hr />
+<h2 id="level-2-quickstart-run-it-yourself-in-two-minutes">Level 2 — Quickstart: run it yourself in two minutes<a class="headerlink" href="#level-2-quickstart-run-it-yourself-in-two-minutes" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mamuncseru/hilbertbench
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>hilbertbench
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[qiskit,storage]&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-q<span class="w">        </span><span class="c1"># 319 tests should pass</span>
+</code></pre></div>
+<p>Then run this complete example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">Parameter</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.quantum_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparsePauliOp</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.recorder.tape</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTape</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.integrations.qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertEstimatorProxy</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_barren_plateau</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">theta</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">qc</span><span class="o">.</span><span class="n">ry</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">qc</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">obs</span> <span class="o">=</span> <span class="n">SparsePauliOp</span><span class="p">(</span><span class="s2">&quot;IZ&quot;</span><span class="p">)</span>          <span class="c1"># measure &lt;Z&gt; on qubit 0</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="k">with</span> <span class="n">HilbertTape</span><span class="p">(</span><span class="s2">&quot;runs/demo&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">est</span> <span class="o">=</span> <span class="n">HilbertEstimatorProxy</span><span class="p">(</span><span class="n">tape</span><span class="p">)</span>        <span class="c1"># local ideal simulator</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">25</span><span class="p">):</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="n">est</span><span class="o">.</span><span class="n">run</span><span class="p">([(</span><span class="n">qc</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="p">[[</span><span class="n">val</span><span class="p">]])])</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="nb">print</span><span class="p">(</span><span class="n">detect_barren_plateau</span><span class="p">(</span><span class="n">tape</span><span class="o">.</span><span class="n">dir_path</span><span class="p">))</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="c1"># {&#39;status&#39;: &#39;Trainable&#39;, &#39;variance&#39;: 0.49..., ...}</span>
+</code></pre></div>
+<p>What just happened: 25 circuit executions were recorded into
+<code>runs/demo/&lt;timestamp&gt;/</code>, the trace was sealed, and the analyzer
+measured the variance of the recorded outcomes — high variance means
+a bumpy, trainable landscape.</p>
+<hr />
+<h2 id="level-3-how-recording-works-the-proxy-and-the-tape">Level 3 — How recording works (the proxy and the tape)<a class="headerlink" href="#level-3-how-recording-works-the-proxy-and-the-tape" title="Permanent link">&para;</a></h2>
+<h3 id="what">What<a class="headerlink" href="#what" title="Permanent link">&para;</a></h3>
+<p>Two objects cooperate:</p>
+<ul>
+<li><strong>The proxy</strong> (<code>HilbertEstimatorProxy</code>, <code>HilbertSamplerProxy</code>,
+  <code>HilbertPennyLaneDeviceProxy</code>) impersonates the object your code
+  already uses. It forwards every call to the real backend untouched
+  and copies what it sees to the tape.</li>
+<li><strong>The tape</strong> (<code>HilbertTape</code>) is the writer. It owns a run
+  directory and appends records to it. It is append-only: nothing
+  recorded is ever modified or deleted (invariant INV-002).</li>
+</ul>
+<h3 id="why-intercept-at-the-execution-boundary">Why intercept at the <em>execution boundary</em>?<a class="headerlink" href="#why-intercept-at-the-execution-boundary" title="Permanent link">&para;</a></h3>
+<p>Most ML logging tools ask you to instrument your training loop.
+HilbertBench refuses, for coverage reasons: whatever framework or
+optimizer you use, everything eventually funnels through one narrow
+interface — the call that submits circuits for execution (in Qiskit,
+the V2 primitive <code>run()</code> method). Intercepting there captures
+<em>everything</em> with one line, and the user's code stays immutable.</p>
+<h3 id="how-what-one-execution-produces">How: what one execution produces<a class="headerlink" href="#how-what-one-execution-produces" title="Permanent link">&para;</a></h3>
+<p>When your code calls <code>proxy.run(pubs)</code>:</p>
+<ol>
+<li>The proxy forwards the call to the real estimator and waits for
+   the result — <strong>first</strong>, so timing is unchanged.</li>
+<li>For each PUB (a "primitive unified bloc" — circuit + observable +
+   parameter values), the tape records one <strong>span</strong>: a begin/end
+   record with events. Attached to the span as <strong>artifacts</strong>:</li>
+<li>the circuit, serialized to OpenQASM 3 text;</li>
+<li>the parameter values;</li>
+<li>the observable;</li>
+<li>the outcome (expectation values, or measurement counts for the
+     sampler);</li>
+<li>the requested measurement budget (shots or target precision) —
+     evidence the shot-noise analyzer needs later.</li>
+<li>Rate-limited (at most once per 10 minutes), the proxy also
+   snapshots the <strong>device calibration</strong> — the machine's measured
+   error rates and coherence times — into the trace. On a drifting
+   device, each <em>distinct</em> calibration becomes a new snapshot, so a
+   trace carries a small history (<code>trace.calibration_history()</code>).
+   This is what lets an analyst correlate a loss spike with the
+   machine recalibrating mid-run, rather than blaming the model.</li>
+</ol>
+<p>Failures in recording never break the user's run: a span that cannot
+complete is closed with an <code>ERROR</code> event (invariant INV-007 — no
+silent failures), and the real result is returned regardless.</p>
+<hr />
+<h2 id="level-4-anatomy-of-a-trace-directory">Level 4 — Anatomy of a trace directory<a class="headerlink" href="#level-4-anatomy-of-a-trace-directory" title="Permanent link">&para;</a></h2>
+<p>Every run directory is self-contained and portable — zip it, email
+it, publish it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>runs/demo/20260611_120000_ab12cd34/
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├── trace.json        # identity: version, mode, timestamps, tags,
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│                     #   environment, integrity seal
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>├── events.jsonl      # the append-only event stream (one JSON/line):
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│                     #   span begins, events, span ends
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>├── catalog.json      # index of every artifact: kind, encoding,
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│                     #   size, created_at, content hash
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>└── artifacts/        # content-addressed files, sharded by hash
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    ├── 39/39be4a...qasm    # circuits (OpenQASM 3)
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    ├── 7f/7fc01a...json    # calibration snapshot
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    └── ...                 # outcomes, parameters, observables
+</code></pre></div>
+<p>Three design decisions worth understanding:</p>
+<ul>
+<li><strong>Content addressing.</strong> Artifacts are stored under the SHA-256 of
+  their bytes. A circuit reused 10,000 times is stored once. The
+  hash doubles as an integrity check on every read.</li>
+<li><strong>The seal.</strong> When the tape closes, the SHA-256 checksum of the
+  whole event stream is written into <code>trace.json</code>.
+  <code>trace.verify()</code> re-derives everything and fails loudly on any
+  modification. This is what makes the blinded validation protocol
+  (Level 7) possible: nobody can quietly edit evidence.</li>
+<li><strong>Append-only JSONL.</strong> A crash mid-run loses at most the final
+  line. Everything before it is still valid evidence — flight
+  recorders must survive the crash.</li>
+</ul>
+<p>Reading is symmetric to writing: <code>HilbertTrace(run_dir)</code> gives you
+<code>.spans</code> (a pandas DataFrame), <code>.completed()</code> (span views with
+resolved <code>.outcome</code>, <code>.parameters</code>, <code>.circuit</code>),
+<code>.numeric_outcomes()</code> (a flat numpy array of every recorded value),
+<code>.calibration_history()</code>, and <code>.verify()</code>.</p>
+<hr />
+<h2 id="level-5-the-six-analyzers-what-why-how">Level 5 — The six analyzers (what / why / how)<a class="headerlink" href="#level-5-the-six-analyzers-what-why-how" title="Permanent link">&para;</a></h2>
+<p>All analyzers are plain functions: trace in, dictionary out. They
+never modify the trace. Each returns a <code>status</code> string plus the
+quantitative evidence behind it, with bootstrap confidence intervals
+where a statistic is estimated. Full per-analyzer pages are under
+<em>Analyzers</em> in the navigation; this is the map.</p>
+<h3 id="detect_barren_plateau-is-there-anything-to-learn-from"><code>detect_barren_plateau</code> — is there anything to learn from?<a class="headerlink" href="#detect_barren_plateau-is-there-anything-to-learn-from" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> variance of all recorded outcome values, with a 95%
+  bootstrap CI, classified against a threshold (default 0.005).</li>
+<li><strong>Why:</strong> the most famous QML failure mode (McClean et al., 2018)
+  is an exponentially flat loss landscape. Flatness = low variance
+  across the visited points. Below the threshold, an optimizer is
+  walking on a billiard table.</li>
+<li><strong>How:</strong> <code>np.var(trace.numeric_outcomes())</code> plus a bootstrap. The
+  verdict reports its own confidence: if the CI straddles the
+  threshold, confidence is "low" — transparency over false certainty.</li>
+</ul>
+<h3 id="shot_noise_ratio-signal-or-static"><code>shot_noise_ratio</code> — signal, or static?<a class="headerlink" href="#shot_noise_ratio-signal-or-static" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> compares the empirical variance of the outcome
+  trajectory to the <em>shot-noise floor</em> — the variance you would see
+  from measurement statistics alone.</li>
+<li><strong>Why:</strong> a quantum measurement is a coin-flip sample; estimating an
+  expectation from N shots has variance ~1/N no matter what. If the
+  trajectory's variance is comparable to that floor, the optimizer is
+  fitting noise.</li>
+<li><strong>How:</strong> the floor is 1/shots when shot counts were recorded, or
+  precision² when the run requested a target precision (the proxy
+  records both). SNR &lt; 1.5 → "Shot Noise Dominated".</li>
+</ul>
+<h3 id="optimization_convergence-is-the-trajectory-still-moving"><code>optimization_convergence</code> — is the trajectory still moving?<a class="headerlink" href="#optimization_convergence-is-the-trajectory-still-moving" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> classifies the recorded parameter/outcome trajectory:
+  Converged / Converging / Still Improving / not moving.</li>
+<li><strong>Why:</strong> distinguishes "stuck" from "slow" — the cheapest question
+  to answer before blaming anything quantum.</li>
+<li><strong>How:</strong> step sizes and loss deltas across the recorded sequence
+  of spans.</li>
+</ul>
+<h3 id="circuit_structure-what-actually-ran"><code>circuit_structure</code> — what actually ran?<a class="headerlink" href="#circuit_structure-what-actually-ran" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> qubit count, depth, gate composition, entangling-gate
+  fraction, parameter count, measurement count, and <em>which physical
+  qubits were used</em> — parsed from the recorded OpenQASM.</li>
+<li><strong>Why:</strong> every other diagnosis needs the structural facts, and on
+  real hardware the circuit that ran (post-transpilation) is not the
+  circuit you wrote.</li>
+<li><strong>How:</strong> a line-level QASM parser that handles both virtual
+  (<code>q[0]</code>) and hardware-native physical (<code>$0</code>) qubit syntax, with
+  ASAP layering for depth.</li>
+</ul>
+<h3 id="kl_expressibility-how-much-of-the-space-can-the-model-reach"><code>kl_expressibility</code> — how much of the space can the model reach?<a class="headerlink" href="#kl_expressibility-how-much-of-the-space-can-the-model-reach" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> Kullback–Leibler divergence between the model's
+  state-fidelity distribution and the Haar (uniform-random) ideal.
+  Small KL = the circuit covers state space like a truly random one.</li>
+<li><strong>Why:</strong> expressibility is the standard capacity measure for
+  quantum models (Sim et al., 2019) — and it trades off provably
+  against trainability (Holmes et al., 2022). Claiming it from a
+  training run is a methodological error: training visits a biased
+  path. Measuring it honestly needs <em>random</em> sampling — which is why
+  this analyzer only accepts Active Mode traces (Level 6).</li>
+<li><strong>How:</strong> pairwise state fidelities, histogrammed, compared to the
+  exact Haar reference, with a bootstrap CI.</li>
+</ul>
+<h3 id="noise_profile-how-hostile-was-the-machine"><code>noise_profile</code> — how hostile was the machine?<a class="headerlink" href="#noise_profile-how-hostile-was-the-machine" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>What:</strong> summarizes the calibration snapshot (coherence times,
+  readout and gate error rates) <strong>scoped to the qubits the circuit
+  actually used</strong>, and predicts the circuit's survival probability
+  as a product of per-operation success rates.</li>
+<li><strong>Why:</strong> on NISQ hardware, noise is part of the algorithm. The
+  prediction gives a falsifiable number: on a real 156-qubit device
+  we measured prediction within ~8% of observed signal attenuation.</li>
+<li><strong>How:</strong> fidelity ≈ (1−e₁q)^n1q · (1−e₂q)^n2q · (1−e_ro)^n_meas,
+  with error rates averaged over the active qubits only.
+  (Device-wide averaging — including a big chip's dead edges — was
+  found to mispredict by ~600×; the scoped version is the fix.)</li>
+</ul>
+<h3 id="summary-all-of-the-above"><code>summary</code> — all of the above<a class="headerlink" href="#summary-all-of-the-above" title="Permanent link">&para;</a></h3>
+<p>One call, one dictionary, every analyzer. This is what a blinded
+diagnostician uses.</p>
+<hr />
+<h2 id="level-6-passive-vs-active-mode">Level 6 — Passive vs Active Mode<a class="headerlink" href="#level-6-passive-vs-active-mode" title="Permanent link">&para;</a></h2>
+<p><strong>Passive mode</strong> (the default) records what your experiment was
+going to do anyway. It can answer trajectory questions: convergence,
+shot noise, plateau evidence <em>along the visited path</em>.</p>
+<p><strong>Active mode</strong> is for structural questions, which require
+executions your experiment would <em>not</em> have performed — for example
+expressibility, which needs uniformly random parameter samples. The
+rules:</p>
+<ul>
+<li>Active diagnostics are explicitly opt-in and run in isolation —
+  never silently mixed into your training run.</li>
+<li>The trace records its mode (<code>trace.json: "mode": "active"</code>), so an
+  analyst always knows whether they are looking at observational or
+  interventional data.</li>
+<li><code>hilbertbench.active.probe_expressibility(state_fn, ...)</code> is the
+  built-in active probe: it samples random parameters, records the
+  resulting states into an active-mode trace, and
+  <code>kl_expressibility</code> consumes it.</li>
+</ul>
+<p>The distinction is scientific, not cosmetic: observational data can
+show <em>correlation along a path</em>; interventional data supports claims
+about the model <em>as a whole</em>. Conflating them is how "highly
+expressive" claims end up unfounded.</p>
+<hr />
+<h2 id="level-7-the-blinded-validation-toolkit">Level 7 — The blinded-validation toolkit<a class="headerlink" href="#level-7-the-blinded-validation-toolkit" title="Permanent link">&para;</a></h2>
+<p>How do you prove a diagnostic instrument can be trusted? The same
+way medicine does: blinded, with the answer key sealed in advance.
+<code>tools/blind_corpus.py</code> implements the machinery:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Researcher A generates a corpus with planted failure modes</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>experiments/study_e_corpus.py<span class="w"> </span>--test
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Blind it: verbatim copies under random IDs + leakage audit</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>python<span class="w"> </span>tools/blind_corpus.py<span class="w"> </span>blind<span class="w"> </span>--manifest<span class="w"> </span>.../manifest.json<span class="w"> </span>--out<span class="w"> </span>blinded/
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">#   -&gt; publishes answer_key.sha256 (the commitment) BEFORE diagnosis</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Researcher B fills diagnosis_sheet.json using only analyzer output</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>python<span class="w"> </span>tools/blind_corpus.py<span class="w"> </span>score<span class="w"> </span>--key<span class="w"> </span>...<span class="w"> </span>--commitment<span class="w"> </span>...<span class="w"> </span>--diagnosis<span class="w"> </span>...
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">#   -&gt; confusion matrix, per-class precision/recall, 95% Wilson CI</span>
+</code></pre></div>
+<p>Why each safeguard exists:</p>
+<table>
+<thead>
+<tr>
+<th>Safeguard</th>
+<th>Attack it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Traces sealed at creation</td>
+<td>editing evidence after the fact</td>
+</tr>
+<tr>
+<td>SHA-256 commitment of the key, published first</td>
+<td>changing answers after seeing diagnoses</td>
+</tr>
+<tr>
+<td>Leakage audit on tags &amp; names</td>
+<td>accidentally shipping the label inside the trace</td>
+</tr>
+<tr>
+<td>Thresholds frozen on a disjoint dev corpus</td>
+<td>tuning the detector to pass its own exam</td>
+</tr>
+<tr>
+<td>Shuffled generation order</td>
+<td>timestamps leaking the label</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="level-8-the-experiments-harness">Level 8 — The experiments harness<a class="headerlink" href="#level-8-the-experiments-harness" title="Permanent link">&para;</a></h2>
+<p><code>experiments/</code> contains one seeded, reproducible script per study in
+the validation paper (see <code>experiments/README.md</code> for the full map):</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>study_a_bp_scaling.py</code></td>
+<td>does measured variance decay exponentially with qubit count, as theory predicts?</td>
+</tr>
+<tr>
+<td><code>study_b_shot_noise.py</code></td>
+<td>at what measurement budget does the SNR cross usability?</td>
+</tr>
+<tr>
+<td><code>study_c_expressibility.py</code></td>
+<td>where does each depth sit on the expressibility–trainability frontier?</td>
+</tr>
+<tr>
+<td><code>study_d_fidelity.py</code></td>
+<td>does the predicted fidelity match observed attenuation?</td>
+</tr>
+<tr>
+<td><code>study_e_corpus.py</code></td>
+<td>generates the blinded corpus (dev and test tiers)</td>
+</tr>
+<tr>
+<td><code>hw_smoke_test.py</code></td>
+<td>end-to-end validation on real IBM hardware (+ first fidelity points)</td>
+</tr>
+<tr>
+<td><code>hw_frontier.py</code></td>
+<td>hardware frontier measurement; <code>--pilot</code> = free tier, <code>--full</code> = paid batch</td>
+</tr>
+</tbody>
+</table>
+<p>Every script accepts <code>--quick</code> (or <code>--pilot</code>) for a smoke-test-sized
+run. All randomness is seeded; every result JSON records its seeds
+and trace directories.</p>
+<hr />
+<h2 id="level-9-running-on-real-ibm-hardware">Level 9 — Running on real IBM hardware<a class="headerlink" href="#level-9-running-on-real-ibm-hardware" title="Permanent link">&para;</a></h2>
+<p>What you need: an IBM Quantum account and its API token.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit_ibm_runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">QiskitRuntimeService</span><span class="p">,</span> <span class="n">EstimatorV2</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">service</span> <span class="o">=</span> <span class="n">QiskitRuntimeService</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;ibm_cloud&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">YOUR_TOKEN</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">least_busy</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">operational</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">est</span> <span class="o">=</span> <span class="n">EstimatorV2</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">proxy</span> <span class="o">=</span> <span class="n">HilbertEstimatorProxy</span><span class="p">(</span><span class="n">tape</span><span class="p">,</span> <span class="n">real_estimator</span><span class="o">=</span><span class="n">est</span><span class="p">)</span>   <span class="c1"># that&#39;s it</span>
+</code></pre></div>
+<p>Practical notes, learned the expensive-feeling way:</p>
+<ul>
+<li><strong>Transpile first.</strong> Real devices require ISA circuits (their
+  native gates, physical qubits). Use
+  <code>generate_preset_pass_manager(backend=...)</code> and
+  <code>observable.apply_layout(isa.layout)</code>. The recorded QASM will use
+  physical-qubit syntax — the analyzers handle it.</li>
+<li><strong>Batch your parameters.</strong> One PUB can carry hundreds of parameter
+  sets. This is the difference between a 30-second job and a
+  30-minute one at ~$96/minute on pay-as-you-go.</li>
+<li><strong>Never hardcode the token.</strong> Keep it in a private file outside
+  the repository.</li>
+<li><strong>Mind mitigation defaults.</strong> If you are studying raw device
+  behavior, set <code>resilience_level = 0</code> and disable twirling —
+  otherwise the platform "helpfully" corrects the noise you are
+  trying to measure.</li>
+<li>Calibration snapshots are captured automatically; on long runs the
+  proxy refreshes them (rate-limited) so drift is visible in
+  <code>trace.calibration_history()</code>.</li>
+</ul>
+<hr />
+<h2 id="level-10-quality-assurance">Level 10 — Quality assurance<a class="headerlink" href="#level-10-quality-assurance" title="Permanent link">&para;</a></h2>
+<p>The suite has <strong>319 tests</strong>, organized by subsystem, and every single
+one is described in the <a href="../reference/test-catalog/">Test Catalog</a> —
+what it checks and why it exists. The shape of the suite mirrors the
+guarantees:</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What it protects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/recorder/</code></td>
+<td>append-only writing, sealing, artifact store</td>
+</tr>
+<tr>
+<td><code>tests/trace/</code></td>
+<td>the read API resolves exactly what was written</td>
+</tr>
+<tr>
+<td><code>tests/integrations/</code></td>
+<td>proxies are transparent (parity!) and record faithfully — incl. calibration capture across all backend conventions and hardware ISA circuits</td>
+</tr>
+<tr>
+<td><code>tests/analysis/</code></td>
+<td>each analyzer's verdicts on constructed ground-truth traces</td>
+</tr>
+<tr>
+<td><code>tests/active/</code></td>
+<td>the expressibility probe and active-mode labeling</td>
+</tr>
+<tr>
+<td><code>tests/compliance/</code></td>
+<td>the architecture invariants (INV-001 …) hold end to end</td>
+</tr>
+<tr>
+<td><code>tests/reader/</code></td>
+<td>verification: tampered traces must fail loudly</td>
+</tr>
+<tr>
+<td><code>tests/e2e/</code></td>
+<td>full record→seal→analyze journeys</td>
+</tr>
+<tr>
+<td><code>tests/tools/</code></td>
+<td>the blinding protocol: leakage audit, commitments, scoring</td>
+</tr>
+</tbody>
+</table>
+<p>The invariants themselves are documented in
+<a href="../reference/invariants/">Reference → Invariants</a>.</p>
+<h2 id="level-10-glossary-for-non-quantum-readers">Glossary for non-quantum readers<a class="headerlink" href="#level-10-glossary-for-non-quantum-readers" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Qubit</strong></td>
+<td>quantum bit; n qubits span a 2ⁿ-dimensional state space</td>
+</tr>
+<tr>
+<td><strong>Circuit</strong></td>
+<td>the program: a sequence of gates applied to qubits</td>
+</tr>
+<tr>
+<td><strong>Ansatz</strong></td>
+<td>a parameterized circuit template — the "model architecture" of QML</td>
+</tr>
+<tr>
+<td><strong>Shot</strong></td>
+<td>one execution-and-measurement of a circuit; outcomes are statistical, so estimates average many shots</td>
+</tr>
+<tr>
+<td><strong>Expectation value</strong></td>
+<td>the average of a measured observable — QML's loss is built from these</td>
+</tr>
+<tr>
+<td><strong>Transpilation</strong></td>
+<td>compiling an abstract circuit to a device's native gates and physical qubit layout (ISA form)</td>
+</tr>
+<tr>
+<td><strong>Barren plateau</strong></td>
+<td>exponentially flat loss landscape; gradients vanish</td>
+</tr>
+<tr>
+<td><strong>Expressibility</strong></td>
+<td>how uniformly a parameterized circuit covers state space (KL vs the Haar ideal)</td>
+</tr>
+<tr>
+<td><strong>T1 / T2</strong></td>
+<td>how long a qubit retains its state (energy / phase coherence times)</td>
+</tr>
+<tr>
+<td><strong>Calibration</strong></td>
+<td>the device's measured error rates and coherence times, refreshed periodically by the provider</td>
+</tr>
+<tr>
+<td><strong>Fidelity</strong></td>
+<td>overlap between intended and actual state; 1.0 = perfect</td>
+</tr>
+<tr>
+<td><strong>NISQ</strong></td>
+<td>today's noisy, intermediate-scale quantum hardware era</td>
+</tr>
+<tr>
+<td><strong>PUB</strong></td>
+<td>primitive unified bloc — Qiskit's (circuit, observable, parameters, precision) work unit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Where to next:</em> the four <a href="../tutorials/">tutorials</a> each walk
+one failure mode end to end; the <a href="../analyzers/barren-plateau/">Analyzer pages</a>
+go deeper on each diagnostic; the <a href="../reference/trace-format/">Trace Format</a>
+specifies the schema; the <a href="../reference/test-catalog/">Test Catalog</a>
+explains all 319 tests.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../getting-started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting Started">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Getting Started
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../tutorials/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Overview
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
