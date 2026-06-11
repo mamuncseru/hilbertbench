@@ -3,6 +3,8 @@
 # file: hilbertbench/analysis/circuit.py
 #
 # revision history:
+#  20260610 (am): parse hardware ISA circuits (physical $N qubits, QASM3
+#                 measure-assignment syntax, undeclared registers)
 #  20260604 (am): cleaned up to project coding standards
 #
 # Circuit-structure diagnostics. Parses the stored OpenQASM circuit(s)
@@ -44,9 +46,16 @@ from hilbertbench.analysis._util import TraceLike, as_trace
 #
 __FILE__ = os.path.basename(__file__)
 
-# matches qubit index references of the form q[N]
+# matches qubit references: virtual register form q[N], or the
+# physical-qubit form $N used by hardware-transpiled (ISA) circuits
 #
-_WIRE_RE = re.compile(r"q\[(\d+)\]")
+_WIRE_RE = re.compile(r"q\[(\d+)\]|\$(\d+)")
+
+# matches a measure instruction anywhere in the line; QASM3 writes
+# measurements as assignments ('c[0] = measure $0;'), so a prefix
+# check alone misses every hardware sampler circuit
+#
+_MEASURE_RE = re.compile(r"\bmeasure\b")
 
 # matches positional parameter placeholders from _qasm_to_template
 #
@@ -80,7 +89,8 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
 
     return:
      a dict of structural metrics:
-      num_qubits          qubit count from the register declaration
+      num_qubits          qubit count from the register declaration,
+                          or distinct active qubits for ISA circuits
       depth               circuit depth (greedy ASAP layer assignment)
       total_gates         single + entangling gate count
       single_qubit_gates  gates acting on exactly one qubit
@@ -89,6 +99,8 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
       gate_counts         dict of gate_name -> count
       num_parameters      distinct parameter placeholders
       num_measurements    measure instructions
+      active_qubits       sorted list of qubit indices used by gates;
+                          physical indices for ISA circuits
 
     description:
      Parses one OpenQASM string line-by-line. Non-gate lines are
@@ -118,10 +130,11 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
         if not line:
             continue
 
-        # count measurement instructions separately
+        # count measurement instructions separately; matches both the
+        # QASM2 statement form and the QASM3 assignment form
         #
         low = line.lower()
-        if low.startswith("measure"):
+        if _MEASURE_RE.search(low):
             measurements += 1
             continue
 
@@ -130,9 +143,12 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
         if low.startswith(_SKIP_PREFIXES):
             continue
 
-        # extract qubit indices from the line
+        # extract qubit indices from the line (either regex group)
         #
-        wires = [int(w) for w in _WIRE_RE.findall(line)]
+        wires = [
+            int(virt or phys)
+            for virt, phys in _WIRE_RE.findall(line)
+        ]
         if not wires:
             continue
 
@@ -157,6 +173,12 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
         for w in distinct:
             qubit_layer[w] = layer
         depth = max(depth, layer)
+
+    # ISA circuits address physical qubits with no register
+    # declaration; fall back to the number of distinct active qubits
+    #
+    if num_qubits == 0:
+        num_qubits = len(qubit_layer)
 
     # count distinct parameter placeholders in the circuit
     #
@@ -185,6 +207,7 @@ def _parse_qasm(qasm: str) -> dict[str, Any]:
         "gate_counts":         gate_counts,
         "num_parameters":      num_params,
         "num_measurements":    measurements,
+        "active_qubits":       sorted(qubit_layer.keys()),
     }
 #
 # end of function
