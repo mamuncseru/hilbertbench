@@ -123,3 +123,77 @@ class TestDepthInteraction:
         # deep circuit: many CX gates dominate
         deep = noise_profile(record_depth(runs, 3, 15, seed=4))
         assert deep["dominant_error_source"] == "two_qubit_gates"
+
+
+# ---------------------------------------------------------------------------
+# Calibration scoping (found on ibm_marrakesh: device-wide means over a
+# 156-qubit device, dead edges included, mispredicted fidelity by ~600x)
+# ---------------------------------------------------------------------------
+
+def build_scoped_trace(runs, tmp_path):
+    """Trace with a synthetic calibration: qubits 0/1 good, qubit 2 awful.
+    The recorded circuit only touches qubits 0 and 1."""
+    import json as _json
+    from hilbertbench.models import Encoding, Kind
+
+    cal = {
+        "backend_name": "synthetic",
+        "qubits": [
+            [{"name": "T1", "value": 100.0},
+             {"name": "T2", "value": 80.0},
+             {"name": "readout_error", "value": 0.01}],
+            [{"name": "T1", "value": 110.0},
+             {"name": "T2", "value": 90.0},
+             {"name": "readout_error", "value": 0.01}],
+            [{"name": "T1", "value": 5.0},
+             {"name": "T2", "value": 3.0},
+             {"name": "readout_error", "value": 0.5}],
+        ],
+        "gates": [
+            {"qubits": [0], "parameters":
+                [{"name": "gate_error", "value": 1e-4}]},
+            {"qubits": [1], "parameters":
+                [{"name": "gate_error", "value": 1e-4}]},
+            {"qubits": [2], "parameters":
+                [{"name": "gate_error", "value": 0.4}]},
+            {"qubits": [0, 1], "parameters":
+                [{"name": "gate_error", "value": 0.005}]},
+            {"qubits": [1, 2], "parameters":
+                [{"name": "gate_error", "value": 0.9}]},
+        ],
+    }
+    qasm = ('OPENQASM 3.0;\ninclude "stdgates.inc";\n'
+            "sx $0;\ncx $0, $1;\n")
+
+    cal_f = tmp_path / "cal.json"
+    cal_f.write_text(_json.dumps(cal))
+    qasm_f = tmp_path / "circ.qasm"
+    qasm_f.write_text(qasm)
+    with HilbertTape(runs) as tape:
+        tape.attach_artifact(cal_f, kind=Kind.calibration_snapshot,
+                             encoding=Encoding.json)
+        ref = tape.attach_artifact(qasm_f, kind=Kind.circuit_qasm,
+                                   encoding=Encoding.openqasm)
+        with tape.execution_span(payload_ref=ref) as span:
+            span.outcome_ref = span.attach_inline(
+                "0.5", kind="execution_outcome", encoding="json")
+    return tape.dir_path
+
+
+class TestCalibrationScoping:
+
+    def test_stats_scoped_to_active_qubits(self, runs, tmp_path):
+        r = noise_profile(build_scoped_trace(runs, tmp_path))
+        assert r["scope"] == "active_qubits"
+        assert r["active_qubits"] == [0, 1]
+        # the awful qubit 2 must not contaminate any statistic
+        assert r["gate_error_2q_mean"] == pytest.approx(0.005)
+        assert r["gate_error_1q_mean"] == pytest.approx(1e-4)
+        assert r["readout_error"]["mean"] == pytest.approx(0.01)
+        assert r["t1_us"]["min"] == pytest.approx(100.0)
+
+    def test_fidelity_uses_scoped_errors(self, runs, tmp_path):
+        r = noise_profile(build_scoped_trace(runs, tmp_path))
+        # 1 sx + 1 cx on good qubits: fidelity must stay high; the
+        # device-wide means (incl. the 0.9-error edge) would crater it
+        assert r["estimated_circuit_fidelity"] > 0.9

@@ -121,6 +121,22 @@ rz(_p2) q[0];
 measure q[0] -> c[0];
 """
 
+# hardware-transpiled (ISA) circuit: physical $N qubits, no register
+# declaration, QASM3 measure-assignment syntax — what real-device and
+# runtime local-mode traces actually contain
+ISA_QASM = """OPENQASM 3.0;
+include "stdgates.inc";
+input float[64] t_0;
+bit[2] c;
+sx $0;
+rz(t_0 + pi) $0;
+sx $0;
+rz(3*pi) $0;
+cx $0, $1;
+c[0] = measure $0;
+c[1] = measure $1;
+"""
+
 
 class TestCircuitStructure:
 
@@ -163,3 +179,22 @@ class TestCircuitStructure:
         r = circuit_structure(build_qasm_trace(runs, tmp_path, PARAM_QASM))
         frac = r["primary"]["entangling_fraction"]
         assert 0.0 <= frac <= 1.0
+
+    def test_isa_circuit_physical_qubits(self, runs, tmp_path):
+        # Regression: hardware ISA circuits previously parsed as empty
+        # (0 qubits, 0 gates), making noise_profile report fidelity 1.0
+        # on every real-device trace.
+        r = circuit_structure(build_qasm_trace(runs, tmp_path, ISA_QASM))
+        assert r["status"] == "OK"
+        p = r["primary"]
+        assert p["num_qubits"] == 2           # distinct $0, $1
+        assert p["single_qubit_gates"] == 4   # 2x sx + 2x rz
+        assert p["entangling_gates"] == 1     # cx
+        assert p["num_measurements"] == 2     # QASM3 assignment form
+        assert p["num_parameters"] == 1       # input float t_0
+        assert p["gate_counts"] == {"sx": 2, "rz": 2, "cx": 1}
+
+    def test_isa_circuit_depth(self, runs, tmp_path):
+        # sx, rz, sx, rz stack on $0 (layers 1-4), cx joins $0/$1 → 5
+        r = circuit_structure(build_qasm_trace(runs, tmp_path, ISA_QASM))
+        assert r["primary"]["depth"] == 5

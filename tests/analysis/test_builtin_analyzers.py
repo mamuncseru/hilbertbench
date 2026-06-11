@@ -24,8 +24,8 @@ def runs(tmp_path: Path) -> Path:
     return d
 
 
-def build_trace(runs, outcomes, shots=None):
-    """One span per outcome; optional shots tagged on EXECUTION_COMPLETED."""
+def build_trace(runs, outcomes, shots=None, precision=None):
+    """One span per outcome; optional shots/precision on EXECUTION_COMPLETED."""
     dummy = "sha256:" + "a" * 64
     with HilbertTape(runs) as tape:
         for o in outcomes:
@@ -33,8 +33,13 @@ def build_trace(runs, outcomes, shots=None):
                 span.outcome_ref = span.attach_inline(
                     json.dumps(o), kind="execution_outcome", encoding="json"
                 )
+                attrs = {}
                 if shots is not None:
-                    span.add_event("EXECUTION_COMPLETED", {"shots": shots})
+                    attrs["shots"] = shots
+                if precision is not None:
+                    attrs["precision"] = precision
+                if attrs:
+                    span.add_event("EXECUTION_COMPLETED", attrs)
     return tape.dir_path
 
 
@@ -114,6 +119,25 @@ class TestShotNoise:
         r = shot_noise_ratio(build_trace(runs, [0.5, -0.5, 0.3]), default_shots=1024)
         assert r["mean_shots"] == 1024
         assert r["estimated_snr"] is not None
+        assert r["shots_source"] == "default"
+
+    def test_precision_fallback(self, runs):
+        # estimator runs record target precision, not shots; the floor
+        # is precision^2 (here 0.1^2 = 0.01 → ~100 effective shots)
+        r = shot_noise_ratio(
+            build_trace(runs, [0.9, -0.8, 0.7, -0.6], precision=0.1)
+        )
+        assert r["shots_source"] == "precision"
+        assert r["theoretical_floor"] == pytest.approx(0.01)
+        assert r["mean_shots"] == pytest.approx(100.0)
+        assert "Signal Clear" in r["status"]
+
+    def test_recorded_shots_win_over_precision(self, runs):
+        r = shot_noise_ratio(
+            build_trace(runs, [0.9, -0.8, 0.7], shots=64, precision=0.1)
+        )
+        assert r["shots_source"] == "recorded"
+        assert r["mean_shots"] == 64
 
     def test_insufficient_data(self, runs):
         r = shot_noise_ratio(build_trace(runs, [0.5]))  # < 2 outcomes
