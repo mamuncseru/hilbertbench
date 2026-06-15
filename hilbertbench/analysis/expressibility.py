@@ -91,7 +91,7 @@ def _to_statevector(outcome: Any) -> Optional[np.ndarray]:
         and len(outcome[0]) == 2
     ):
         arr = np.asarray(outcome, dtype=float)
-        return arr[:, 0] + 1j * arr[:, 1]
+        return np.asarray(arr[:, 0] + 1j * arr[:, 1])
 
     # decode .npy / array form for large statevectors
     #
