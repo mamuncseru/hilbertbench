@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-291%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-319%20passing-brightgreen)]()
 [![Docs](https://img.shields.io/badge/docs-readthedocs-blueviolet)](https://hilbertbench.readthedocs.io)
 
 HilbertBench is a **non-intrusive diagnostic framework** for quantum machine
@@ -21,15 +21,20 @@ hardware noise — all from the evidence already in the trace.
 ## Install
 
 ```bash
-# Qiskit + Parquet storage
-pip install hilbertbench[qiskit,storage]
+# Default: runs the Qiskit workflow out of the box
+# (trace core + Qiskit integration + Parquet storage)
+pip install hilbertbench
 
-# PennyLane + Parquet storage
-pip install hilbertbench[pennylane,storage]
+# Add the PennyLane integration
+pip install hilbertbench[pennylane]
 
-# Everything
+# Everything (Qiskit + PennyLane + storage)
 pip install hilbertbench[full]
 ```
+
+The default install covers the documented Qiskit path. PennyLane is the
+one optional integration; if you use it without installing it, the
+error tells you exactly which extra to add.
 
 ---
 
@@ -117,6 +122,15 @@ The learning site builds from `mkdocs.yml`, the reference site from
 - **Immutable traces** — every trace is append-only and sealed with a SHA-256 hash on close (INV-002)
 - **Evidence, not verdicts** — raw execution data is stored; diagnostic conclusions are computed at read time and never written back (INV-006)
 - **No silent failures** — every initiated span ends with a `COMPLETED` or `ERROR` event (INV-007)
+
+Those `INV-NNN` codes appear throughout the source comments and docstrings.
+Each is a numbered, non-negotiable guarantee; the **complete, canonical list
+(INV-001 … INV-008)** lives in
+**[docs/reference/invariants.md](docs/reference/invariants.md)** (rendered on
+the [reference site](https://hilbertbench.readthedocs.io)), with the
+contributor-facing rationale in
+[docs/architecture/001_invariants.md](docs/architecture/001_invariants.md).
+When you see an `INV-NNN` tag in the code, that is where it is defined.
 
 ---
 
