@@ -21,7 +21,7 @@ from __future__ import annotations
 #
 import json
 import os
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, cast
 
 # TYPE_CHECKING guard avoids a circular import at runtime
 #
@@ -318,8 +318,8 @@ class SpanView:
         # decode JSON string when loaded from Parquet
         #
         if isinstance(ia, str):
-            return json.loads(ia) if ia else {}
-        return ia
+            return cast("dict[Any, Any]", json.loads(ia)) if ia else {}
+        return cast("dict[Any, Any]", ia)
     #
     # end of method
 
@@ -350,7 +350,7 @@ class SpanView:
                 # decode JSON string when loaded from Parquet
                 #
                 if isinstance(attrs, str):
-                    return json.loads(attrs)
+                    return cast("dict[Any, Any]", json.loads(attrs))
                 return attrs
         return None
     #
