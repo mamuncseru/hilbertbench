@@ -414,7 +414,7 @@ class HilbertQiskitJobProxy:
     #
     # end of method
 
-    def result(self, *args, **kwargs) -> Any:
+    def result(self, *args: Any, **kwargs: Any) -> Any:
         """
         method: result
 
@@ -552,7 +552,7 @@ class HilbertQiskitBackendProxy:
     def run(
         self,
         run_input: Union[QuantumCircuit, List[QuantumCircuit]],
-        **options,
+        **options: Any,
     ) -> HilbertQiskitJobProxy:
         """
         method: run
@@ -630,7 +630,7 @@ class HilbertQiskitBackendProxy:
 # end of class
 
 
-class HilbertEstimatorProxy(BaseEstimatorV2):
+class HilbertEstimatorProxy(BaseEstimatorV2):  # type: ignore[misc]
     """
     Class: HilbertEstimatorProxy
 
@@ -687,7 +687,7 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
     # end of method
 
     @property
-    def options(self):
+    def options(self) -> Any:
         """
         method: options
 
@@ -752,7 +752,7 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
     #
     # end of method
 
-    def run(self, pubs, **kwargs):
+    def run(self, pubs: Any, **kwargs: Any) -> Any:
         """
         method: run
 
@@ -816,8 +816,8 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
 
                 qasm_hash = self.tape.attach_artifact(
                     src_path=tmp_qasm,
-                    kind="circuit_qasm",
-                    encoding="openqasm",
+                    kind=Kind.circuit_qasm,
+                    encoding=Encoding.openqasm,
                 )
                 os.remove(tmp_qasm)
 
@@ -902,7 +902,7 @@ class HilbertEstimatorProxy(BaseEstimatorV2):
 # end of class
 
 
-class HilbertSamplerProxy(BaseSamplerV2):
+class HilbertSamplerProxy(BaseSamplerV2):  # type: ignore[misc]
     """
     Class: HilbertSamplerProxy
 
@@ -963,7 +963,7 @@ class HilbertSamplerProxy(BaseSamplerV2):
     # end of method
 
     @property
-    def options(self):
+    def options(self) -> Any:
         """
         method: options
 
@@ -1028,7 +1028,7 @@ class HilbertSamplerProxy(BaseSamplerV2):
     #
     # end of method
 
-    def run(self, pubs, **kwargs):
+    def run(self, pubs: Any, **kwargs: Any) -> Any:
         """
         method: run
 
@@ -1091,8 +1091,8 @@ class HilbertSamplerProxy(BaseSamplerV2):
 
                 qasm_hash = self.tape.attach_artifact(
                     src_path=tmp_qasm,
-                    kind="circuit_qasm",
-                    encoding="openqasm",
+                    kind=Kind.circuit_qasm,
+                    encoding=Encoding.openqasm,
                 )
                 os.remove(tmp_qasm)
 
