@@ -287,6 +287,7 @@ def active_probe_qiskit(
     params = list(circuit.parameters)
 
     def state_fn(theta: np.ndarray) -> np.ndarray:
+        """Bind theta into the circuit and return its statevector data."""
         bound = circuit.assign_parameters(dict(zip(params, theta)))
         return Statevector(bound).data
 
@@ -360,10 +361,12 @@ def active_probe_pennylane(
 
     @qml.qnode(dev)
     def qnode(theta):
+        """Execute the user circuit at theta and return the statevector."""
         circuit_fn(theta)
         return qml.state()
 
     def state_fn(theta: np.ndarray) -> np.ndarray:
+        """Return the circuit statevector at theta as a numpy array."""
         return np.asarray(qnode(theta))
 
     # generate the QASM template from the zero-parameter point;
