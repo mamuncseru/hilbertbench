@@ -215,6 +215,7 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
     # the whole device when the filter would leave nothing
     #
     def _scoped_qubit_values(values: dict) -> list:
+        """Per-qubit values on the active qubits (else the whole device)."""
         if active:
             scoped = [v for k, v in values.items() if k in active]
             if scoped:
@@ -222,6 +223,7 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
         return list(values.values())
 
     def _scoped_gate_errors(pairs: list) -> list:
+        """Gate errors on edges within the active qubit set (else all)."""
         if active:
             scoped = [e for qs, e in pairs if set(qs) <= active]
             if scoped:

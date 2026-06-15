@@ -131,6 +131,11 @@ def shot_noise_ratio(
      default_shots: shot count to assume when none was recorded; if
                     None and no shots are recorded, the status
                     message says so rather than guessing
+     n_boot:        bootstrap resamples for the variance confidence
+                    interval (0 disables the interval)
+     ci:            confidence level for the bootstrap interval
+                    (0.95 = 95%)
+     seed:          optional RNG seed for the bootstrap
 
     return:
      a dict with keys:

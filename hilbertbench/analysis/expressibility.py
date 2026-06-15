@@ -158,6 +158,9 @@ def kl_expressibility(
      num_bins:  histogram bins for the fidelity distribution
      max_pairs: maximum number of state pairs to sample
      seed:      optional RNG seed for reproducibility
+     n_boot:    bootstrap resamples for the KL confidence interval
+                (0 disables the interval)
+     ci:        confidence level for the bootstrap interval (0.95 = 95%)
 
     return:
      a dict with keys:
@@ -166,6 +169,8 @@ def kl_expressibility(
       num_states    number of statevectors used
       num_pairs     fidelity pairs sampled
       num_qubits    inferred from the statevector dimension
+      kl_ci         [low, high] bootstrap interval on the KL divergence
+      confidence_level  the CI level used (e.g. 0.95)
 
     description:
      Estimates ansatz expressibility as the KL divergence of the
@@ -249,6 +254,7 @@ def kl_expressibility(
     # KL of an empirical fidelity sample against the Haar reference
     #
     def kl_of(fids: np.ndarray) -> float:
+        """KL divergence of a fidelity sample against the Haar reference."""
         p, _ = np.histogram(fids, bins=bin_edges, density=False)
         p = p / np.sum(p)
         p_a = np.where(p == 0, eps, p)
