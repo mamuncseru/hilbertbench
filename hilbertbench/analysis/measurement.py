@@ -53,7 +53,7 @@ __FILE__ = os.path.basename(__file__)
 #
 #------------------------------------------------------------------------------
 
-def _collect_shots(trace) -> list[int]:
+def _collect_shots(trace: Any) -> list[int]:
     """
     function: _collect_shots
 
@@ -83,7 +83,7 @@ def _collect_shots(trace) -> list[int]:
 # end of function
 
 
-def _collect_precisions(trace) -> list[float]:
+def _collect_precisions(trace: Any) -> list[float]:
     """
     function: _collect_precisions
 
