@@ -289,7 +289,7 @@ def active_probe_qiskit(
     def state_fn(theta: np.ndarray) -> np.ndarray:
         """Bind theta into the circuit and return its statevector data."""
         bound = circuit.assign_parameters(dict(zip(params, theta)))
-        return Statevector(bound).data
+        return np.asarray(Statevector(bound).data)
 
     # serialize the decomposed circuit to QASM; fall back gracefully
     #
@@ -350,17 +350,24 @@ def active_probe_pennylane(
      deduplicate across all samples.
     """
 
-    # import PennyLane modules locally to respect INV-004
+    # import PennyLane modules locally to respect INV-004; PennyLane is
+    # an optional extra, so guide the user if it is not installed
     #
-    import pennylane as qml
+    try:
+        import pennylane as qml
+    except ImportError as exc:
+        raise ImportError(
+            "PennyLane is required for the PennyLane active probe. "
+            "Install it with: pip install 'hilbertbench[pennylane]'"
+        ) from exc
     from hilbertbench.integrations.pennylane import _qasm_to_template
 
     # build a statevector qnode wrapping the user's circuit function
     #
     dev = qml.device("default.qubit", wires=num_qubits)
 
-    @qml.qnode(dev)
-    def qnode(theta):
+    @qml.qnode(dev)  # type: ignore[untyped-decorator]
+    def qnode(theta: Any) -> Any:
         """Execute the user circuit at theta and return the statevector."""
         circuit_fn(theta)
         return qml.state()
