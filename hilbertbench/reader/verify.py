@@ -12,12 +12,13 @@
 
 # import system modules
 #
+import argparse
 import hashlib
 import os
 import re
 import sys
 from pathlib import Path
-from typing import Set
+from typing import Any, Set
 
 # import hilbertbench modules
 #
@@ -138,7 +139,7 @@ def verify_trace_directory(run_dir: Path | str) -> bool:
 # end of function
 
 
-def _verify_integrity_seal(events_path: Path, seal) -> None:
+def _verify_integrity_seal(events_path: Path, seal: Any) -> None:
     """
     function: _verify_integrity_seal
 
@@ -393,38 +394,60 @@ def verify_catalog(catalog: HilbertbenchArtifactCatalog) -> list[str]:
 # end of function
 
 
-def main() -> None:
+def main(argv: list | None = None) -> int:
     """
     function: main
 
     arguments:
-     none (reads sys.argv)
+     argv: command-line arguments (defaults to sys.argv[1:])
 
     return:
-     none
+     process exit code (0 if every trace verifies, 1 otherwise)
 
     description:
-     CLI entry point for hb-verify. Accepts one run directory as an
-     argument and exits with code 0 on success or 1 on failure.
+     CLI entry point for hb-verify. Cryptographically and causally
+     verifies one or more HilbertBench run directories, printing OK or
+     FAILED per directory. Exits non-zero if any trace fails.
     """
 
-    # check for a run directory argument
+    # build the parser
     #
-    if len(sys.argv) < 2:
-        print(f"usage: {os.path.basename(sys.argv[0])} <run_dir>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        prog="hb-verify",
+        description=(
+            "Verify the integrity of HilbertBench traces: recompute the "
+            "seal and check causal ordering. Fails loudly on any "
+            "tampering."
+        ),
+    )
+    parser.add_argument(
+        "run_dir",
+        nargs="+",
+        help="one or more HilbertBench run directories",
+    )
+    args = parser.parse_args(argv)
 
-    # verify the trace directory and report result
+    # verify each directory, reporting per-directory outcomes
     #
-    run_dir = sys.argv[1]
-    try:
-        verify_trace_directory(run_dir)
-        print(f"OK: {run_dir}")
-    except TraceValidationError as e:
-        print(f"FAILED: {e}")
-        sys.exit(1)
+    failures = 0
+    for run_dir in args.run_dir:
+        try:
+            verify_trace_directory(run_dir)
+            print(f"OK: {run_dir}")
+        except (TraceValidationError, FileNotFoundError) as e:
+            print(f"FAILED: {run_dir}: {e}", file=sys.stderr)
+            failures += 1
+
+    # exit gracefully
+    #
+    return 1 if failures else 0
 #
 # end of function
 
+
+# begin gracefully
+#
+if __name__ == "__main__":
+    sys.exit(main())
 #
 # end of file
