@@ -381,7 +381,7 @@ class HilbertTrace:
     # end of method
 
     @property
-    def spans(self):
+    def spans(self) -> Any:
         """
         method: spans
 
