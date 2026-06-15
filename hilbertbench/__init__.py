@@ -12,6 +12,10 @@
 #
 #   from hilbertbench import HilbertTrace
 #   trace = HilbertTrace("runs/20260605_xxx")
+#
+# Source comments reference architectural invariants as INV-NNN (e.g.
+# INV-001). These are the framework's non-negotiable guarantees; the
+# canonical list lives in docs/reference/invariants.md.
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
