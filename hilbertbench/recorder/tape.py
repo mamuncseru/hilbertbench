@@ -25,7 +25,7 @@ import time
 import uuid
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any, Iterator, Optional, TextIO
 
 # import hilbertbench modules
 #
@@ -192,9 +192,14 @@ class SpanHandle:
 
         # store the inline artifact record
         #
+        # pydantic coerces the str kind/encoding to the model's enum at
+        # construction; the public Kind/Encoding differ by identity from
+        # InlineArtifact's generated span-module enums, so the string is
+        # the portable input here
+        #
         self.inline_artifacts[sha256_hash] = InlineArtifact(
-            kind=kind,
-            encoding=encoding,
+            kind=kind,        # type: ignore[arg-type]
+            encoding=encoding,  # type: ignore[arg-type]
             data=data,
             size_bytes=len(data_bytes),
             created_at=time.time_ns(),
@@ -267,7 +272,7 @@ class HilbertTape:
 
         # initialise file handle and closed flag
         #
-        self._event_file = None
+        self._event_file: Optional[TextIO] = None
         self._closed = False
         self._artifacts: dict[str, HilbertbenchArtifactMetadata] = {}
 
@@ -343,7 +348,7 @@ class HilbertTape:
     #
     # end of method
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> bool:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """
         method: __exit__
 
@@ -353,23 +358,23 @@ class HilbertTape:
          exc_tb:   exception traceback, or None on clean exit
 
         return:
-         False — exceptions are never suppressed (INV-007)
+         None — exceptions are never suppressed (INV-007)
 
         description:
          Seals the tape with SEALED_WITH_ERRORS on exception or
          SEALED_SUCCESS on clean exit. Never suppresses exceptions.
         """
 
-        # seal with error status if an exception occurred
+        # seal with error status if an exception occurred; returning
+        # None (never True) ensures the exception always propagates
         #
         if exc_type is not None:
             self.close(TraceStatus.SEALED_WITH_ERRORS)
-            return False
+            return
 
         # exit gracefully — seal as success
         #
         self.close(TraceStatus.SEALED_SUCCESS)
-        return False
     #
     # end of method
 
