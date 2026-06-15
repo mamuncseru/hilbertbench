@@ -54,7 +54,7 @@ __FILE__ = os.path.basename(__file__)
 #
 #------------------------------------------------------------------------------
 
-def _ordered_completed(trace) -> list:
+def _ordered_completed(trace: Any) -> list:
     """
     function: _ordered_completed
 
@@ -82,7 +82,7 @@ def _ordered_completed(trace) -> list:
 # end of function
 
 
-def _parameter_movements(spans) -> np.ndarray:
+def _parameter_movements(spans: Any) -> np.ndarray:
     """
     function: _parameter_movements
 
