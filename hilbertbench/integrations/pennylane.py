@@ -89,7 +89,9 @@ def _qasm_to_template(qasm: str) -> str:
     counter = [0]
 
     def repl_parens(match: re.Match) -> str:
+        """Replace each numeric literal in one parenthesis group with a slot."""
         def repl_num(_: re.Match) -> str:
+            """Emit the next positional parameter slot (_p0, _p1, ...)."""
             idx = counter[0]
             counter[0] += 1
             return f"_p{idx}"
