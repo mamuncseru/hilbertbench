@@ -1,20 +1,58 @@
 [build-system]
-requires = ["setuptools>=68.0.0"]
+requires = ["setuptools>=77.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "hilbertbench"
-version = "0.1.0-dev"
+version = "1.0.0"
+description = "Non-intrusive diagnostic framework for evaluating scientific claims in quantum machine learning"
+readme = "README.md"
 requires-python = ">=3.10"
-# Updated to standard SPDX string format for MIT
-license = "MIT" 
+license = "MIT"
+authors = [
+    { name = "Mamun (mamuncseru)", email = "mamun.cseian@gmail.com" },
+]
+keywords = [
+    "quantum-machine-learning",
+    "quantum-computing",
+    "diagnostics",
+    "barren-plateau",
+    "expressibility",
+    "nisq",
+    "qiskit",
+    "observability",
+    "reproducibility",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
 
-# CORE: zero external dependencies
+# The default install runs the documented Qiskit path out of the box:
+# the trace core (stdlib + pydantic), the Qiskit integration, and the
+# Parquet storage backend. The PennyLane integration is the one heavy
+# extra kept optional. (INV-004 still holds: the recorder/reader/models
+# code imports only the standard library — these are runtime deps of the
+# integration and storage layers, not of the core.)
 dependencies = [
-    "pydantic>=2.6.0",   # required: models/v1_0.py uses BaseModel
+    "pydantic>=2.6.0",
+    "qiskit>=1.0.0",
+    "pyarrow>=14.0.0",
 ]
 
 [project.optional-dependencies]
+# Granular knobs. `storage` and `qiskit` are already in the default
+# install; they are kept as named extras so the dependency intent stays
+# explicit and so a minimal install (`pip install hilbertbench --no-deps`
+# plus picks) can request exactly one.
 storage = ["pyarrow>=14.0.0"]
 qiskit  = ["qiskit>=1.0.0"]
 pennylane = ["pennylane>=0.38.0"]
@@ -24,40 +62,69 @@ dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
     "mypy>=1.7.0",
-    "black>=23.0.0",
     "ruff>=0.4.0",
-    "jsonschema>=4.21.0",      # for schema validation
-    "datamodel-code-generator", # for generate_python_models.sh
-    "pre-commit>=3.5.0",
+    "jsonschema>=4.21.0",         # schema validation in tests
+    "datamodel-code-generator",   # for schemas/scripts/generate_models.py
+    "pennylane>=0.38.0",          # so the full test suite runs
+    "build>=1.0.0",               # python -m build
+    "twine>=5.0.0",               # release upload + metadata check
+]
+docs = [
+    "mkdocs-material>=9.5.0",
 ]
 
-[project.scripts]
-hb-verify  = "hilbertbench.reader.verify:main"
-hb-migrate = "hilbertbench.recorder.storage.migrate:main"
+[project.urls]
+Homepage      = "https://mamuncseru.github.io/hilbertbench/"
+Documentation = "https://hilbertbench.readthedocs.io"
+Repository    = "https://github.com/mamuncseru/hilbertbench"
+Issues        = "https://github.com/mamuncseru/hilbertbench/issues"
 
-# ADDED: Explicitly tell setuptools which folder is the package
+[project.scripts]
+hb-verify = "hilbertbench.reader.verify:main"
+hb-export = "hilbertbench.recorder.storage.writer:main"
+
 [tool.setuptools.packages.find]
 include = ["hilbertbench*"]
 
+# Ship the inline type marker (PEP 561) so downstream users get the types.
+[tool.setuptools.package-data]
+hilbertbench = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts   = "-v --cov=hilbertbench --cov-report=term-missing"
+addopts   = "-q --cov=hilbertbench --cov-report=term-missing"
 
 [tool.mypy]
-python_version         = "3.10"
-strict                 = true
-disallow_untyped_defs  = true
+python_version        = "3.10"
+strict                = true
+# Bare `np.ndarray` is idiomatic in numerical Python, and numpy's
+# generic parameters carry no usable shape/dtype information here — so
+# requiring `np.ndarray[Any, Any]` everywhere would add noise without
+# safety. Every other strict check stays on.
+disallow_any_generics = false
 
 [[tool.mypy.overrides]]
-module   = "hilbertbench.models.*"
+module        = "hilbertbench.models.*"
 # auto-generated — relax strictness here only
 ignore_errors = true
 
-[tool.black]
-line-length    = 100
-target-version = ["py310"]
+[[tool.mypy.overrides]]
+# These libraries ship no type stubs (no py.typed), so mypy cannot
+# analyze them. This silences "missing library stubs" noise without
+# weakening type checking of our own code.
+module = [
+    "qiskit", "qiskit.*",
+    "pennylane", "pennylane.*",
+    "pyarrow", "pyarrow.*",
+    "pandas", "pandas.*",
+    "scipy", "scipy.*",
+    "sklearn", "sklearn.*",
+]
+ignore_missing_imports = true
 
 [tool.ruff]
 line-length    = 100
 target-version = "py310"
-select         = ["E", "F", "I", "N", "UP"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP"]
