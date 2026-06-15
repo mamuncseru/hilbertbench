@@ -275,7 +275,7 @@ def noise_profile(trace: TraceLike) -> dict[str, Any]:
             "two_qubit_gates": 1.0 - s_2q,
             "readout": 1.0 - s_ro,
         }
-        dominant = max(contributions, key=contributions.get)
+        dominant = max(contributions, key=lambda k: contributions[k])
 
     # classify the noise level from the estimated fidelity
     #
