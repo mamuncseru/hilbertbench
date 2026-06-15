@@ -13,9 +13,11 @@
 
 # import system modules
 #
+import argparse
 import json
+import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 # import optional third-party modules
 #
@@ -205,5 +207,61 @@ def convert_trace_to_parquet(run_dir: Path | str) -> Path:
 #
 # end of function
 
+
+def main(argv: list | None = None) -> int:
+    """
+    function: main
+
+    arguments:
+     argv: command-line arguments (defaults to sys.argv[1:])
+
+    return:
+     process exit code (0 on success, non-zero on failure)
+
+    description:
+     CLI entry point for hb-export. Converts the events.jsonl of one or
+     more run directories into columnar events.parquet for fast offline
+     analysis, leaving the original JSONL untouched (INV-002).
+    """
+
+    # build the parser
+    #
+    parser = argparse.ArgumentParser(
+        prog="hb-export",
+        description=(
+            "Export a HilbertBench trace's events to Parquet for fast "
+            "offline analysis. The original events.jsonl is preserved."
+        ),
+    )
+    parser.add_argument(
+        "run_dir",
+        nargs="+",
+        help="one or more HilbertBench run directories",
+    )
+    args = parser.parse_args(argv)
+
+    # convert each run directory, reporting per-directory outcomes
+    #
+    failures = 0
+    for run_dir in args.run_dir:
+        try:
+            out = convert_trace_to_parquet(run_dir)
+            print(f"OK: {out}")
+        except (ImportError, FileNotFoundError,
+                ParquetConversionError) as e:
+            print(f"FAILED: {run_dir}: {e}", file=sys.stderr)
+            failures += 1
+
+    # exit gracefully
+    #
+    return 1 if failures else 0
+#
+# end of function
+
+
+# begin gracefully
+#
+if __name__ == "__main__":
+    sys.exit(main())
 #
 # end of file
