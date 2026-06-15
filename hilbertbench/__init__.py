@@ -18,6 +18,10 @@
 # canonical list lives in docs/reference/invariants.md.
 #------------------------------------------------------------------------------
 
+# import system modules
+#
+from typing import Any
+
 #------------------------------------------------------------------------------
 #
 # global variables are listed here
@@ -34,7 +38,7 @@ __all__ = ["HilbertTrace", "SpanView"]
 #
 #------------------------------------------------------------------------------
 
-def __getattr__(name: str):
+def __getattr__(name: str) -> Any:
     """
     function: __getattr__
 
