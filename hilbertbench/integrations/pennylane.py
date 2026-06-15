@@ -218,7 +218,7 @@ def HilbertPennyLaneDeviceProxy(
      INV-007 (errors recorded and re-raised).
     """
 
-    class PennyLaneDeviceWrapper(real_device.__class__):
+    class PennyLaneDeviceWrapper(real_device.__class__):  # type: ignore[misc]
         """
         Class: PennyLaneDeviceWrapper
 
@@ -266,9 +266,9 @@ def HilbertPennyLaneDeviceProxy(
         def _intercept_execution(
             self,
             method_name: str,
-            tapes,
-            *args,
-            **kwargs,
+            tapes: Any,
+            *args: Any,
+            **kwargs: Any,
         ) -> Any:
             """
             method: _intercept_execution
@@ -492,7 +492,7 @@ def HilbertPennyLaneDeviceProxy(
         #
         # end of method
 
-        def execute(self, tapes, *args, **kwargs):
+        def execute(self, tapes: Any, *args: Any, **kwargs: Any) -> Any:
             """
             method: execute
 
@@ -514,7 +514,7 @@ def HilbertPennyLaneDeviceProxy(
         #
         # end of method
 
-        def batch_execute(self, tapes, *args, **kwargs):
+        def batch_execute(self, tapes: Any, *args: Any, **kwargs: Any) -> Any:
             """
             method: batch_execute
 
