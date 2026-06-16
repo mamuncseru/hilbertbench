@@ -25,7 +25,7 @@
     
     
       
-        <title>0001 trace atomicity - HilbertBench</title>
+        <title>ADR-0001: Traces are append-only and sealed on close - HilbertBench</title>
       
     
     
@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#adr-0001-traces-are-append-only-and-sealed-on-close" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -105,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              0001 trace atomicity
+              ADR-0001: Traces are append-only and sealed on close
             
           </span>
         </div>
@@ -942,6 +947,49 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -961,9 +1009,59 @@
   
 
 
-  <h1>0001 trace atomicity</h1>
-
-
+<h1 id="adr-0001-traces-are-append-only-and-sealed-on-close">ADR-0001: Traces are append-only and sealed on close<a class="headerlink" href="#adr-0001-traces-are-append-only-and-sealed-on-close" title="Permanent link">&para;</a></h1>
+<p><strong>Status:</strong> Accepted · <strong>Enforces:</strong> <a href="../../architecture/001_invariants/">INV-002</a></p>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
+<p>A HilbertBench trace is scientific evidence. It may be the basis of a
+published result, handed to a second researcher who did not run the
+experiment, or re-analyzed years after it was recorded. Two failure
+modes would make that evidence worthless:</p>
+<ol>
+<li><strong>Silent mutation.</strong> If a trace can be edited after the fact — by a
+   migration script, a reader utility, a well-meaning "cleanup" — then
+   no one can trust that what they are reading is what actually
+   happened.</li>
+<li><strong>Crash corruption.</strong> Quantum experiments are long-running and
+   submitted to flaky queues. If a crash mid-run could leave the trace
+   in a half-written, ambiguous state, every long experiment becomes a
+   gamble.</li>
+</ol>
+<p>We needed a storage discipline where a finalized trace is provably
+untouched, and an interrupted trace still yields all the evidence
+gathered up to the moment of failure.</p>
+<h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
+<p>Traces are <strong>append-only during recording</strong> and <strong>cryptographically
+sealed on close.</strong></p>
+<ul>
+<li>The event stream is written to <code>events.jsonl</code>, one JSON object per
+  line, append-only. A record, once written, is never modified.</li>
+<li>When the <code>HilbertTape</code> context exits, the tape computes a SHA-256
+  checksum over the entire event stream and writes it into
+  <code>trace.json</code> as the integrity seal.</li>
+<li>The read path has no write privileges. Any tool that needs to reshape
+  a trace produces a <em>new</em> derived trace and leaves the original
+  untouched.</li>
+<li><code>trace.verify()</code> recomputes the seal and the causal ordering, and
+  raises if a single byte has moved.</li>
+</ul>
+<h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
+<p><strong>What we gain.</strong> A sealed trace is tamper-evident: anyone can verify
+it has not changed since it was written, which is precisely the
+property the <a href="../../end-to-end/">blinded validation protocol</a> depends on
+— nobody, including the tool's authors, can quietly alter recorded
+evidence. The append-only log is also crash-resilient: an interrupted
+run loses at most the final partial line, and everything before it is
+valid, readable evidence. An unsealed trace is detectable as such.</p>
+<p><strong>What we give up.</strong> No in-place edits, ever. Fixing a mistake in a
+trace means generating a corrected derivative, not patching the
+original — more disk, more discipline. Append-only JSONL is also not
+the most compact on-disk form, which is why a separate, <em>additive</em>
+Parquet export exists (<a href="../../reference/trace-format/"><code>hb-export</code></a>) for
+analytical workloads; it never replaces the JSONL source of truth.</p>
+<p><strong>What it commits us to.</strong> This decision is the foundation of
+<a href="../../architecture/001_invariants/">INV-002</a>. It means migrations are
+forward-only, the reader stays strictly read-only, and the seal is part
+of the trace contract, not an optional add-on.</p>
 
 
 

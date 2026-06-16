@@ -25,7 +25,7 @@
     
     
       
-        <title>HilbertBench: Architectural Invariants - HilbertBench</title>
+        <title>Architectural Invariants - HilbertBench</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hilbertbench-architectural-invariants" class="md-skip">
+        <a href="#architectural-invariants" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              HilbertBench: Architectural Invariants
+              Architectural Invariants
             
           </span>
         </div>
@@ -957,10 +957,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#inv-001-execution-parity-the-observer-effect" class="md-nav__link">
+  <a href="#inv-001-execution-parity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-001: Execution Parity (The Observer Effect)
+        INV-001 — Execution Parity
       
     </span>
   </a>
@@ -971,7 +971,7 @@
   <a href="#inv-002-trace-immutability" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-002: Trace Immutability
+        INV-002 — Trace Immutability
       
     </span>
   </a>
@@ -979,10 +979,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-003-schema-is-the-sole-source-of-truth" class="md-nav__link">
+  <a href="#inv-003-the-schema-is-the-only-source-of-truth" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-003: Schema is the Sole Source of Truth
+        INV-003 — The Schema is the Only Source of Truth
       
     </span>
   </a>
@@ -990,10 +990,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-004-core-dependency-isolation" class="md-nav__link">
+  <a href="#inv-004-the-core-imports-only-the-standard-library" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-004: Core Dependency Isolation
+        INV-004 — The Core Imports Only the Standard Library
       
     </span>
   </a>
@@ -1001,10 +1001,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-005-schema-version-freezing" class="md-nav__link">
+  <a href="#inv-005-tagged-schema-versions-are-frozen" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-005: Schema Version Freezing
+        INV-005 — Tagged Schema Versions Are Frozen
       
     </span>
   </a>
@@ -1012,10 +1012,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-006-strict-separation-of-evidence-and-interpretation" class="md-nav__link">
+  <a href="#inv-006-evidence-and-interpretation-stay-separate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-006: Strict Separation of Evidence and Interpretation
+        INV-006 — Evidence and Interpretation Stay Separate
       
     </span>
   </a>
@@ -1023,10 +1023,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-007-mandatory-failure-visibility" class="md-nav__link">
+  <a href="#inv-007-failures-are-always-visible" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-007: Mandatory Failure Visibility
+        INV-007 — Failures Are Always Visible
       
     </span>
   </a>
@@ -1034,10 +1034,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#inv-008-graceful-schema-degradation" class="md-nav__link">
+  <a href="#inv-008-missing-data-degrades-never-hallucinates" class="md-nav__link">
     <span class="md-ellipsis">
       
-        INV-008: Graceful Schema Degradation
+        INV-008 — Missing Data Degrades, Never Hallucinates
       
     </span>
   </a>
@@ -1064,71 +1064,111 @@
   
 
 
-<h1 id="hilbertbench-architectural-invariants">HilbertBench: Architectural Invariants<a class="headerlink" href="#hilbertbench-architectural-invariants" title="Permanent link">&para;</a></h1>
-<p><strong>Status:</strong> Active<br />
-<strong>Applies to:</strong> All pull requests, schema modifications, and tool development.</p>
-<p>These invariants are the non-negotiable laws of the HilbertBench repository. They ensure the scientific validity of the trace data and the long-term maintainability of the codebase. Any code or schema change that violates them MUST be rejected, regardless of convenience or urgency.</p>
+<h1 id="architectural-invariants">Architectural Invariants<a class="headerlink" href="#architectural-invariants" title="Permanent link">&para;</a></h1>
+<p>HilbertBench records scientific evidence, and these eight rules are
+what make that evidence trustworthy. They are referenced throughout the
+source as <code>INV-001</code> … <code>INV-008</code>. A change that breaks one is rejected in
+review no matter how convenient it is; if an invariant genuinely needs
+to change, that is a design discussion, not a patch.</p>
+<p>Each entry below states the rule, then explains the failure it exists
+to prevent — because the rule only makes sense once you have seen what
+goes wrong without it.</p>
 <hr />
-<h2 id="inv-001-execution-parity-the-observer-effect">INV-001: Execution Parity (The Observer Effect)<a class="headerlink" href="#inv-001-execution-parity-the-observer-effect" title="Permanent link">&para;</a></h2>
-<p>The recorder MUST NOT alter the number of shots, circuit executions, parameter bindings, or observable evaluations performed by the user's underlying code.</p>
-<ul>
-<li><strong>Implication:</strong> The recorder operates strictly in passive interception mode at the execution boundary, writing to a background queue. It never re-executes, re-samples, or injects synthetic circuits into the hardware queue.</li>
-<li><strong>Violated by:</strong> Any instrumentation hook that calls <code>backend.run()</code> outside of the original user call context, or modifies the <code>shots</code> argument of an intercepted call.</li>
-</ul>
+<h2 id="inv-001-execution-parity">INV-001 — Execution Parity<a class="headerlink" href="#inv-001-execution-parity" title="Permanent link">&para;</a></h2>
+<p><strong>The recorder must not change the number of shots, circuit executions,
+parameter bindings, or observable evaluations the user's code performs.</strong></p>
+<p>This is the one that justifies the word "non-intrusive". On
+superconducting hardware, a circuit's noise depends on when it runs, so
+a diagnostic that quietly fires an extra job — or pads the shot count
+"just to be safe" — has changed the very thing it claims to observe, and
+on paid hardware it has also spent the user's money. The proxy therefore
+only watches. It forwards each call to the real backend, waits for the
+result the user would have gotten anyway, and copies it aside. The
+optimizer cannot tell HilbertBench is attached.</p>
+<p><em>Broken by</em> an integration hook that calls <code>backend.run()</code> outside the
+user's original call, or that touches the <code>shots</code> argument on the way
+through.</p>
 <hr />
-<h2 id="inv-002-trace-immutability">INV-002: Trace Immutability<a class="headerlink" href="#inv-002-trace-immutability" title="Permanent link">&para;</a></h2>
-<p>A written trace file MUST NOT be modified after it is finalized. Traces are append-only during the recording phase and cryptographically sealed upon closure.</p>
-<ul>
-<li><strong>Implication:</strong> The <code>hilbertbench/reader/</code> path has zero write privileges. Any schema migrations or anomaly corrections MUST produce a new derived trace file or a secondary index; they do not overwrite the original source of truth.</li>
-<li><strong>Violated by:</strong> Any diagnostic script, reader utility, or CLI tool that opens a <code>.parquet</code> or <code>.json</code> trace file in <code>w</code>, <code>a</code>, or <code>r+</code> mode.</li>
-</ul>
+<h2 id="inv-002-trace-immutability">INV-002 — Trace Immutability<a class="headerlink" href="#inv-002-trace-immutability" title="Permanent link">&para;</a></h2>
+<p><strong>A finalized trace is never modified.</strong></p>
+<p>A flight recorder you can edit after the crash is worthless. During
+recording the event log only ever grows; when the <code>HilbertTape</code> context
+closes, the trace is sealed with a SHA-256 checksum over the whole event
+stream. Nothing on the read side can write — not the reader, not an
+analyzer, not a migration. If a trace must be reshaped, that produces a
+new derived trace and leaves the original untouched.</p>
+<p><em>Checked by</em> <code>trace.verify()</code>, which recomputes the seal and raises
+<code>IntegrityError</code> if a single byte has moved.</p>
 <hr />
-<h2 id="inv-003-schema-is-the-sole-source-of-truth">INV-003: Schema is the Sole Source of Truth<a class="headerlink" href="#inv-003-schema-is-the-sole-source-of-truth" title="Permanent link">&para;</a></h2>
-<p>Python data models in <code>hilbertbench/models/</code> are ALWAYS auto-generated from the language-agnostic JSON schemas in <code>schemas/v*/</code>. They are NEVER edited by hand.</p>
-<ul>
-<li><strong>Implication:</strong> If a model field requires modification, the JSON schema changes first. The developer must then run <code>schemas/scripts/generate_python_models.sh</code> to propagate the change.</li>
-<li><strong>Violated by:</strong> Any manual Git commit that modifies <code>hilbertbench/models/v*.py</code> without a corresponding change to the upstream JSON schema.</li>
-</ul>
+<h2 id="inv-003-the-schema-is-the-only-source-of-truth">INV-003 — The Schema is the Only Source of Truth<a class="headerlink" href="#inv-003-the-schema-is-the-only-source-of-truth" title="Permanent link">&para;</a></h2>
+<p><strong>The Python models in <code>hilbertbench/models/</code> are generated from the
+JSON schemas in <code>schemas/</code>. They are never hand-edited.</strong></p>
+<p>A trace is meant to be read years from now by tools written in languages
+that may not exist yet. If the format lived only in Python, the
+"specification" would be whatever the code happened to do that week. So
+the JSON Schema is authoritative and the Python is compiled output, the
+way an object file is compiled from source. Want to change a field? Edit
+the schema, run <code>python schemas/scripts/generate_models.py</code>, commit both
+together.</p>
+<p><em>Broken by</em> a commit that edits <code>hilbertbench/models/v*.py</code> without a
+matching schema change — the tell-tale sign of a hand-edit.</p>
 <hr />
-<h2 id="inv-004-core-dependency-isolation">INV-004: Core Dependency Isolation<a class="headerlink" href="#inv-004-core-dependency-isolation" title="Permanent link">&para;</a></h2>
-<p>The foundational modules (<code>hilbertbench/recorder/</code>, <code>hilbertbench/reader/</code>, and <code>hilbertbench/models/</code>) MUST import only from the Python standard library and each other.</p>
-<ul>
-<li><strong>Implication:</strong> Heavy or volatile third-party quantum libraries (e.g., <code>import qiskit</code>, <code>import pennylane</code>) and storage engines (<code>import pyarrow</code>) are strictly confined to <code>hilbertbench/integrations/</code> and <code>hilbertbench/storage/</code>. </li>
-<li><strong>Verification:</strong>
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># This CI check must produce NO output:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;^import\|^from&quot;</span><span class="w"> </span>hilbertbench/recorder/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>hilbertbench/reader/<span class="w"> </span>hilbertbench/models/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;hilbertbench\|typing\|dataclasses\|abc\|uuid\|datetime\|pathlib\|hashlib\|json\|enum\|sys\|os&quot;</span>
-</code></pre></div></li>
-</ul>
+<h2 id="inv-004-the-core-imports-only-the-standard-library">INV-004 — The Core Imports Only the Standard Library<a class="headerlink" href="#inv-004-the-core-imports-only-the-standard-library" title="Permanent link">&para;</a></h2>
+<p><strong><code>recorder/</code>, <code>reader/</code>, and <code>models/</code> depend on nothing but the Python
+standard library and each other.</strong></p>
+<p>Recording evidence is too important to be hostage to a heavy, fast-moving
+quantum stack. Keeping the core dependency-free means it stays small
+enough to audit by reading, and a researcher can open and verify someone
+else's traces without installing Qiskit at all. Everything volatile —
+<code>qiskit</code>, <code>pennylane</code>, <code>pyarrow</code> — lives in <code>integrations/</code>, <code>analysis/</code>,
+and the storage layer, where it belongs.</p>
 <hr />
-<h2 id="inv-005-schema-version-freezing">INV-005: Schema Version Freezing<a class="headerlink" href="#inv-005-schema-version-freezing" title="Permanent link">&para;</a></h2>
-<p>Once a major schema version (e.g., <code>schemas/v1.0/</code>) is officially tagged in Git, no file within that directory may be modified. </p>
-<ul>
-<li><strong>Implication:</strong> The structure of "Bucket A" (Irreducible Facts) is permanent. If a new field must be added, or an optional field introduced, it requires the creation of <code>schemas/v1.1/</code>.</li>
-<li><strong>Violated by:</strong> Any PR that modifies the contents of <code>schemas/v1.0/*.json</code> after the <code>schema-v1.0</code> Git tag has been cut.</li>
-</ul>
+<h2 id="inv-005-tagged-schema-versions-are-frozen">INV-005 — Tagged Schema Versions Are Frozen<a class="headerlink" href="#inv-005-tagged-schema-versions-are-frozen" title="Permanent link">&para;</a></h2>
+<p><strong>Once a schema version is tagged in Git, no file in that directory ever
+changes again.</strong></p>
+<p>The whole promise of INV-003 collapses if <code>v1.0</code> can quietly mean
+something different next month. So a released schema version is permanent.
+A new or changed field means a new version directory (<code>v1.1/</code>, <code>v2.0/</code>),
+which guarantees that a trace written today still parses against any
+future reader that understands its version.</p>
 <hr />
-<h2 id="inv-006-strict-separation-of-evidence-and-interpretation">INV-006: Strict Separation of Evidence and Interpretation<a class="headerlink" href="#inv-006-strict-separation-of-evidence-and-interpretation" title="Permanent link">&para;</a></h2>
-<p>A span recorded in a trace captures strictly WHAT happened (the physical constants: circuits submitted, parameters bound, UTC timestamps, outcomes observed). It records NO interpretation of what the data means.</p>
-<ul>
-<li><strong>Implication:</strong> Diagnostic conclusions (e.g., "barren plateau detected", "noise level high") do not exist in the trace schema. They are generated dynamically by the <code>reader</code> path and stored externally.</li>
-<li><strong>Violated by:</strong> Introducing fields like <code>is_converged</code>, <code>error_rate</code>, or <code>quality_score</code> into the trace schema.</li>
-</ul>
+<h2 id="inv-006-evidence-and-interpretation-stay-separate">INV-006 — Evidence and Interpretation Stay Separate<a class="headerlink" href="#inv-006-evidence-and-interpretation-stay-separate" title="Permanent link">&para;</a></h2>
+<p><strong>A span records what physically happened — circuits, parameters,
+timestamps, outcomes. It records no judgement about what any of it
+means.</strong></p>
+<p>The moment a verdict like "barren plateau detected" is written into a
+trace, that trace is frozen around one analysis, made with one set of
+thresholds, by one version of the tool. Keep interpretation out, and the
+same raw trace can be re-diagnosed tomorrow with a sharper analyzer or a
+different threshold — which is exactly the workflow the project is built
+for. Diagnoses are computed on read, by the <code>analysis</code> layer, and never
+flow back.</p>
+<p><em>Broken by</em> adding fields such as <code>is_converged</code>, <code>error_rate</code>, or
+<code>quality_score</code> to the trace schema.</p>
 <hr />
-<h2 id="inv-007-mandatory-failure-visibility">INV-007: Mandatory Failure Visibility<a class="headerlink" href="#inv-007-mandatory-failure-visibility" title="Permanent link">&para;</a></h2>
-<p>Silent failures are strictly prohibited. Every initiated execution span MUST conclude with either a successful <code>SPAN_END</code> event, an explicit <code>ERROR</code> event, or be structurally detectable as a catastrophic crash.</p>
-<ul>
-<li><strong>Implication:</strong> Unhandled exceptions in the user's script or the integration adapter must be caught, logged to the trace as an <code>ERROR</code> event, and then re-raised. The logger must not swallow exceptions to "keep the trace clean."</li>
-<li><strong>Violated by:</strong> <code>try...except Exception: pass</code> blocks within the <code>recorder</code> or <code>integrations</code> modules.</li>
-</ul>
+<h2 id="inv-007-failures-are-always-visible">INV-007 — Failures Are Always Visible<a class="headerlink" href="#inv-007-failures-are-always-visible" title="Permanent link">&para;</a></h2>
+<p><strong>Every span that starts must end in a way you can see: a clean
+<code>SPAN_END</code>, an explicit <code>ERROR</code> event, or a structurally detectable
+crash.</strong></p>
+<p>The worst outcome for a diagnostic tool is to make a problem disappear.
+If the user's circuit throws, the adapter catches it, writes an <code>ERROR</code>
+event into the trace, and re-raises — the failure is both surfaced to the
+user and preserved as evidence. What the recorder must never do is
+swallow an exception to keep the trace looking tidy; a tidy trace that
+hides a failure is a lie.</p>
+<p><em>Broken by</em> <code>try: ... except Exception: pass</code> anywhere in <code>recorder/</code> or
+<code>integrations/</code>.</p>
 <hr />
-<h2 id="inv-008-graceful-schema-degradation">INV-008: Graceful Schema Degradation<a class="headerlink" href="#inv-008-graceful-schema-degradation" title="Permanent link">&para;</a></h2>
-<p>Analysis tools reading historical traces MUST NOT hallucinate data. If an optional field (e.g., <code>calibration_snapshot</code>) is missing from an older trace, the reader must degrade gracefully.</p>
-<ul>
-<li><strong>Implication:</strong> The absence of evidence must never be interpreted as evidence of absence. Missing fields resolve to <code>Null</code>. Diagnostics relying on that data must return an <code>Insufficient Evidence</code> status, rather than assuming a default value of <code>0</code> or <code>False</code>.</li>
-<li><strong>Violated by:</strong> Reader logic that assigns default fallback values to missing trace fields to force a diagnostic function to run.</li>
-</ul>
+<h2 id="inv-008-missing-data-degrades-never-hallucinates">INV-008 — Missing Data Degrades, Never Hallucinates<a class="headerlink" href="#inv-008-missing-data-degrades-never-hallucinates" title="Permanent link">&para;</a></h2>
+<p><strong>A reader of an older trace must not invent values the trace does not
+contain.</strong></p>
+<p>Absence of evidence is not evidence of absence. If an optional field —
+say, a calibration snapshot — was never recorded, it resolves to <code>None</code>,
+and any diagnostic that needed it reports <code>Insufficient Data</code> and stops.
+What it must not do is substitute a <code>0</code> or a <code>False</code> and proceed, because
+that manufactures a confident answer out of nothing.</p>
+<p><em>Broken by</em> reader logic that fills missing fields with defaults just to
+keep a diagnostic from short-circuiting.</p>
 
 
 

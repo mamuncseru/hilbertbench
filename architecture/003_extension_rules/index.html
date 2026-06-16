@@ -25,7 +25,7 @@
     
     
       
-        <title>003 extension rules - HilbertBench</title>
+        <title>Extending HilbertBench - HilbertBench</title>
       
     
     
@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#extending-hilbertbench" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -105,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              003 extension rules
+              Extending HilbertBench
             
           </span>
         </div>
@@ -942,6 +947,60 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adding-an-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding an analyzer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-framework-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a framework integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-trace-schema-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a trace-schema field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-rule-behind-the-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The rule behind the rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -961,9 +1020,86 @@
   
 
 
-  <h1>003 extension rules</h1>
-
-
+<h1 id="extending-hilbertbench">Extending HilbertBench<a class="headerlink" href="#extending-hilbertbench" title="Permanent link">&para;</a></h1>
+<p>HilbertBench is built to be extended in three places: new analyzers,
+new framework integrations, and new trace-schema fields. Each has a
+safe path and a few rules that keep an extension from quietly breaking
+the guarantees the framework rests on. The full contributor checklist
+is in <a href="https://github.com/mamuncseru/hilbertbench/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>;
+this page is the architectural how-to.</p>
+<h2 id="adding-an-analyzer">Adding an analyzer<a class="headerlink" href="#adding-an-analyzer" title="Permanent link">&para;</a></h2>
+<p>An analyzer is the easiest thing to add, because it only <em>reads</em>.</p>
+<p>A new analyzer is a plain function: it takes a trace (or a run-directory
+path) and returns a dictionary. It lives in <code>hilbertbench/analysis/</code>,
+and it must follow the same contract as the existing six:</p>
+<ul>
+<li><strong>Read-only.</strong> It never writes to the trace (<a href="../001_invariants/">INV-002</a>).
+  Take a <code>HilbertTrace</code>, resolve what you need, compute, return.</li>
+<li><strong>Evidence in, dictionary out.</strong> Return a <code>status</code> string plus the
+  quantitative evidence behind it. Do not invent a verdict the numbers
+  do not support.</li>
+<li><strong>Quantify uncertainty.</strong> If you estimate a statistic, attach a
+  bootstrap confidence interval (see <code>analysis/_util.py</code> for the
+  shared helper) and let the verdict report low confidence when the
+  interval straddles a threshold.</li>
+<li><strong>Degrade, don't guess.</strong> If the trace lacks what you need (an old
+  trace with no calibration snapshot, say), return an "insufficient
+  data" status — never a fabricated default (<a href="../001_invariants/">INV-008</a>).</li>
+<li><strong>Document the threshold.</strong> Any decision cutoff is a named constant
+  with a comment explaining where the number came from. Expose it as a
+  function argument so callers can override it.</li>
+</ul>
+<p>Add a test in <code>tests/analysis/</code> that plants a known condition in a
+constructed trace and asserts the verdict, then regenerate the
+<a href="../../reference/test-catalog/">test catalog</a>.</p>
+<h2 id="adding-a-framework-integration">Adding a framework integration<a class="headerlink" href="#adding-a-framework-integration" title="Permanent link">&para;</a></h2>
+<p>An integration is a transparent proxy. It is the only place a heavy
+quantum library may be imported, and it carries the heaviest
+responsibility, because it runs <em>during</em> the user's experiment.</p>
+<ul>
+<li><strong>Parity is sacred.</strong> The proxy must not change the number of shots,
+  executions, parameter bindings, or observables (<a href="../001_invariants/">INV-001</a>).
+  Forward the call to the real backend, wait for the result the user
+  would have gotten anyway, and copy it aside. Never re-execute.</li>
+<li><strong>Record after, not instead.</strong> Run the real call first; record from
+  its result. Recording must never sit on the critical path in a way
+  that could alter timing or fail the user's job.</li>
+<li><strong>Failures are visible.</strong> Wrap recording so that a problem writing
+  the trace cannot break the user's run, but is itself logged as an
+  <code>ERROR</code> event, not silently dropped (<a href="../001_invariants/">INV-007</a>).</li>
+<li><strong>Import locally.</strong> Keep the framework import inside the integration
+  module so the core stays dependency-free (<a href="../001_invariants/">INV-004</a>),
+  and add a clear message if an optional dependency is missing.</li>
+</ul>
+<p>The existing <a href="https://github.com/mamuncseru/hilbertbench/blob/main/hilbertbench/integrations/qiskit.py">Qiskit</a>
+and <a href="https://github.com/mamuncseru/hilbertbench/blob/main/hilbertbench/integrations/pennylane.py">PennyLane</a>
+proxies are the templates to copy.</p>
+<h2 id="adding-a-trace-schema-field">Adding a trace-schema field<a class="headerlink" href="#adding-a-trace-schema-field" title="Permanent link">&para;</a></h2>
+<p>This is the one with the strictest rules, because the trace format is
+a long-lived contract.</p>
+<ul>
+<li><strong>Edit the schema, never the models.</strong> Change the JSON Schema in
+  <code>schemas/</code>, then regenerate the Python models
+  (<a href="../001_invariants/">INV-003</a>). See the
+  <a href="https://github.com/mamuncseru/hilbertbench/blob/main/schemas/README.md">schema guide</a>.</li>
+<li><strong>Respect the version freeze.</strong> Once a schema version is tagged it is
+  frozen forever (<a href="../001_invariants/">INV-005</a>). A new field goes into
+  a new version directory (<code>v1.1/</code>), not into a released one.</li>
+<li><strong>New fields are optional and degrade gracefully.</strong> Anything not
+  present since the first release must be optional and nullable, so a
+  reader of an older trace resolves it to <code>None</code>
+  (<a href="../001_invariants/">INV-008</a>).</li>
+<li><strong>Evidence only.</strong> The new field records <em>what happened</em>, never an
+  interpretation of it (<a href="../001_invariants/">INV-006</a>). Fields like
+  <code>is_converged</code> or <code>quality_score</code> do not belong in a trace.</li>
+</ul>
+<h2 id="the-rule-behind-the-rules">The rule behind the rules<a class="headerlink" href="#the-rule-behind-the-rules" title="Permanent link">&para;</a></h2>
+<p>Every extension rule traces back to one question: <em>does this change
+keep the trace trustworthy?</em> If an addition could let the recorder
+perturb an experiment, let a trace be edited after the fact, or let an
+analyzer invent data, it is rejected — regardless of how useful it
+seems. The <a href="../../reference/test-catalog/">compliance suite</a> exists to
+catch the cases where good intentions would have broken a guarantee.</p>
 
 
 

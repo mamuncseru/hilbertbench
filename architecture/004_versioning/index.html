@@ -25,7 +25,7 @@
     
     
       
-        <title>004 versioning - HilbertBench</title>
+        <title>Versioning - HilbertBench</title>
       
     
     
@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#versioning" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -105,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              004 versioning
+              Versioning
             
           </span>
         </div>
@@ -942,6 +947,49 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#software-version-semantic-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software version (semantic versioning)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trace-schema-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace-schema version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-two-relate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the two relate
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -961,9 +1009,95 @@
   
 
 
-  <h1>004 versioning</h1>
-
-
+<h1 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h1>
+<p>HilbertBench carries two version numbers, and they move independently
+on purpose: the <strong>software</strong> version and the <strong>trace-schema</strong> version.
+A trace recorded by one software version must stay readable by later
+ones, so the schema cannot be hostage to the software's release pace.</p>
+<h2 id="software-version-semantic-versioning">Software version (semantic versioning)<a class="headerlink" href="#software-version-semantic-versioning" title="Permanent link">&para;</a></h2>
+<p>The package follows <a href="https://semver.org">semantic versioning</a>.
+Given <code>MAJOR.MINOR.PATCH</code>:</p>
+<ul>
+<li><strong>PATCH</strong> (<code>1.0.0 → 1.0.1</code>) — bug fixes, no change to the public API
+  or trace format.</li>
+<li><strong>MINOR</strong> (<code>1.0.0 → 1.1.0</code>) — backward-compatible additions: a new
+  analyzer, a new integration, a new <em>optional</em> schema field shipped as
+  <code>schemas/v1.1/</code>. Existing code and existing traces keep working.</li>
+<li><strong>MAJOR</strong> (<code>1.0.0 → 2.0.0</code>) — a breaking change to the public API or
+  the trace format.</li>
+</ul>
+<p>The public API is the surface in <code>hilbertbench/__init__.py</code>, the
+<code>HilbertTrace</code> reader, the six analyzer functions, the integration
+proxies, and the <code>hb-verify</code> / <code>hb-export</code> commands. Anything prefixed
+with an underscore is internal and may change in a minor release.</p>
+<p>The version lives in one place — <code>pyproject.toml</code> — and the Git tag
+must match it exactly (<code>v1.0.0</code> ↔ <code>version = "1.0.0"</code>). The
+<a href="https://github.com/mamuncseru/hilbertbench/blob/main/RELEASING.md">release process</a>
+covers the mechanics, including the rule that a version published to
+PyPI can never be replaced.</p>
+<h2 id="trace-schema-version">Trace-schema version<a class="headerlink" href="#trace-schema-version" title="Permanent link">&para;</a></h2>
+<p>Every trace records the schema version it was written against
+(<code>hbtrace_version</code>, <code>hbspan_version</code>, and so on). This is what lets an
+analyzer written years later know exactly how to read an old trace.</p>
+<p>The governing rule is <a href="../001_invariants/">INV-005</a>: <strong>once a schema
+version is tagged in Git, no file in that directory ever changes.</strong> A
+released <code>schemas/v1.0/</code> is permanent. The trace format is a contract
+with every trace ever written under it, and you cannot quietly change
+what <code>v1.0</code> means.</p>
+<p>When the format must change:</p>
+<ul>
+<li>A new <em>optional</em> field, added compatibly, goes into a new minor
+  schema version (<code>schemas/v1.1/</code>) and degrades gracefully on older
+  traces (<a href="../001_invariants/">INV-008</a>).</li>
+<li>A change that would break older readers — removing a field, changing
+  a type, making an optional field required — requires a new major
+  schema version (<code>schemas/v2.0/</code>) and a corresponding major software
+  release.</li>
+</ul>
+<p>Because the Python models are generated from the schema
+(<a href="../001_invariants/">INV-003</a>), bumping a schema version means adding a
+new generated model package (<code>hilbertbench/models/v1_1/</code>) and exposing
+it through the version-stable re-export surface, so existing importers
+are never broken.</p>
+<h2 id="how-the-two-relate">How the two relate<a class="headerlink" href="#how-the-two-relate" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Software bump</th>
+<th>Schema bump</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix a bug in an analyzer</td>
+<td>patch</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Add an analyzer or integration</td>
+<td>minor</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Add an optional trace field</td>
+<td>minor</td>
+<td>new minor schema (<code>v1.1</code>)</td>
+</tr>
+<tr>
+<td>Break the public API</td>
+<td>major</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Break the trace format</td>
+<td>major</td>
+<td>new major schema (<code>v2.0</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The asymmetry is the point: the software can evolve quickly, but the
+record of an experiment is meant to outlive the tool that wrote it.</p>
 
 
 
