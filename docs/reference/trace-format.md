@@ -94,7 +94,7 @@ Run-level metadata written when the tape seals.
   "ts_start":    "2026-06-05T14:30:22Z",
   "ts_end":      "2026-06-05T14:30:25Z",
   "client_environment": {
-    "hilbertbench_version": "0.1.0-dev",
+    "hilbertbench_version": "1.0.0",
     "python_version": "3.11.4"
   },
   "integrity_seal": {
