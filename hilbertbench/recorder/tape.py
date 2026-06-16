@@ -24,6 +24,7 @@ import threading
 import time
 import uuid
 from contextlib import contextmanager
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Iterator, Optional, TextIO
 
@@ -55,6 +56,14 @@ from hilbertbench.models import (
 # set the filename using basename
 #
 __FILE__ = os.path.basename(__file__)
+
+# the installed package version, stamped into every trace manifest;
+# read from package metadata so it tracks pyproject.toml automatically
+#
+try:
+    HB_VERSION = version("hilbertbench")
+except PackageNotFoundError:
+    HB_VERSION = "0.0.0+unknown"
 
 #------------------------------------------------------------------------------
 #
@@ -305,7 +314,7 @@ class HilbertTape:
         # exit gracefully
         #
         return ClientEnvironment(
-            hilbertbench_version="0.1.0-dev",
+            hilbertbench_version=HB_VERSION,
             python_version=platform.python_version(),
             os_platform=platform.system().lower(),
             frameworks={},
