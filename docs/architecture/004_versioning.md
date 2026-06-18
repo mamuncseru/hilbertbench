@@ -35,7 +35,7 @@ Every trace records the schema version it was written against
 (`hbtrace_version`, `hbspan_version`, and so on). This is what lets an
 analyzer written years later know exactly how to read an old trace.
 
-The governing rule is [INV-005](001_invariants.md): **once a schema
+The governing rule is [INV-005](../reference/invariants.md): **once a schema
 version is tagged in Git, no file in that directory ever changes.** A
 released `schemas/v1.0/` is permanent. The trace format is a contract
 with every trace ever written under it, and you cannot quietly change
@@ -45,14 +45,14 @@ When the format must change:
 
 - A new *optional* field, added compatibly, goes into a new minor
   schema version (`schemas/v1.1/`) and degrades gracefully on older
-  traces ([INV-008](001_invariants.md)).
+  traces ([INV-008](../reference/invariants.md)).
 - A change that would break older readers — removing a field, changing
   a type, making an optional field required — requires a new major
   schema version (`schemas/v2.0/`) and a corresponding major software
   release.
 
 Because the Python models are generated from the schema
-([INV-003](001_invariants.md)), bumping a schema version means adding a
+([INV-003](../reference/invariants.md)), bumping a schema version means adding a
 new generated model package (`hilbertbench/models/v1_1/`) and exposing
 it through the version-stable re-export surface, so existing importers
 are never broken.
