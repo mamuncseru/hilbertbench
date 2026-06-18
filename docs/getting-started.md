@@ -11,8 +11,9 @@ HilbertBench's core has no external dependencies. Choose the extras that
 match your stack.
 
 ```bash
-# Qiskit + Parquet storage (most common)
-pip install hilbertbench[qiskit,storage] scipy
+# Default: runs the Qiskit workflow out of the box
+# (trace core + Qiskit integration + Parquet storage)
+pip install hilbertbench scipy
 
 # PennyLane + Parquet storage
 pip install hilbertbench[pennylane,storage] scikit-learn
