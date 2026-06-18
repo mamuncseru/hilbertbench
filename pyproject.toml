@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
-    { name = "Mamun (mamuncseru)", email = "mamun.cseian@gmail.com" },
+    { name = "Md. Abdullah Al Mamun", email = "mamun.cseian@gmail.com" },
 ]
 keywords = [
     "quantum-machine-learning",
@@ -74,10 +74,11 @@ docs = [
 ]
 
 [project.urls]
-Homepage      = "https://mamuncseru.github.io/hilbertbench/"
-Documentation = "https://hilbertbench.readthedocs.io"
-Repository    = "https://github.com/mamuncseru/hilbertbench"
-Issues        = "https://github.com/mamuncseru/hilbertbench/issues"
+Homepage       = "https://mamuncseru.github.io/hilbertbench/"
+Documentation  = "https://hilbertbench.readthedocs.io"
+Repository     = "https://github.com/mamuncseru/hilbertbench"
+Issues         = "https://github.com/mamuncseru/hilbertbench/issues"
+"Research Group" = "https://www.nedcdata.org/"
 
 [project.scripts]
 hb-verify = "hilbertbench.reader.verify:main"
