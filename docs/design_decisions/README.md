@@ -12,7 +12,7 @@ The point of keeping them is simple: six months from now, someone
 inconvenient and ask "why on earth is it like this?" The ADR is the
 answer, written while the reasoning was fresh.
 
-Where the [invariants](../architecture/001_invariants.md) state the
+Where the [invariants](../reference/invariants.md) state the
 rules and the [principles](../architecture/002_principles.md) explain
 the shape of the system, the ADRs record the *moments of choice* — the
 places where a different decision was genuinely possible and we picked
@@ -22,8 +22,8 @@ one path on purpose.
 
 | ADR | Decision | Enforces |
 |-----|----------|----------|
-| [ADR-0001](0001_trace_atomicity.md) | Traces are append-only during recording and sealed on close | [INV-002](../architecture/001_invariants.md) |
-| [ADR-0002](0002_evidence_vs_interpretation.md) | Traces store evidence only; diagnoses are computed on read | [INV-006](../architecture/001_invariants.md) |
+| [ADR-0001](0001_trace_atomicity.md) | Traces are append-only during recording and sealed on close | [INV-002](../reference/invariants.md) |
+| [ADR-0002](0002_evidence_vs_interpretation.md) | Traces store evidence only; diagnoses are computed on read | [INV-006](../reference/invariants.md) |
 
 ## Format
 
