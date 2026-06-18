@@ -15,15 +15,11 @@ INV-001` or `INV-007 is honoured at the batch level`. These are the
 project's **non-negotiable guarantees**. There are eight of them and
 they are numbered INV-001 through INV-008.
 
-**Where they are defined:**
-
-- Canonical, rendered list — **[docs/reference/invariants.md](docs/reference/invariants.md)**
-  (also on the [reference site](https://hilbertbench.readthedocs.io)).
-- Contributor rationale with verification commands —
-  [docs/architecture/001_invariants.md](docs/architecture/001_invariants.md).
-
-When you see an `INV-NNN` tag anywhere in the code, those documents
-are where it comes from. The short version:
+**Where they are defined:** the canonical, complete list lives in
+**[docs/reference/invariants.md](docs/reference/invariants.md)** (also
+on the [reference site](https://hilbertbench.readthedocs.io)). When you
+see an `INV-NNN` tag anywhere in the code, that is where it comes from.
+The short version:
 
 | ID | Guarantee |
 |----|-----------|
