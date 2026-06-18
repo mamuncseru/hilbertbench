@@ -1,6 +1,6 @@
 # ADR-0002: Traces store evidence; diagnoses are computed on read
 
-**Status:** Accepted · **Enforces:** [INV-006](../architecture/001_invariants.md)
+**Status:** Accepted · **Enforces:** [INV-006](../reference/invariants.md)
 
 ## Context
 
@@ -49,11 +49,11 @@ does not tell you "this run was healthy" — you have to run an analyzer
 to find out, every time, and analyzers must be robust to being pointed
 at any trace. There is no cached verdict to read cheaply.
 
-**What it commits us to.** This is [INV-006](../architecture/001_invariants.md),
+**What it commits us to.** This is [INV-006](../reference/invariants.md),
 and it constrains both ends of the system: the recorder and schema must
 never grow an interpretation field, and the analysis layer must treat
 the trace as immutable, read-only input. It also pairs with
-[INV-008](../architecture/001_invariants.md) — when an analyzer meets a
+[INV-008](../reference/invariants.md) — when an analyzer meets a
 trace missing the evidence it needs, it reports "insufficient data"
 rather than inventing a verdict, because a guessed conclusion is exactly
 the contamination this decision exists to prevent.
