@@ -127,12 +127,25 @@ Those `INV-NNN` codes appear throughout the source comments and docstrings.
 Each is a numbered, non-negotiable guarantee; the **complete, canonical list
 (INV-001 … INV-008)** lives in
 **[docs/reference/invariants.md](docs/reference/invariants.md)** (rendered on
-the [reference site](https://hilbertbench.readthedocs.io)), with the
-contributor-facing rationale in
-[docs/architecture/001_invariants.md](docs/architecture/001_invariants.md).
-When you see an `INV-NNN` tag in the code, that is where it is defined.
+the [reference site](https://hilbertbench.readthedocs.io)). When you see an
+`INV-NNN` tag in the code, that is where it is defined.
 
 ---
+
+## Acknowledgments
+
+HilbertBench was developed by **Md. Abdullah Al Mamun** in the
+**[Neural Engineering Data Consortium (NEDC)](https://nedcdata.org/)**,
+lab at **Temple University**, under the advisorship of
+**Prof. Joseph Picone** (Department of Electrical and Computer
+Engineering). The author is grateful to Dr. Picone for his guidance
+and for the research environment in which this work was carried out.
+
+## Citing HilbertBench
+
+If you use HilbertBench in your research, please cite it via the
+[`CITATION.cff`](CITATION.cff) metadata (GitHub's "Cite this
+repository" button), or the archived release once a DOI is minted.
 
 ## License
 
