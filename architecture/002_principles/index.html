@@ -1043,7 +1043,7 @@
 
 
 <h1 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h1>
-<p>The <a href="../001_invariants/">invariants</a> say what the code must never do.
+<p>The <a href="../../reference/invariants/">invariants</a> say what the code must never do.
 This page says <em>why</em> the framework is shaped the way it is — the
 handful of ideas that, once you hold them, make the rest of the
 codebase predictable.</p>
@@ -1064,7 +1064,7 @@ written by people who never heard of it.</p>
 experiment runs: serialize what was about to happen anyway, hand it to
 an append-only log, return. Every interpretation — variance,
 expressibility, fidelity — happens later, offline, against the sealed
-trace. This split is what makes <a href="../001_invariants/">INV-001</a>
+trace. This split is what makes <a href="../../reference/invariants/">INV-001</a>
 (execution parity) achievable: a tool that computed diagnostics inline
 would change the experiment's timing, and on real hardware, timing is
 noise.</p>
@@ -1075,7 +1075,7 @@ separates from the machine.</p>
 <h2 id="3-evidence-and-interpretation-never-mix">3. Evidence and interpretation never mix<a class="headerlink" href="#3-evidence-and-interpretation-never-mix" title="Permanent link">&para;</a></h2>
 <p>A trace records what happened. It contains no verdict, no
 "converged", no "noisy". Diagnoses live outside the trace, computed on
-read (<a href="../001_invariants/">INV-006</a>). The reason is humility: today's
+read (<a href="../../reference/invariants/">INV-006</a>). The reason is humility: today's
 threshold for "barren plateau" is a heuristic, and next year's
 analyzer will be better. If we baked a verdict into the trace, we
 would freeze the evidence around one fallible opinion. Keep them
@@ -1084,7 +1084,7 @@ behind this one is recorded in full as
 <a href="../../design_decisions/0002_evidence_vs_interpretation/">ADR-0002</a>.</p>
 <h2 id="4-the-schema-is-the-contract-the-code-is-an-implementation">4. The schema is the contract; the code is an implementation<a class="headerlink" href="#4-the-schema-is-the-contract-the-code-is-an-implementation" title="Permanent link">&para;</a></h2>
 <p>The trace format is defined by language-agnostic JSON Schema, and the
-Python models are generated from it (<a href="../001_invariants/">INV-003</a>). A
+Python models are generated from it (<a href="../../reference/invariants/">INV-003</a>). A
 trace written today must be readable by a tool written in 2035, in a
 language that may not exist yet. That is only possible if the format is
 specified independently of any one implementation. The Python you see
@@ -1092,7 +1092,7 @@ in <code>hilbertbench/models/</code> is build output, not the source of truth.</
 <h2 id="5-a-small-dependency-free-core">5. A small, dependency-free core<a class="headerlink" href="#5-a-small-dependency-free-core" title="Permanent link">&para;</a></h2>
 <p>The parts that handle evidence — the recorder, the reader, the data
 models — import nothing but the Python standard library
-(<a href="../001_invariants/">INV-004</a>). Heavy, fast-moving libraries (Qiskit,
+(<a href="../../reference/invariants/">INV-004</a>). Heavy, fast-moving libraries (Qiskit,
 PennyLane, PyArrow) are confined to the integration and storage layers.
 The payoff is trust: the evidence-handling core is small enough to
 audit by reading, and you can open and verify someone's traces without
@@ -1100,11 +1100,11 @@ installing a quantum framework at all.</p>
 <h2 id="6-fail-loudly-degrade-gracefully">6. Fail loudly, degrade gracefully<a class="headerlink" href="#6-fail-loudly-degrade-gracefully" title="Permanent link">&para;</a></h2>
 <p>These sound opposed; they are not. When something breaks <em>now</em> — a
 circuit throws, a span cannot close — the failure is recorded and
-re-raised, never swallowed (<a href="../001_invariants/">INV-007</a>). When
+re-raised, never swallowed (<a href="../../reference/invariants/">INV-007</a>). When
 something is <em>absent</em> — an old trace lacks a field a new analyzer
 wants — the reader returns <code>None</code> and the analyzer reports
 "insufficient data", never a fabricated default
-(<a href="../001_invariants/">INV-008</a>). A present failure must be visible; an
+(<a href="../../reference/invariants/">INV-008</a>). A present failure must be visible; an
 absent measurement must not be invented. Both rules serve the same
 master: the trace never lies.</p>
 <hr />

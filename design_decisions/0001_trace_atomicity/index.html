@@ -1010,7 +1010,7 @@
 
 
 <h1 id="adr-0001-traces-are-append-only-and-sealed-on-close">ADR-0001: Traces are append-only and sealed on close<a class="headerlink" href="#adr-0001-traces-are-append-only-and-sealed-on-close" title="Permanent link">&para;</a></h1>
-<p><strong>Status:</strong> Accepted · <strong>Enforces:</strong> <a href="../../architecture/001_invariants/">INV-002</a></p>
+<p><strong>Status:</strong> Accepted · <strong>Enforces:</strong> <a href="../../reference/invariants/">INV-002</a></p>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>A HilbertBench trace is scientific evidence. It may be the basis of a
 published result, handed to a second researcher who did not run the
@@ -1059,7 +1059,7 @@ the most compact on-disk form, which is why a separate, <em>additive</em>
 Parquet export exists (<a href="../../reference/trace-format/"><code>hb-export</code></a>) for
 analytical workloads; it never replaces the JSONL source of truth.</p>
 <p><strong>What it commits us to.</strong> This decision is the foundation of
-<a href="../../architecture/001_invariants/">INV-002</a>. It means migrations are
+<a href="../../reference/invariants/">INV-002</a>. It means migrations are
 forward-only, the reader stays strictly read-only, and the seal is part
 of the trace contract, not an optional add-on.</p>
 

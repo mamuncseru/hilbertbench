@@ -1010,7 +1010,7 @@
 
 
 <h1 id="adr-0002-traces-store-evidence-diagnoses-are-computed-on-read">ADR-0002: Traces store evidence; diagnoses are computed on read<a class="headerlink" href="#adr-0002-traces-store-evidence-diagnoses-are-computed-on-read" title="Permanent link">&para;</a></h1>
-<p><strong>Status:</strong> Accepted · <strong>Enforces:</strong> <a href="../../architecture/001_invariants/">INV-006</a></p>
+<p><strong>Status:</strong> Accepted · <strong>Enforces:</strong> <a href="../../reference/invariants/">INV-006</a></p>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>The obvious way to build a diagnostic tool is to compute the diagnosis
 while you have the data in hand and store the conclusion alongside it:
@@ -1049,11 +1049,11 @@ is the whole premise of the project's "data-only research" model.</p>
 does not tell you "this run was healthy" — you have to run an analyzer
 to find out, every time, and analyzers must be robust to being pointed
 at any trace. There is no cached verdict to read cheaply.</p>
-<p><strong>What it commits us to.</strong> This is <a href="../../architecture/001_invariants/">INV-006</a>,
+<p><strong>What it commits us to.</strong> This is <a href="../../reference/invariants/">INV-006</a>,
 and it constrains both ends of the system: the recorder and schema must
 never grow an interpretation field, and the analysis layer must treat
 the trace as immutable, read-only input. It also pairs with
-<a href="../../architecture/001_invariants/">INV-008</a> — when an analyzer meets a
+<a href="../../reference/invariants/">INV-008</a> — when an analyzer meets a
 trace missing the evidence it needs, it reports "insufficient data"
 rather than inventing a verdict, because a guessed conclusion is exactly
 the contamination this decision exists to prevent.</p>
