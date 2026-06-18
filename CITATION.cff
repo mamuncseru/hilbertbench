@@ -1,0 +1,38 @@
+# This software was developed by Md. Abdullah Al Mamun in the
+# Neural Engineering Data Consortium (NEDC) / Institute for Signal and
+# Information Processing (ISIP) at Temple University, under the
+# advisorship of Prof. Joseph Picone (Department of Electrical and
+# Computer Engineering, Temple University).
+#
+# GitHub renders this file as a "Cite this repository" button.
+cff-version: 1.2.0
+title: "HilbertBench: A Non-Intrusive Diagnostic Framework for Quantum Machine Learning"
+message: "If you use this software, please cite it using this metadata."
+type: software
+authors:
+  - given-names: "Md. Abdullah"
+    family-names: "Al Mamun"
+    email: "mamun.cseian@gmail.com"
+    affiliation: "Neural Engineering Data Consortium, Temple University"
+repository-code: "https://github.com/mamuncseru/hilbertbench"
+url: "https://mamuncseru.github.io/hilbertbench/"
+license: MIT
+version: "1.0.0"
+date-released: "2026-06-15"
+keywords:
+  - quantum machine learning
+  - quantum computing
+  - diagnostics
+  - barren plateau
+  - expressibility
+  - NISQ
+  - qiskit
+abstract: >-
+  HilbertBench is a non-intrusive diagnostic framework for quantum
+  machine learning. It records circuit executions at their natural
+  execution boundary into append-only, cryptographically sealed traces,
+  then computes mechanism-level diagnostics (barren plateaus, shot
+  noise, expressibility, optimization convergence, circuit structure,
+  and hardware noise) offline, without perturbing the experiment under
+  test. Developed in the Neural Engineering Data Consortium at Temple
+  University under the advisorship of Prof. Joseph Picone.
