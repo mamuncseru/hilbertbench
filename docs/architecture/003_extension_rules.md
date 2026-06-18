@@ -15,7 +15,7 @@ A new analyzer is a plain function: it takes a trace (or a run-directory
 path) and returns a dictionary. It lives in `hilbertbench/analysis/`,
 and it must follow the same contract as the existing six:
 
-- **Read-only.** It never writes to the trace ([INV-002](001_invariants.md)).
+- **Read-only.** It never writes to the trace ([INV-002](../reference/invariants.md)).
   Take a `HilbertTrace`, resolve what you need, compute, return.
 - **Evidence in, dictionary out.** Return a `status` string plus the
   quantitative evidence behind it. Do not invent a verdict the numbers
@@ -26,7 +26,7 @@ and it must follow the same contract as the existing six:
   interval straddles a threshold.
 - **Degrade, don't guess.** If the trace lacks what you need (an old
   trace with no calibration snapshot, say), return an "insufficient
-  data" status — never a fabricated default ([INV-008](001_invariants.md)).
+  data" status — never a fabricated default ([INV-008](../reference/invariants.md)).
 - **Document the threshold.** Any decision cutoff is a named constant
   with a comment explaining where the number came from. Expose it as a
   function argument so callers can override it.
@@ -42,7 +42,7 @@ quantum library may be imported, and it carries the heaviest
 responsibility, because it runs *during* the user's experiment.
 
 - **Parity is sacred.** The proxy must not change the number of shots,
-  executions, parameter bindings, or observables ([INV-001](001_invariants.md)).
+  executions, parameter bindings, or observables ([INV-001](../reference/invariants.md)).
   Forward the call to the real backend, wait for the result the user
   would have gotten anyway, and copy it aside. Never re-execute.
 - **Record after, not instead.** Run the real call first; record from
@@ -50,9 +50,9 @@ responsibility, because it runs *during* the user's experiment.
   that could alter timing or fail the user's job.
 - **Failures are visible.** Wrap recording so that a problem writing
   the trace cannot break the user's run, but is itself logged as an
-  `ERROR` event, not silently dropped ([INV-007](001_invariants.md)).
+  `ERROR` event, not silently dropped ([INV-007](../reference/invariants.md)).
 - **Import locally.** Keep the framework import inside the integration
-  module so the core stays dependency-free ([INV-004](001_invariants.md)),
+  module so the core stays dependency-free ([INV-004](../reference/invariants.md)),
   and add a clear message if an optional dependency is missing.
 
 The existing [Qiskit](https://github.com/mamuncseru/hilbertbench/blob/main/hilbertbench/integrations/qiskit.py)
@@ -66,17 +66,17 @@ a long-lived contract.
 
 - **Edit the schema, never the models.** Change the JSON Schema in
   `schemas/`, then regenerate the Python models
-  ([INV-003](001_invariants.md)). See the
+  ([INV-003](../reference/invariants.md)). See the
   [schema guide](https://github.com/mamuncseru/hilbertbench/blob/main/schemas/README.md).
 - **Respect the version freeze.** Once a schema version is tagged it is
-  frozen forever ([INV-005](001_invariants.md)). A new field goes into
+  frozen forever ([INV-005](../reference/invariants.md)). A new field goes into
   a new version directory (`v1.1/`), not into a released one.
 - **New fields are optional and degrade gracefully.** Anything not
   present since the first release must be optional and nullable, so a
   reader of an older trace resolves it to `None`
-  ([INV-008](001_invariants.md)).
+  ([INV-008](../reference/invariants.md)).
 - **Evidence only.** The new field records *what happened*, never an
-  interpretation of it ([INV-006](001_invariants.md)). Fields like
+  interpretation of it ([INV-006](../reference/invariants.md)). Fields like
   `is_converged` or `quality_score` do not belong in a trace.
 
 ## The rule behind the rules
