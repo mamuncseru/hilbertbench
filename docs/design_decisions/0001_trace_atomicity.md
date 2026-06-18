@@ -1,6 +1,6 @@
 # ADR-0001: Traces are append-only and sealed on close
 
-**Status:** Accepted · **Enforces:** [INV-002](../architecture/001_invariants.md)
+**Status:** Accepted · **Enforces:** [INV-002](../reference/invariants.md)
 
 ## Context
 
@@ -56,6 +56,6 @@ Parquet export exists ([`hb-export`](../reference/trace-format.md)) for
 analytical workloads; it never replaces the JSONL source of truth.
 
 **What it commits us to.** This decision is the foundation of
-[INV-002](../architecture/001_invariants.md). It means migrations are
+[INV-002](../reference/invariants.md). It means migrations are
 forward-only, the reader stays strictly read-only, and the seal is part
 of the trace contract, not an optional add-on.
