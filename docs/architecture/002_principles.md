@@ -1,6 +1,6 @@
 # Design Principles
 
-The [invariants](001_invariants.md) say what the code must never do.
+The [invariants](../reference/invariants.md) say what the code must never do.
 This page says *why* the framework is shaped the way it is — the
 handful of ideas that, once you hold them, make the rest of the
 codebase predictable.
@@ -26,7 +26,7 @@ The recorder does as little as physically possible while the
 experiment runs: serialize what was about to happen anyway, hand it to
 an append-only log, return. Every interpretation — variance,
 expressibility, fidelity — happens later, offline, against the sealed
-trace. This split is what makes [INV-001](001_invariants.md)
+trace. This split is what makes [INV-001](../reference/invariants.md)
 (execution parity) achievable: a tool that computed diagnostics inline
 would change the experiment's timing, and on real hardware, timing is
 noise.
@@ -40,7 +40,7 @@ separates from the machine.
 
 A trace records what happened. It contains no verdict, no
 "converged", no "noisy". Diagnoses live outside the trace, computed on
-read ([INV-006](001_invariants.md)). The reason is humility: today's
+read ([INV-006](../reference/invariants.md)). The reason is humility: today's
 threshold for "barren plateau" is a heuristic, and next year's
 analyzer will be better. If we baked a verdict into the trace, we
 would freeze the evidence around one fallible opinion. Keep them
@@ -51,7 +51,7 @@ behind this one is recorded in full as
 ## 4. The schema is the contract; the code is an implementation
 
 The trace format is defined by language-agnostic JSON Schema, and the
-Python models are generated from it ([INV-003](001_invariants.md)). A
+Python models are generated from it ([INV-003](../reference/invariants.md)). A
 trace written today must be readable by a tool written in 2035, in a
 language that may not exist yet. That is only possible if the format is
 specified independently of any one implementation. The Python you see
@@ -61,7 +61,7 @@ in `hilbertbench/models/` is build output, not the source of truth.
 
 The parts that handle evidence — the recorder, the reader, the data
 models — import nothing but the Python standard library
-([INV-004](001_invariants.md)). Heavy, fast-moving libraries (Qiskit,
+([INV-004](../reference/invariants.md)). Heavy, fast-moving libraries (Qiskit,
 PennyLane, PyArrow) are confined to the integration and storage layers.
 The payoff is trust: the evidence-handling core is small enough to
 audit by reading, and you can open and verify someone's traces without
@@ -71,11 +71,11 @@ installing a quantum framework at all.
 
 These sound opposed; they are not. When something breaks *now* — a
 circuit throws, a span cannot close — the failure is recorded and
-re-raised, never swallowed ([INV-007](001_invariants.md)). When
+re-raised, never swallowed ([INV-007](../reference/invariants.md)). When
 something is *absent* — an old trace lacks a field a new analyzer
 wants — the reader returns `None` and the analyzer reports
 "insufficient data", never a fabricated default
-([INV-008](001_invariants.md)). A present failure must be visible; an
+([INV-008](../reference/invariants.md)). A present failure must be visible; an
 absent measurement must not be invented. Both rules serve the same
 master: the trace never lies.
 
