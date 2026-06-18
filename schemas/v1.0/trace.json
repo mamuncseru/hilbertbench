@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hilbertbench.org/schemas/v1.0/trace.json",
+  "$id": "https://raw.githubusercontent.com/mamuncseru/hilbertbench/main/schemas/v1.0/trace.json",
   "title": "HilbertBench Trace Manifest",
   "description": "Root manifest describing a HilbertBench trace. Contains metadata, lifecycle state, intent mode, and integrity guarantees. Does NOT contain execution events.",
   "type": "object",

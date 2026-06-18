@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hilbertbench.org/schemas/v1.0/span.json",
+  "$id": "https://raw.githubusercontent.com/mamuncseru/hilbertbench/main/schemas/v1.0/span.json",
   "title": "HilbertBench Span",
   "description": "A causal execution unit containing top-level physical evidence and an immutable sequence of execution-boundary events.",
   "type": "object",

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hilbertbench.org/schemas/v1.0/catalog.json",
+  "$id": "https://raw.githubusercontent.com/mamuncseru/hilbertbench/main/schemas/v1.0/catalog.json",
   "title": "HilbertBench Artifact Catalog",
   "description": "The central registry mapping SHA-256 hashes to their artifact metadata records. Ensures O(1) lookups.",
   "type": "object",
