@@ -1332,8 +1332,8 @@ trace is sealed and ready to read. The <code>estimator</code> inside is identica
 </code></pre></div>
 <p>Iterating gives <code>SpanView</code> objects — one per recorded circuit execution:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">for</span> <span class="n">span</span> <span class="ow">in</span> <span class="n">trace</span><span class="o">.</span><span class="n">completed</span><span class="p">():</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">span</span><span class="o">.</span><span class="n">outcome</span><span class="p">)</span>      <span class="c1"># expectation value (float)</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">span</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>   <span class="c1"># bound parameter vector (numpy array)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">span</span><span class="o">.</span><span class="n">outcome</span><span class="p">)</span>      <span class="c1"># expectation value (float; list if multi-observable)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">span</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>   <span class="c1"># bound parameter vector (list of floats)</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">span</span><span class="o">.</span><span class="n">circuit</span><span class="p">)</span>      <span class="c1"># OpenQASM string</span>
 </code></pre></div>
 <hr />
