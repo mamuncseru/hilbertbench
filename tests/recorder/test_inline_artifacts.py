@@ -263,5 +263,8 @@ class TestParquetWriterInline:
 
         convert_trace_to_parquet(tape.dir_path)
         df = pq.read_table(tape.dir_path / "events.parquet").to_pandas()
-        assert df.iloc[0]["inline_artifacts"] is None or str(df.iloc[0]["inline_artifacts"]) == "None"
+        # a null cell reads back as None (older pandas) or NaN (newer);
+        # pd.isna treats both as missing
+        import pandas as pd
+        assert pd.isna(df.iloc[0]["inline_artifacts"])
 
