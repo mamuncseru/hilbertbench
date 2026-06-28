@@ -18,7 +18,12 @@ repository-code: "https://github.com/mamuncseru/hilbertbench"
 url: "https://mamuncseru.github.io/hilbertbench/"
 license: MIT
 version: "1.0.0"
-date-released: "2026-06-15"
+date-released: "2026-06-28"
+doi: "10.5281/zenodo.21009245"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21009244"
+    description: "Concept DOI (resolves to the latest version)"
 keywords:
   - quantum machine learning
   - quantum computing

@@ -6,6 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Tests](https://github.com/mamuncseru/hilbertbench/actions/workflows/tests.yml/badge.svg)](https://github.com/mamuncseru/hilbertbench/actions/workflows/tests.yml)
 [![Docs](https://img.shields.io/badge/docs-readthedocs-blueviolet)](https://hilbertbench.readthedocs.io)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21009244.svg)](https://doi.org/10.5281/zenodo.21009244)
 
 HilbertBench is a **non-intrusive diagnostic framework** for quantum machine
 learning. You wrap one object — an Estimator, Sampler, or PennyLane device —
@@ -146,9 +147,12 @@ and for the research environment in which this work was carried out.
 If you use HilbertBench in your research, please cite it using the
 metadata in [`CITATION.cff`](CITATION.cff). On the GitHub project page,
 that file makes a **"Cite this repository"** button appear automatically
-in the right-hand sidebar (it is a GitHub feature, not a README badge,
-and only shows once the repository is on GitHub). A DOI badge will be
-added here once the first release is archived on Zenodo.
+in the right-hand sidebar.
+
+Each release is archived on Zenodo with a DOI. Cite the **version** you
+used (v1.0.0 → [10.5281/zenodo.21009245](https://doi.org/10.5281/zenodo.21009245));
+the **concept DOI** [10.5281/zenodo.21009244](https://doi.org/10.5281/zenodo.21009244)
+always resolves to the latest version.
 
 ## License
 
