@@ -65,7 +65,10 @@ dev = [
     "ruff>=0.4.0",
     "jsonschema>=4.21.0",         # schema validation in tests
     "datamodel-code-generator",   # for schemas/scripts/generate_models.py
-    "pennylane>=0.38.0",          # so the full test suite runs
+    "pennylane>=0.38.0",          # PennyLane integration tests
+    "qiskit-ibm-runtime>=0.20.0", # FakeManilaV2 in calibration/noise tests
+    "qiskit-aer>=0.13.0",         # AerSimulator in the e2e test
+    "pandas>=2.0.0",              # the HilbertTrace.spans DataFrame test
     "build>=1.0.0",               # python -m build
     "twine>=5.0.0",               # release upload + metadata check
 ]

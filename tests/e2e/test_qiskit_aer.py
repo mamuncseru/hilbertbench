@@ -8,8 +8,13 @@ without breaking standard QML workflows.
 import json
 from pathlib import Path
 
+import pytest
+
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
+
+# qiskit-aer is an optional test dependency; skip cleanly if absent.
+pytest.importorskip("qiskit_aer")
 from qiskit_aer import AerSimulator
 
 from hilbertbench.integrations.qiskit import HilbertQiskitBackendProxy
