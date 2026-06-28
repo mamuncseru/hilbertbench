@@ -131,6 +131,12 @@ def _pennylane_circuit_template(pl_tape: Any) -> tuple[str, bool]:
     try:
         import pennylane as qml
         concrete = qml.to_openqasm(pl_tape)
+        # PennyLane <= 0.42 exposes to_openqasm as a transform that
+        # returns a callable, while the tape's own method returns the
+        # QASM string directly; newer versions return the string
+        # straight from qml.to_openqasm(tape). Normalise to a string.
+        if not isinstance(concrete, str):
+            concrete = pl_tape.to_openqasm()
         return _qasm_to_template(concrete), True
     except Exception:
         pass
