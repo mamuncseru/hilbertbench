@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-319%20passing-brightgreen)]()
+[![Tests](https://github.com/mamuncseru/hilbertbench/actions/workflows/tests.yml/badge.svg)](https://github.com/mamuncseru/hilbertbench/actions/workflows/tests.yml)
 [![Docs](https://img.shields.io/badge/docs-readthedocs-blueviolet)](https://hilbertbench.readthedocs.io)
 
 HilbertBench is a **non-intrusive diagnostic framework** for quantum machine
@@ -143,9 +143,12 @@ and for the research environment in which this work was carried out.
 
 ## Citing HilbertBench
 
-If you use HilbertBench in your research, please cite it via the
-[`CITATION.cff`](CITATION.cff) metadata (GitHub's "Cite this
-repository" button), or the archived release once a DOI is minted.
+If you use HilbertBench in your research, please cite it using the
+metadata in [`CITATION.cff`](CITATION.cff). On the GitHub project page,
+that file makes a **"Cite this repository"** button appear automatically
+in the right-hand sidebar (it is a GitHub feature, not a README badge,
+and only shows once the repository is on GitHub). A DOI badge will be
+added here once the first release is archived on Zenodo.
 
 ## License
 
