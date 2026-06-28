@@ -654,7 +654,7 @@ The recorder is the write path: `HilbertTape`, spans, events, and the content-ad
 |---|---|
 | `test_inline_artifacts_column_written` | Inline artifacts column written |
 | `test_inline_artifacts_data_round_trips` | Inline artifacts data round trips |
-| `test_spans_without_inline_have_null_column` | Spans without inline have null column |
+| `test_spans_without_inline_have_null_column` | Spans without inline have null column — a null cell reads back as None or NaN depending on pandas version |
 
 ### test_invariants.py
 
