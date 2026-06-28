@@ -1753,7 +1753,7 @@ evidence. This separation (invariant INV-006) means:</p>
 <h2 id="level-2-quickstart-run-it-yourself-in-two-minutes">Level 2 — Quickstart: run it yourself in two minutes<a class="headerlink" href="#level-2-quickstart-run-it-yourself-in-two-minutes" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mamuncseru/hilbertbench
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>hilbertbench
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[qiskit,storage]&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span><span class="w">           </span><span class="c1"># base + PennyLane + test tools</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-q<span class="w">        </span><span class="c1"># 319 tests should pass</span>
 </code></pre></div>
 <p>Then run this complete example:</p>
