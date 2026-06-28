@@ -139,8 +139,8 @@ Iterating gives `SpanView` objects — one per recorded circuit execution:
 
 ```python
 for span in trace.completed():
-    print(span.outcome)      # expectation value (float)
-    print(span.parameters)   # bound parameter vector (numpy array)
+    print(span.outcome)      # expectation value (float; list if multi-observable)
+    print(span.parameters)   # bound parameter vector (list of floats)
     print(span.circuit)      # OpenQASM string
 ```
 

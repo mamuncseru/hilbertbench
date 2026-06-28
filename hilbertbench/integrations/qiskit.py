@@ -828,10 +828,16 @@ class HilbertEstimatorProxy(BaseEstimatorV2):  # type: ignore[misc]
                     backend_id=self._backend_id(),
                 ) as span:
 
-                    # store expectation values as inline outcome
+                    # store expectation values as inline outcome; a
+                    # single expval records as a scalar float (the
+                    # documented span.outcome contract), while multiple
+                    # observables keep their array shape
                     #
+                    evs = np.array(res[i].data.evs)
                     evs_str = json.dumps(
-                        np.array(res[i].data.evs).tolist()
+                        float(evs.ravel()[0])
+                        if evs.size == 1
+                        else evs.tolist()
                     )
                     span.outcome_ref = span.attach_inline(
                         evs_str,
