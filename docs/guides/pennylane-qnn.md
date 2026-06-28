@@ -7,7 +7,7 @@ HilbertBench passive recording.
 Run it directly:
 
 ```bash
-pip install hilbertbench[pennylane,storage] scikit-learn
+pip install hilbertbench[pennylane] scikit-learn
 python demo/04_pennylane.py
 ```
 

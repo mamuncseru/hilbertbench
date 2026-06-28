@@ -15,7 +15,7 @@
 **Prerequisites**
 
 ```bash
-pip install hilbertbench[qiskit,storage]
+pip install hilbertbench
 ```
 
 ---

@@ -14,7 +14,7 @@
 **Prerequisites**
 
 ```bash
-pip install hilbertbench[qiskit,storage] scipy
+pip install hilbertbench scipy
 ```
 
 ---

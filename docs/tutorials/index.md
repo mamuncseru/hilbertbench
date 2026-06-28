@@ -18,7 +18,7 @@ output with the science behind it.
 **Prerequisites for all tutorials**
 
 ```bash
-pip install hilbertbench[qiskit,storage] scipy
+pip install hilbertbench scipy
 ```
 
 Tutorial 04 additionally requires:

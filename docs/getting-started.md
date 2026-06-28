@@ -16,7 +16,7 @@ match your stack.
 pip install hilbertbench scipy
 
 # PennyLane + Parquet storage
-pip install hilbertbench[pennylane,storage] scikit-learn
+pip install hilbertbench[pennylane] scikit-learn
 
 # Everything
 pip install hilbertbench[full]

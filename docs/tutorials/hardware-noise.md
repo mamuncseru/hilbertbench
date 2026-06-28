@@ -15,7 +15,7 @@
 **Prerequisites**
 
 ```bash
-pip install hilbertbench[qiskit,storage] scipy qiskit-aer
+pip install hilbertbench scipy qiskit-aer
 ```
 
 ---

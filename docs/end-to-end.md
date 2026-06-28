@@ -120,7 +120,7 @@ print(summary(trace))
 ```bash
 git clone https://github.com/mamuncseru/hilbertbench
 cd hilbertbench
-pip install -e ".[qiskit,storage]"
+pip install -e ".[dev]"           # base + PennyLane + test tools
 python -m pytest tests/ -q        # 319 tests should pass
 ```
 

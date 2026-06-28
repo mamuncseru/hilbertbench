@@ -15,7 +15,7 @@ python demo/03_qiskit_ibm.py
 ## Prerequisites
 
 ```bash
-pip install hilbertbench[qiskit,storage] qiskit-ibm-runtime
+pip install hilbertbench qiskit-ibm-runtime
 ```
 
 You need an IBM Quantum account. Set your token in the demo file:
