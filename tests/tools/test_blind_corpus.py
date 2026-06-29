@@ -83,7 +83,8 @@ class TestBlind:
         assert set(sheet) == set(key["corpus"])
         for blind_id in key["corpus"]:
             assert (out / blind_id / "trace.json").is_file()
-            assert sheet[blind_id]["label"] is None
+            assert sheet[blind_id]["primary"] is None
+            assert sheet[blind_id]["secondary"] is None
 
         # blinded copies are byte-identical to the originals (sealed)
         for blind_id, truth in key["corpus"].items():
@@ -132,7 +133,8 @@ class TestScore:
         out = self._blind(corpus, tmp_path)
         key = json.loads((out / "answer_key.json").read_text())
         sheet = {
-            bid: {"label": truth["label"], "confidence": 1.0, "notes": ""}
+            bid: {"primary": truth["label"], "secondary": None,
+                  "confidence": 1.0, "notes": ""}
             for bid, truth in key["corpus"].items()
         }
         diag = tmp_path / "diag.json"
@@ -146,7 +148,7 @@ class TestScore:
         ])
         assert rc == 0
         result = json.loads(result_path.read_text())
-        assert result["accuracy"] == 1.0
+        assert result["overall"]["accuracy"] == 1.0
         assert result["n"] == 2
 
     def test_wrong_diagnosis_scores_zero(self, corpus, tmp_path):
@@ -154,7 +156,8 @@ class TestScore:
         key = json.loads((out / "answer_key.json").read_text())
         wrong = {"barren_plateau": "healthy", "healthy": "barren_plateau"}
         sheet = {
-            bid: {"label": wrong[truth["label"]], "confidence": 0.5}
+            bid: {"primary": wrong[truth["label"]], "secondary": None,
+                  "confidence": 0.5}
             for bid, truth in key["corpus"].items()
         }
         diag = tmp_path / "diag.json"
@@ -168,7 +171,45 @@ class TestScore:
         ])
         assert rc == 0
         result = json.loads(result_path.read_text())
-        assert result["accuracy"] == 0.0
+        assert result["overall"]["accuracy"] == 0.0
+
+    def test_secondary_label_counts_in_top2(self, corpus, tmp_path):
+        out = self._blind(corpus, tmp_path)
+        key = json.loads((out / "answer_key.json").read_text())
+        # primary wrong, but the true label is given as the secondary
+        wrong = {"barren_plateau": "healthy", "healthy": "barren_plateau"}
+        sheet = {
+            bid: {"primary": wrong[truth["label"]],
+                  "secondary": truth["label"], "confidence": 0.5}
+            for bid, truth in key["corpus"].items()
+        }
+        diag = tmp_path / "diag.json"
+        diag.write_text(json.dumps(sheet))
+        result_path = tmp_path / "scores.json"
+
+        rc = blind_corpus.main([
+            "score", "--key", str(out / "answer_key.json"),
+            "--commitment", str(out / "answer_key.sha256"),
+            "--diagnosis", str(diag), "--out", str(result_path),
+        ])
+        assert rc == 0
+        result = json.loads(result_path.read_text())
+        assert result["overall"]["accuracy"] == 0.0
+        assert result["overall"]["top2_accuracy"] == 1.0
+
+    def test_missing_primary_is_refused(self, corpus, tmp_path):
+        out = self._blind(corpus, tmp_path)
+        key = json.loads((out / "answer_key.json").read_text())
+        sheet = {bid: {"primary": None, "secondary": None}
+                 for bid in key["corpus"]}
+        diag = tmp_path / "diag.json"
+        diag.write_text(json.dumps(sheet))
+        rc = blind_corpus.main([
+            "score", "--key", str(out / "answer_key.json"),
+            "--commitment", str(out / "answer_key.sha256"),
+            "--diagnosis", str(diag),
+        ])
+        assert rc == 1
 
     def test_tampered_key_fails_commitment(self, corpus, tmp_path):
         out = self._blind(corpus, tmp_path)

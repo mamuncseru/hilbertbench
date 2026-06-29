@@ -271,10 +271,15 @@ def cmd_blind(args: argparse.Namespace) -> int:
         _sha256_hex(key_text) + "\n"
     )
 
-    # write the empty diagnosis sheet for Researcher B
+    # write the empty diagnosis sheet for Researcher B; the protocol
+    # records one primary label, an optional secondary label, a
+    # confidence in [0, 1], and free-text notes per run
     #
     sheet = {
-        blind_id: {"label": None, "confidence": None, "notes": ""}
+        blind_id: {
+            "primary": None, "secondary": None,
+            "confidence": None, "notes": "",
+        }
         for blind_id in sorted(key_entries)
     }
     (out_dir / "diagnosis_sheet.json").write_text(
@@ -375,6 +380,162 @@ def _wilson_interval(successes: int, n: int) -> tuple:
 # end of function
 
 
+def _binom_p_value(successes: int, n: int, p0: float = 0.25) -> float:
+    """
+    function: _binom_p_value
+
+    arguments:
+     successes: number of correct primary diagnoses
+     n:         total number of diagnoses
+     p0:        null success probability (the four-class chance level)
+
+    return:
+     the one-sided exact binomial p-value, P(X >= successes) for
+     X ~ Binomial(n, p0)
+
+    description:
+     Tests H0: accuracy <= p0 against H1: accuracy > p0 -- does the
+     diagnosis beat chance. Exact, so valid at small corpus sizes.
+    """
+
+    # sum the upper binomial tail
+    #
+    if n == 0:
+        return 1.0
+    return sum(
+        math.comb(n, k) * p0 ** k * (1.0 - p0) ** (n - k)
+        for k in range(successes, n + 1)
+    )
+#
+# end of function
+
+
+def _metrics(items: list, labels: list) -> dict:
+    """
+    function: _metrics
+
+    arguments:
+     items:  list of (true, primary, secondary) label triples
+     labels: the full set of class labels, for the matrix axes
+
+    return:
+     a dict with primary accuracy + Wilson CI, the one-sided binomial
+     p-value vs chance, top-2 accuracy, the confusion matrix, and
+     per-label precision/recall/F1
+
+    description:
+     Computes the registered classification metrics for one subset of
+     runs; reused for the whole corpus and for each stratum.
+    """
+
+    # accuracy and top-2 (true label in {primary, secondary})
+    #
+    n = len(items)
+    correct = sum(1 for t, p, _ in items if p == t)
+    top2 = sum(
+        1 for t, p, s in items if t == p or (s is not None and t == s)
+    )
+
+    # confusion matrix (truth -> primary)
+    #
+    confusion: dict = {t: {} for t in labels}
+    for t, p, _ in items:
+        pred = p or "undiagnosed"
+        confusion.setdefault(t, {})
+        confusion[t][pred] = confusion[t].get(pred, 0) + 1
+
+    # per-label precision / recall / F1
+    #
+    per_label = {}
+    for label in labels:
+        tp = confusion.get(label, {}).get(label, 0)
+        fn = sum(confusion.get(label, {}).values()) - tp
+        fp = sum(
+            row.get(label, 0)
+            for t, row in confusion.items() if t != label
+        )
+        precision = tp / (tp + fp) if (tp + fp) else None
+        recall = tp / (tp + fn) if (tp + fn) else None
+        f1 = (
+            2 * precision * recall / (precision + recall)
+            if precision and recall else None
+        )
+        per_label[label] = {
+            "precision": precision, "recall": recall, "f1": f1,
+            "support": tp + fn,
+        }
+
+    # exit gracefully
+    #
+    lo, hi = _wilson_interval(correct, n)
+    return {
+        "n": n, "correct": correct,
+        "accuracy": correct / n if n else 0.0,
+        "accuracy_ci95": [lo, hi],
+        "chance_p_value": _binom_p_value(correct, n, 0.25),
+        "top2_accuracy": top2 / n if n else 0.0,
+        "confusion": confusion, "per_label": per_label,
+    }
+#
+# end of function
+
+
+def _print_metrics(title: str, m: dict, labels: list) -> None:
+    """
+    function: _print_metrics
+
+    arguments:
+     title:  section heading
+     m:      a metrics dict from _metrics
+     labels: class labels, for the confusion-matrix axes
+
+    return:
+     none
+
+    description:
+     Pretty-prints one metrics block (accuracy, chance test, top-2,
+     per-label scores, confusion matrix) to stdout.
+    """
+
+    # headline numbers
+    #
+    fmt = lambda v: "n/a" if v is None else f"{v:.3f}"
+    lo, hi = m["accuracy_ci95"]
+    print(f"\n== {title} ==")
+    print(f"  runs: {m['n']}")
+    print(f"  primary accuracy: {m['accuracy']:.3f} "
+          f"(95% Wilson CI [{lo:.3f}, {hi:.3f}])")
+    print(f"  vs 25% chance: one-sided exact binomial p = "
+          f"{m['chance_p_value']:.4g}")
+    print(f"  top-2 accuracy: {m['top2_accuracy']:.3f}")
+
+    # per-label metrics
+    #
+    print("  per-label:")
+    for label in labels:
+        pl = m["per_label"].get(label, {"support": 0})
+        if pl["support"] == 0:
+            continue
+        print(f"    {label:<18} P={fmt(pl['precision'])} "
+              f"R={fmt(pl['recall'])} F1={fmt(pl['f1'])} "
+              f"(n={pl['support']})")
+
+    # confusion matrix
+    #
+    preds = sorted({p for row in m["confusion"].values() for p in row})
+    if preds:
+        print("  confusion (rows=truth, cols=primary):")
+        print(" " * 18 + "  ".join(f"{c[:10]:>10}" for c in preds))
+        for t in labels:
+            row = m["confusion"].get(t, {})
+            if not row:
+                continue
+            cells = "  ".join(f"{row.get(c, 0):>10}" for c in preds)
+            print(f"  {t:<16}{cells}")
+#
+# end of function
+
+
 def cmd_score(args: argparse.Namespace) -> int:
     """
     function: cmd_score
@@ -414,92 +575,74 @@ def cmd_score(args: argparse.Namespace) -> int:
         print(f"error: diagnosis sheet missing runs: {missing}")
         return 1
 
-    # build the confusion matrix (truth -> predicted -> count)
+    # a primary label is required for every run
+    #
+    blank = sorted(b for b in key if not sheet[b].get("primary"))
+    if blank:
+        print(f"error: runs without a primary label: {blank}")
+        return 1
+
+    # collect (stratum, true, primary, secondary) per run; a run with
+    # no explicit stratum is treated as simulated (the primary corpus)
     #
     labels = sorted(
-        set(VALID_LABELS)
-        | {entry["label"] for entry in key.values()}
+        set(VALID_LABELS) | {t["label"] for t in key.values()}
     )
-    predicted_labels = set()
-    confusion: dict = {t: {} for t in labels}
-    correct = 0
+    rows = []
     for blind_id, truth in key.items():
-        true_label = truth["label"]
-        pred = sheet[blind_id].get("label") or "undiagnosed"
-        predicted_labels.add(pred)
-        row = confusion[true_label]
-        row[pred] = row.get(pred, 0) + 1
-        if pred == true_label:
-            correct += 1
+        d = sheet[blind_id]
+        rows.append((
+            truth.get("stratum", "simulated"),
+            truth["label"], d.get("primary"), d.get("secondary"),
+        ))
 
-    # per-label precision / recall / F1
+    # overall metrics, then a per-stratum breakdown if more than one
     #
-    per_label = {}
-    for label in labels:
-        tp = confusion[label].get(label, 0)
-        fn = sum(confusion[label].values()) - tp
-        fp = sum(
-            row.get(label, 0)
-            for truth, row in confusion.items()
-            if truth != label
+    overall = _metrics([(t, p, s) for _, t, p, s in rows], labels)
+    _print_metrics("OVERALL", overall, labels)
+    result = {"n": overall["n"], "overall": overall, "strata": {}}
+
+    strata = sorted({r[0] for r in rows})
+    if len(strata) > 1:
+        for st in strata:
+            sub = [(t, p, s) for stx, t, p, s in rows if stx == st]
+            m = _metrics(sub, labels)
+            result["strata"][st] = m
+            _print_metrics(f"stratum: {st}", m, labels)
+
+    # H2: barren <-> noise co-occurrence on the hardware stratum
+    #
+    hw = [(t, p, s) for stx, t, p, s in rows if stx == "hardware"]
+    if hw:
+        barren = [r for r in hw if r[0] == "barren_plateau"]
+        co = sum(
+            1 for t, p, s in barren if "noise_dominated" in (p, s)
         )
-        precision = tp / (tp + fp) if (tp + fp) else None
-        recall = tp / (tp + fn) if (tp + fn) else None
-        f1 = (
-            2 * precision * recall / (precision + recall)
-            if precision and recall else None
+        rate = co / len(barren) if barren else None
+        lo, hi = (_wilson_interval(co, len(barren)) if barren
+                  else (None, None))
+        lenient = sum(
+            1 for t, p, s in hw
+            if p == t or {t, p} == {"barren_plateau", "noise_dominated"}
         )
-        per_label[label] = {
-            "precision": precision, "recall": recall, "f1": f1,
-            "support": tp + fn,
+        result["hardware_h2"] = {
+            "barren_runs": len(barren),
+            "barren_diagnosed_noise": co,
+            "co_occurrence_rate": rate,
+            "co_occurrence_ci95": [lo, hi],
+            "primary_or_adjacent_accuracy": lenient / len(hw),
         }
-
-    # overall accuracy with Wilson interval
-    #
-    n = len(key)
-    accuracy = correct / n if n else 0.0
-    ci_low, ci_high = _wilson_interval(correct, n)
-
-    # print the report
-    #
-    print(f"\nruns scored: {n}")
-    print(
-        f"accuracy: {accuracy:.3f} "
-        f"(95% Wilson CI [{ci_low:.3f}, {ci_high:.3f}])"
-    )
-    print("\nper-label metrics:")
-    for label, metrics in per_label.items():
-        if metrics["support"] == 0:
-            continue
-        fmt = lambda v: "n/a" if v is None else f"{v:.3f}"
-        print(
-            f"  {label:<18} P={fmt(metrics['precision'])} "
-            f"R={fmt(metrics['recall'])} F1={fmt(metrics['f1'])} "
-            f"(n={metrics['support']})"
-        )
-    print("\nconfusion matrix (rows=truth, cols=predicted):")
-    cols = sorted(predicted_labels)
-    header = " " * 20 + "  ".join(f"{c[:12]:>12}" for c in cols)
-    print(header)
-    for truth_label in labels:
-        row = confusion[truth_label]
-        if not row:
-            continue
-        cells = "  ".join(
-            f"{row.get(c, 0):>12}" for c in cols
-        )
-        print(f"{truth_label:<20}{cells}")
+        print("\n== H2  hardware barren <-> noise co-occurrence ==")
+        if barren:
+            print(f"  planted barren runs: {len(barren)}; diagnosed "
+                  f"noise (primary or secondary): {co} "
+                  f"(rate {rate:.3f}, 95% CI [{lo:.3f}, {hi:.3f}])")
+        print(f"  primary-or-adjacent accuracy on hardware: "
+              f"{lenient / len(hw):.3f}")
 
     # optionally write the machine-readable result
     #
     if args.out:
-        result = {
-            "n": n,
-            "accuracy": accuracy,
-            "accuracy_ci95": [ci_low, ci_high],
-            "per_label": per_label,
-            "confusion": confusion,
-        }
         Path(args.out).write_text(json.dumps(result, indent=2) + "\n")
         print(f"\nwrote {args.out}")
 
