@@ -128,22 +128,25 @@ KL_BINS = {"pilot": 20, "full": 75}
 #
 #------------------------------------------------------------------------------
 
-def connect() -> tuple:
+def connect(token_file=None, backend_name=None) -> tuple:
     """
     function: connect
 
     arguments:
-     none
+     token_file:   IBM token path (default: the module TOKEN_FILE)
+     backend_name: pin this device, or None for the least busy
 
     return:
-     (service, backend) — runtime service and least-busy real device
+     (service, backend) — runtime service and the chosen real device
     """
 
     # open the service with the private token and pick a device
     #
-    token = TOKEN_FILE.read_text().strip()
+    path = Path(token_file).expanduser() if token_file else TOKEN_FILE
+    token = path.read_text().strip()
     service = QiskitRuntimeService(channel="ibm_cloud", token=token)
-    backend = service.least_busy(simulator=False, operational=True)
+    backend = (service.backend(backend_name) if backend_name
+               else service.least_busy(simulator=False, operational=True))
     print(f"  backend: {backend.name} "
           f"({backend.status().pending_jobs} pending)")
 
@@ -495,6 +498,10 @@ def main() -> int:
     group.add_argument("--full", action="store_true")
     parser.add_argument("--yes", action="store_true",
                         help="required to submit the --full batch")
+    parser.add_argument("--token-file", default=None,
+                        help="IBM token file (default ~/.qiskit/hb_ibm_token)")
+    parser.add_argument("--backend", default=None,
+                        help="pin this device (default: least busy)")
     args = parser.parse_args()
     tier = "pilot" if args.pilot else "full"
 
@@ -517,7 +524,7 @@ def main() -> int:
 
     # connect and dispatch (Batch mode for the paid tier)
     #
-    service, backend = connect()
+    service, backend = connect(args.token_file, args.backend)
     if tier == "full":
         with Batch(backend=backend) as batch:
             if args.arm == "variance":
