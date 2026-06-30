@@ -61,7 +61,7 @@ RECIPES = {
     "healthy":         {"w": 4, "d": 2,  "precision": 0.05, "samples": 40},
     "shot_starved":    {"w": 4, "d": 2,  "precision": 0.45, "samples": 40},
     "noise_dominated": {"w": 4, "d": 16, "precision": 0.10, "samples": 40},
-    "barren_plateau":  {"w": 8, "d": 8,  "precision": 0.10, "samples": 60},
+    "barren_plateau":  {"w": 8, "d": 8,  "precision": 0.03, "samples": 60},
 }
 
 # hardware-subset seeds: disjoint from dev (1000+) and sim test (2000+)

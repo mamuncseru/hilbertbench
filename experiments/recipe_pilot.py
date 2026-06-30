@@ -110,6 +110,8 @@ def main() -> int:
     p.add_argument("--token-file", default="~/.qiskit/hb_ibm_token_10")
     p.add_argument("--backend", default=None)
     p.add_argument("--out", default=None)
+    p.add_argument("--classes", nargs="+", default=LABELS, choices=LABELS,
+                   help="only pilot these classes (e.g. to re-test one)")
     args = p.parse_args()
 
     out = Path(args.out) if args.out else TRACES_ROOT / "recipe_pilot"
@@ -129,9 +131,10 @@ def main() -> int:
     # one pilot run per class, then measure + judge
     #
     qpu, t0, rows = 0.0, time.time(), []
-    for i, label in enumerate(LABELS):
+    for label in args.classes:
         rec = RECIPES[label]
-        run_dir, job = generate_run(out, label, PILOT_SEED + i,
+        run_dir, job = generate_run(out, label,
+                                    PILOT_SEED + LABELS.index(label),
                                     estimator, pass_manager)
         qpu += job_qpu_seconds(job)
         m = measure(run_dir)
