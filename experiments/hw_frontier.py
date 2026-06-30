@@ -128,13 +128,15 @@ KL_BINS = {"pilot": 20, "full": 75}
 #
 #------------------------------------------------------------------------------
 
-def connect(token_file=None, backend_name=None) -> tuple:
+def connect(token_file=None, backend_name=None, instance=None) -> tuple:
     """
     function: connect
 
     arguments:
      token_file:   IBM token path (default: the module TOKEN_FILE)
      backend_name: pin this device, or None for the least busy
+     instance:     the quantum-computing service CRN -- required for
+                   accounts that own multiple IBM Cloud services
 
     return:
      (service, backend) — runtime service and the chosen real device
@@ -144,7 +146,10 @@ def connect(token_file=None, backend_name=None) -> tuple:
     #
     path = Path(token_file).expanduser() if token_file else TOKEN_FILE
     token = path.read_text().strip()
-    service = QiskitRuntimeService(channel="ibm_cloud", token=token)
+    kwargs = {"channel": "ibm_cloud", "token": token}
+    if instance:
+        kwargs["instance"] = instance
+    service = QiskitRuntimeService(**kwargs)
     backend = (service.backend(backend_name) if backend_name
                else service.least_busy(simulator=False, operational=True))
     print(f"  backend: {backend.name} "
@@ -502,6 +507,9 @@ def main() -> int:
                         help="IBM token file (default ~/.qiskit/hb_ibm_token)")
     parser.add_argument("--backend", default=None,
                         help="pin this device (default: least busy)")
+    parser.add_argument("--instance", default=None,
+                        help="quantum-computing service CRN (for accounts "
+                             "with multiple IBM Cloud services)")
     args = parser.parse_args()
     tier = "pilot" if args.pilot else "full"
 
@@ -524,7 +532,7 @@ def main() -> int:
 
     # connect and dispatch (Batch mode for the paid tier)
     #
-    service, backend = connect(args.token_file, args.backend)
+    service, backend = connect(args.token_file, args.backend, args.instance)
     if tier == "full":
         with Batch(backend=backend) as batch:
             if args.arm == "variance":
