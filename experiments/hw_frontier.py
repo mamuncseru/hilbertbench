@@ -510,6 +510,8 @@ def main() -> int:
     parser.add_argument("--instance", default=None,
                         help="quantum-computing service CRN (for accounts "
                              "with multiple IBM Cloud services)")
+    parser.add_argument("--depths", nargs="+", type=int, default=None,
+                        help="override variance depths (e.g. 10 12 14 16 18)")
     args = parser.parse_args()
     tier = "pilot" if args.pilot else "full"
 
@@ -517,6 +519,8 @@ def main() -> int:
     #
     if args.arm == "variance":
         cfg = VAR_CFG[tier]
+        if args.depths:
+            cfg = {**cfg, "depths": args.depths}
         shots = (len(cfg["depths"]) * cfg["points"]
                  * round(1 / cfg["precision"] ** 2)
                  + len(cfg["fid_depths"])
