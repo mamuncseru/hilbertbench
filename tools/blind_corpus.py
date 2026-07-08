@@ -643,7 +643,9 @@ def cmd_score(args: argparse.Namespace) -> int:
     # optionally write the machine-readable result
     #
     if args.out:
-        Path(args.out).write_text(json.dumps(result, indent=2) + "\n")
+        out_path = Path(args.out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(result, indent=2) + "\n")
         print(f"\nwrote {args.out}")
 
     # exit gracefully
