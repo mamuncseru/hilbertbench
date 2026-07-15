@@ -388,7 +388,7 @@ def cmd_expressibility(cfg: dict, tier: str, backend, mode) -> int:
     pm = generate_preset_pass_manager(
         backend=backend, optimization_level=1, seed_transpiler=SEED,
     )
-    bins = KL_BINS[tier]
+    bins = KL_BINS[tier.split("_")[0]]   # base tier ('full_6q' -> 'full')
     pubs, sim_fids = [], []
     for d in cfg["depths"]:
         qc, n_params = build_ansatz(N_QUBITS, d, "linear")
@@ -512,8 +512,33 @@ def main() -> int:
                              "with multiple IBM Cloud services)")
     parser.add_argument("--depths", nargs="+", type=int, default=None,
                         help="override variance depths (e.g. 10 12 14 16 18)")
+    parser.add_argument("--qubits", type=int, default=4,
+                        help="circuit width (non-default widths write "
+                             "to their own result name, e.g. "
+                             "hw_var_full_6q)")
+    parser.add_argument("--force", action="store_true",
+                        help="allow overwriting an existing result "
+                             "file (default: refuse)")
     args = parser.parse_args()
     tier = "pilot" if args.pilot else "full"
+
+    # width override: route the output to a width-suffixed name so a
+    # 6-qubit run can NEVER clobber the 4-qubit record
+    #
+    global N_QUBITS
+    N_QUBITS = args.qubits
+    out_tier = tier if args.qubits == 4 else f"{tier}_{args.qubits}q"
+
+    # refuse to overwrite prior hardware evidence unless forced
+    #
+    from common import RESULTS_ROOT
+    stem = "hw_var" if args.arm == "variance" else "hw_expr"
+    target = RESULTS_ROOT / f"{stem}_{out_tier}" / "results.json"
+    if target.exists() and not args.force:
+        print(f"error: {target} already exists; this is prior "
+              "hardware evidence. Re-run with --force only if you "
+              "mean to replace it (back it up first).")
+        return 1
 
     # estimate the shot budget up front
     #
@@ -540,11 +565,11 @@ def main() -> int:
     if tier == "full":
         with Batch(backend=backend) as batch:
             if args.arm == "variance":
-                return cmd_variance(cfg, tier, backend, batch)
-            return cmd_expressibility(cfg, tier, backend, batch)
+                return cmd_variance(cfg, out_tier, backend, batch)
+            return cmd_expressibility(cfg, out_tier, backend, batch)
     if args.arm == "variance":
-        return cmd_variance(cfg, tier, backend, backend)
-    return cmd_expressibility(cfg, tier, backend, backend)
+        return cmd_variance(cfg, out_tier, backend, backend)
+    return cmd_expressibility(cfg, out_tier, backend, backend)
 #
 # end of function
 

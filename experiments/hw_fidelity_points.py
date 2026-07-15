@@ -52,11 +52,15 @@ PRECISION = 0.0316               # ~1000 shots per point
 SEED_BASE = 20260702
 
 
-def find_point(depth: int) -> tuple:
-    """Search seeds for a parameter point with |ideal| >= MIN_IDEAL."""
+def find_point(depth: int, rep: int = 0) -> tuple:
+    """Search seeds for a parameter point with |ideal| >= MIN_IDEAL.
+
+    A nonzero replicate index offsets the search window so a rerun at
+    the same depth lands on a fresh, disjoint parameter point.
+    """
     qc, n_params = build_ansatz(N_QUBITS, depth, "linear")
     obs = pair_observable(N_QUBITS)
-    for k in range(200):
+    for k in range(rep * 200, rep * 200 + 200):
         rng = np.random.default_rng(SEED_BASE + depth * 1000 + k)
         theta = rng.uniform(0.0, 2.0 * np.pi, n_params)
         ideal = float(
@@ -78,15 +82,21 @@ def main() -> int:
     p.add_argument("--backend", default=None)
     p.add_argument("--instance", default=None,
                    help="quantum-computing service CRN if multi-service")
+    p.add_argument("--depths", nargs="+", type=int, default=None,
+                   help="override the depth list (e.g. 4 6 8 12)")
+    p.add_argument("--rep", type=int, default=0,
+                   help="replicate index: offsets the point search so "
+                        "a rerun samples fresh parameter points")
     args = p.parse_args()
+    depths = args.depths or DEPTHS
 
     # free phase: pick one well-conditioned point per depth
     #
     points = {}
     print("  searching |ideal| >= %.2f points (statevector, free)"
           % MIN_IDEAL)
-    for d in DEPTHS:
-        theta, ideal, seed = find_point(d)
+    for d in depths:
+        theta, ideal, seed = find_point(d, args.rep)
         points[d] = (theta, ideal, seed)
         print(f"    depth {d:>2}: ideal={ideal:+.3f} (seed {seed})")
     if args.dry:
@@ -123,7 +133,7 @@ def main() -> int:
         except Exception:
             pass
 
-        for d in DEPTHS:
+        for d in depths:
             theta, ideal, seed = points[d]
             qc, _ = build_ansatz(N_QUBITS, d, "linear")
             obs = pair_observable(N_QUBITS)
@@ -157,6 +167,20 @@ def main() -> int:
             pf = "n/a" if predicted is None else f"{predicted:.3f}"
             print(f"    depth {d:>2}: predicted={pf} "
                   f"observed={observed:+.3f}")
+
+    # MERGE with any existing record: reruns append new (depth, seed)
+    # points, never overwrite prior hardware evidence
+    #
+    from common import RESULTS_ROOT
+    prior_path = RESULTS_ROOT / "hw_fidelity" / "results.json"
+    if prior_path.exists():
+        prior = json.loads(prior_path.read_text())["records"]
+        have = {(r["depth"], r["seed"]) for r in records}
+        kept = [r for r in prior
+                if (r["depth"], r["seed"]) not in have]
+        records = sorted(kept + records,
+                         key=lambda r: (r["depth"], r["seed"]))
+        print(f"  merged with {len(kept)} prior points")
 
     save_result("hw_fidelity", {
         "protocol": "hw_fidelity_points_v1",
