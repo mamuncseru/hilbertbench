@@ -89,3 +89,7 @@ site/
 experiments/traces/
 experiments/results/
 blinded/
+
+# Study G private artifacts (hash-committed; revealed only at unsealing)
+experiments/study_g_assignment.json
+experiments/study_g_rule_outputs.json

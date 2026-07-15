@@ -1,0 +1,45 @@
+{
+  "protocol": "study_g_blinded_boundary_v1",
+  "committed": "2026-07-15",
+  "title": "Study G: second blinded diagnosis, on the detection boundary (human versus committed rule)",
+  "purpose": "Study E validated the human-plus-instrument workflow at ceiling on a corpus designed to be diagnosable. Study F mapped the instrument's detection boundary with a mechanical rule and found the rule fails exactly where evidence is entangled or borderline. Study G tests, blinded and pre-registered, whether a human reader with the full trace evidence outperforms the committed mechanical rule precisely in that regime.",
+  "diagnostician": "Sadia Afrin Purba (Researcher B of Study E). She is unblinded to Study E's answer key but has never seen any Study G run, the Study G assignment, or this corpus's composition. Reusing a rater across independently blinded corpora is standard practice; her prior calibration on clear cases is part of what is being measured.",
+  "corpus": {
+    "n_runs": 63,
+    "generators": "the byte-identical Study E generators (via the Study F dispatch, commit 5c25350), simulator-only",
+    "composition_disclosure": "Runs may express zero, one, or two failure mechanisms, at planted strengths ranging from physically absent to strongly expressed. The class balance, per-arm composition, knob levels, seeds, and generation order are WITHHELD from the diagnostician and from this public document; the full run-level assignment is committed below by SHA-256 and is revealed, with the answer key, only at unsealing.",
+    "assignment_sha256": "540dfefccdf1d33312a7ab3711c2486040ace46c86c2ef312fb1b1e03f35b08a",
+    "generation_order": "shuffled under a private draw, so trace timestamps carry no arm information",
+    "blinding": "tools/blind_corpus.py blind (verbatim copy under random identifiers, leakage audit, SHA-256 answer-key commitment published before diagnosis begins), exactly as in Study E"
+  },
+  "comparator_rule": {
+    "definition": "the frozen mechanical decision rule of Study F (study_f_protocol.json, commit 5c25350), applied unchanged: analyzer-status flags, precedence noise > barren > shot, healthy iff no flag",
+    "procedure": "the rule's outputs on the blinded corpus are computed and hash-committed BEFORE the diagnostician receives the corpus, so neither the rule nor its outputs can react to her sheet"
+  },
+  "diagnostician_task": "For each blinded run: one primary label from {healthy, barren_plateau, shot_starved, noise_dominated}, an optional secondary label, a confidence in [0,1], and free-text notes, using only the instrument's outputs on the trace. The class balance is not disclosed. 'Healthy' is the correct answer whenever the evidence does not support any failure mechanism.",
+  "outcomes": {
+    "primary": {
+      "name": "paired human-versus-rule primary-label comparison",
+      "definition": "For every run, the human's primary label and the rule's primary label are each scored correct/incorrect against the planted ground truth (for two-mechanism runs, either planted mechanism counts as a correct primary; order is not scored here). The registered primary outcome is the one-sided exact McNemar test on the discordant pairs (H1: the human is correct on more discordant runs than the rule).",
+      "rationale": "In the transition region the knob-defined label and the evidence genuinely diverge, so absolute accuracy is partly ill-defined there; both graders face the identical ambiguity on the identical runs, and the paired comparison cancels it. Runs where both are right or both are wrong do not enter the test."
+    },
+    "secondary": [
+      "per-arm detection-rate curves by planted strength level, human overlaid on rule (the psychometric overlay)",
+      "H2 (falsifiable): the human recovers the specific rule failure classes identified in Study F -- borderline-SNR runs graded 'Marginal' rather than 'Dominated', and shallow converged trajectories that mimic plateau variance -- at a higher rate than the rule",
+      "two-mechanism completeness: per-mechanism recall of the human flag set {primary, secondary} versus the rule flag set against the planted flags",
+      "false positives on mechanism-free runs, reported separately for the shallow converged-trajectory traps",
+      "H3: the human's reported confidence is lower inside the transition regions of Study F than on strongly expressed runs (calibration)"
+    ]
+  },
+  "analysis_plan": {
+    "mcnemar": "exact binomial test on discordant pairs, b ~ Binomial(b+c, 0.5), one-sided",
+    "detection_rate_intervals": "95% Wilson",
+    "no_optional_stopping": "the diagnosis is a single pass; the sheet is hash-committed by the diagnostician before the answer key, the assignment, and the rule outputs are unsealed",
+    "scorer": "experiments/study_g_score.py, committed alongside this protocol before the corpus was generated; no scoring choice is made after data exist"
+  },
+  "thresholds_and_versions": {
+    "instrument": "HilbertBench v1.0.0 (Zenodo 10.5281/zenodo.21009245), thresholds frozen since Study E",
+    "rule": "Study F decision rule, commit 5c25350, unchanged"
+  },
+  "relation_to_registrations": "Registered as a SECOND registration on the existing OSF project (the Study E registration, DOI 10.17605/OSF.IO/2PWHU, is immutable and untouched). This document and its commitments are published to the public repository before corpus generation; the OSF registration is filed before the diagnostician receives the corpus."
+}
