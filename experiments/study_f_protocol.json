@@ -1,0 +1,95 @@
+{
+  "protocol": "study_f_hardmode_v1",
+  "committed": "2026-07-15",
+  "title": "Study F: detection-boundary mapping (hard-mode algorithmic validation)",
+  "purpose": "Map where the instrument's evidence stops supporting a diagnosis. Study E validated the human-plus-instrument workflow on a corpus designed to be diagnosable; Study F measures the instrument's discriminative power alone, by sweeping each planted mechanism from physically absent to fully expressed and scoring a frozen, mechanical decision rule with no human in the loop. Sub-100% behaviour in the transition region is the expected and desired outcome: it locates the failure boundary.",
+  "status_note": "Non-preregistered follow-up to the pre-registered Study E. This protocol (decision rule, grids, seeds, metrics) is committed to the public repository BEFORE any corpus run is generated or scored. The commitment guards against tuning the rule or the grid after seeing results.",
+  "truth_semantics": "Ground truth for every sweep is the physical knob setting (circuit width, depth, measurement budget, device noise model), never the diagnostic statistic itself. The generators are the byte-identical Study E generators; only their physical knobs move. Detection rate is reported as a function of the knob. Runs in the transition region are not scored as classification errors: the transition is a property of the evidence, and its width in physical units is the reported resolution of the instrument. The achieved statistics (measured variance, estimated SNR, estimated fidelity) are recorded per run and reported descriptively.",
+  "decision_rule": {
+    "description": "A deterministic map from the instrument's summary() report to a set of mechanism flags plus one primary label. The rule is the naive reading of the analyzer verdicts; it embeds no knowledge of the corpus.",
+    "flags": {
+      "barren_plateau": "summary['trainability']['status'] == 'Barren Plateau Detected'",
+      "shot_starved": "summary['measurement']['status'] startswith 'Shot Noise Dominated'",
+      "noise_dominated": "summary['noise']['status'] startswith 'Noise Dominated'"
+    },
+    "primary_label": "highest-precedence raised flag; 'healthy' iff no flag is raised",
+    "primary_precedence": ["noise_dominated", "barren_plateau", "shot_starved"],
+    "precedence_rationale": "Device noise is causally upstream: it attenuates landscape variance and buries shot-level signal, so when its independent evidence channel (the recorded calibration snapshot) fires, it explains downstream flags. Barren evidence precedes shot evidence, following the confusable-pair structure pre-registered in Study E.",
+    "thresholds": {
+      "variance": 0.005,
+      "snr": 1.5,
+      "fidelity": 0.5
+    },
+    "thresholds_note": "Identical to the frozen Study E thresholds. Nothing is tuned for this study."
+  },
+  "sweeps": {
+    "barren_plateau": {
+      "generator": "sample_landscape (statevector), identical to the Study E barren generator",
+      "knob": "circuit width n with depth = n (the depth-n rule of Study A)",
+      "levels_n_qubits": [4, 5, 6, 7, 8, 9, 10, 12],
+      "n_samples": 300,
+      "family": "linear",
+      "replicates_per_level": 5,
+      "seed_rule": "3000 + 10 * level_index + replicate"
+    },
+    "shot_starved": {
+      "generator": "COBYLA training trajectory through the proxy on AerSimulator, identical to the Study E shot generator (4 qubits, 2 layers, 60 iterations)",
+      "knob": "target precision per estimate (shots ~ 1/precision^2)",
+      "levels_precision": [0.02, 0.05, 0.08, 0.12, 0.18, 0.28, 0.45],
+      "replicates_per_level": 5,
+      "seed_rule": "3200 + 10 * level_index + replicate"
+    },
+    "noise_dominated": {
+      "generator": "COBYLA training trajectory on FakeManilaV2 with ISA transpilation, identical to the Study E noise generator (4 qubits, precision 0.1, 60 iterations)",
+      "knob": "circuit depth (layers) on the fixed noisy device",
+      "levels_depth": [2, 4, 6, 8, 10, 12, 16],
+      "replicates_per_level": 5,
+      "seed_rule": "3400 + 10 * level_index + replicate"
+    },
+    "healthy_controls": {
+      "generator": "the Study E healthy generator (AerSimulator, precision 0.02, 60 iterations)",
+      "knob": "none (false-positive arm)",
+      "levels_depth": [1, 2, 3],
+      "replicates_per_level": 5,
+      "seed_rule": "3600 + 10 * level_index + replicate"
+    }
+  },
+  "mixtures": {
+    "description": "Two mechanisms planted simultaneously at strong settings. Scored per-mechanism from the flag set (was each planted mechanism flagged?), plus exact-set match. Predictions are stated here, in advance, so hits and misses are equally reportable.",
+    "noise_plus_shot": {
+      "generator": "training on FakeManilaV2, 4 qubits, 16 layers, precision 0.45",
+      "replicates": 5,
+      "seed_rule": "3800 + replicate",
+      "advance_prediction": "both flags raised; primary = noise_dominated by precedence"
+    },
+    "barren_plus_shot": {
+      "generator": "sample_landscape through AerSimulator, 8 qubits, 24 layers, 200 points, precision 0.45",
+      "replicates": 5,
+      "seed_rule": "3820 + replicate",
+      "advance_prediction": "shot noise (variance ~ 0.2 per estimate) swamps the ~1e-3 landscape variance, so the barren flag is expected to be MASKED; the instrument should instead report that the measurement budget cannot support conclusions (shot flag). This is an information-theoretic limit of the evidence, not an instrument defect, and is scored and reported as a masking finding."
+    },
+    "barren_plus_noise": {
+      "generator": "sample_landscape through a calibrated FakeGuadalupeV2 noise model with ISA transpilation, 8 qubits, 24 layers, 200 points, precision 0.045",
+      "replicates": 5,
+      "seed_rule": "3840 + replicate",
+      "advance_prediction": "both flags raised (calibration snapshot fires the noise flag; attenuated variance below threshold fires the barren flag); primary = noise_dominated by precedence. This is the algorithmic form of the pre-registered H2 barren-noise entanglement."
+    }
+  },
+  "replay": {
+    "description": "The frozen decision rule is applied, unmodified, to all 72 runs of the original Study E blinded corpus and scored against the sealed answer key ground truth. Purpose: separate the instrument's discriminative power from the human diagnostician's competence on the identical evidence.",
+    "corpus": "experiments/traces/corpus_test (36 simulated + 36 hardware runs, 18 per class)",
+    "metrics": "primary accuracy overall and per stratum with 95% Wilson intervals, flag-set (top-2 analogue) accuracy, confusion matrix"
+  },
+  "metrics": {
+    "sweeps": "per level: detection rate of the planted mechanism with 95% Wilson interval; rates of every other flag (false co-flags); achieved statistics per run",
+    "healthy_controls": "false-positive rate (any flag raised) with 95% Wilson interval",
+    "mixtures": "per-mechanism recall from the flag set; exact-set match rate; comparison against the advance predictions above",
+    "transition_report": "for each sweep, the knob interval between the last level with detection rate <= 0.2 and the first level with detection rate >= 0.8, stated in physical units and in achieved-statistic units"
+  },
+  "execution": {
+    "script": "experiments/study_f_hardmode.py",
+    "subcommands": ["generate", "score"],
+    "environment": "local simulators only; no QPU time",
+    "output": "experiments/results/study_f/results.json"
+  }
+}
