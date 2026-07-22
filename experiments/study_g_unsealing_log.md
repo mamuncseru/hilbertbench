@@ -31,7 +31,7 @@ no reader infers a recorded session exists.
 | 2026-07-15 | Corpus blinded; answer key moved out of the corpus directory; leakage audit clean (0/63 leaky) |
 | 2026-07-15 | Frozen rule applied to the blinded corpus; outputs hash-committed (`215d97d`) |
 | 2026-07-16 | Diagnostician package built (`study_g_researcher_b.zip`), audited leak-free |
-| before delivery | **OSF registration filed, embargoed**, with the supervisor as contributor. Diagnostician deliberately *not* added as a contributor, so she could not view the registration (which contains the composition and grid). Confirmed by Researcher A. |
+| before delivery | **OSF registration filed, embargoed** (DOI [10.17605/OSF.IO/UYN46](https://doi.org/10.17605/OSF.IO/UYN46)), with the supervisor as contributor. Diagnostician deliberately *not* added as a contributor, so she could not view the registration (which contains the composition and grid). Confirmed by Researcher A. |
 | after registration | Package delivered to the diagnostician |
 | 2026-07-19 13:15 | Diagnostician's filled sheet written (`diagnosis_sheet_v02.json`) |
 | 2026-07-21 | Diagnostician submitted her sheet **and its SHA-256** to Researcher A |
@@ -109,5 +109,19 @@ materially explains the primary outcome):
    knob-defined label and the trace evidence genuinely diverge"),
    which is why the primary outcome is paired — both graders face the
    identical ambiguity on the identical runs.
-4. **OSF DOI pending.** The registration is embargoed; OSF issues the
-   DOI when the embargo is lifted. To be recorded here at that time.
+4. **Registration is embargoed.** The OSF registration
+   (DOI [10.17605/OSF.IO/UYN46](https://doi.org/10.17605/OSF.IO/UYN46))
+   was filed before the diagnostician received the corpus and is under
+   embargo so that its contents — which include the corpus composition
+   and grid — could not reach her during diagnosis. It becomes
+   publicly readable when the embargo is lifted; the registration
+   timestamp and the SHA-256 commitments establish that the design was
+   fixed in advance independently of the embargo.
+
+## Archived dataset
+
+The complete verifiable record — blinded corpus, unsealed materials,
+all four commitments, code, and this log, with a `VERIFY.md`
+re-verification recipe — is archived at Zenodo,
+DOI [10.5281/zenodo.21482518](https://doi.org/10.5281/zenodo.21482518)
+(CC BY 4.0).
