@@ -297,6 +297,13 @@ def cmd_score(args: argparse.Namespace) -> int:
 
     # SECONDARY 5 (H3): confidence calibration
     #
+    # ADDENDUM (disclosed): as committed in b35ee2b this block recorded
+    # only the group means and omitted the one-sided Mann-Whitney U
+    # named in the OSF registration. The test was specified in the
+    # registration BEFORE any data existed; only the implementation was
+    # incomplete, so adding it here changes no analysis decision. See
+    # study_g_unsealing_log.md, Disclosures item 1.
+    #
     def _conf(xs):
         vals = [x["h_conf"] for x in xs if x["h_conf"] is not None]
         return (sum(vals) / len(vals)) if vals else None
@@ -305,10 +312,23 @@ def cmd_score(args: argparse.Namespace) -> int:
              if x["level"] in TRANSITION_LEVELS.get(x["arm"], set())]
     anchor = [x for x in rows
               if x["level"] in ANCHOR_LEVELS.get(x["arm"], set())]
+    t_vals = [x["h_conf"] for x in trans if x["h_conf"] is not None]
+    a_vals = [x["h_conf"] for x in anchor if x["h_conf"] is not None]
+
+    # one-sided (transition < anchor), as registered
+    u_stat = p_value = None
+    if t_vals and a_vals:
+        from scipy.stats import mannwhitneyu
+        u_stat, p_value = mannwhitneyu(
+            t_vals, a_vals, alternative="less")
+        u_stat, p_value = float(u_stat), float(p_value)
+
     result["h3_confidence"] = {
         "transition_mean": _conf(trans),
         "anchor_mean": _conf(anchor),
         "n_transition": len(trans), "n_anchor": len(anchor),
+        "mannwhitney_u": u_stat,
+        "mannwhitney_p_one_sided": p_value,
     }
 
     result["rows"] = rows
