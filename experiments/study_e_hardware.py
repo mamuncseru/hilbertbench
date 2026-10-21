@@ -12,10 +12,11 @@
 # shared queue). Stratum lives in the MANIFEST, never in the trace tags,
 # so Researcher B cannot read it from a blinded run.
 #
-# !!! The per-class RECIPES below are PLACEHOLDERS. Freeze them on the
-#     hardware recipe pilot before the real run (each planted mechanism
-#     must be the dominant signature; barren is an H2 co-occurrence
-#     case). See paper/PREREGISTRATION.md and blind-study notes.
+# The per-class RECIPES below were frozen on the hardware recipe pilot
+# and are the values used for the Study E hardware stratum (ibm_marrakesh,
+# 2026-06-30); the archived traces record the same widths, depths,
+# precisions and sample counts. Each planted mechanism is the dominant
+# signature; barren is an H2 co-occurrence case.
 #
 # Append-safe: re-running adds rounds toward the target and keeps the
 # classes balanced; runs land in the same corpus dir as the simulated
@@ -51,10 +52,9 @@ __FILE__ = os.path.basename(__file__)
 #
 LABELS = ["healthy", "barren_plateau", "shot_starved", "noise_dominated"]
 
-# PLACEHOLDER per-class hardware recipes (width, depth, precision,
-# landscape size). Freeze on the pilot. Rationale for the starting
-# guesses: healthy = shallow + many shots (clean); shot_starved =
-# shallow + ~5 shots (precision 0.45); noise_dominated = deep (fidelity
+# frozen per-class hardware recipes (width, depth, precision, landscape
+# size). Rationale: healthy = shallow + many shots (clean); shot_starved
+# = shallow + ~5 shots (precision 0.45); noise_dominated = deep (fidelity
 # collapses); barren_plateau = wide+deep (flat AND noisy -> H2).
 #
 RECIPES = {
