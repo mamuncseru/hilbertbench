@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1129,14 +1129,14 @@ recorded in the trace and compares it to a threshold.</p>
 <hr />
 <h2 id="output-fields">Output fields<a class="headerlink" href="#output-fields" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s1">&#39;status&#39;</span><span class="p">:</span>             <span class="s1">&#39;Trainable&#39;</span><span class="p">,</span>          <span class="c1"># or &#39;Barren Plateau Detected&#39;</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s1">&#39;variance&#39;</span><span class="p">:</span>           <span class="mf">0.215</span><span class="p">,</span>                <span class="c1"># variance of outcome trajectory</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span>            <span class="mf">0.464</span><span class="p">,</span>                <span class="c1"># standard deviation</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s1">&#39;num_evaluations&#39;</span><span class="p">:</span>    <span class="mi">20</span><span class="p">,</span>                   <span class="c1"># number of numeric outcomes used</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="s1">&#39;threshold&#39;</span><span class="p">:</span>          <span class="mf">0.005</span><span class="p">,</span>                <span class="c1"># threshold applied</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s1">&#39;variance_ci&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.371</span><span class="p">],</span>       <span class="c1"># 95% bootstrap CI on variance</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s1">&#39;confidence_level&#39;</span><span class="p">:</span>   <span class="mf">0.95</span><span class="p">,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s1">&#39;verdict_confidence&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span><span class="p">,</span>               <span class="c1"># &#39;high&#39; or &#39;low&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s1">'status'</span><span class="p">:</span>             <span class="s1">'Trainable'</span><span class="p">,</span>          <span class="c1"># or 'Barren Plateau Detected'</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s1">'variance'</span><span class="p">:</span>           <span class="mf">0.215</span><span class="p">,</span>                <span class="c1"># variance of outcome trajectory</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s1">'std_dev'</span><span class="p">:</span>            <span class="mf">0.464</span><span class="p">,</span>                <span class="c1"># standard deviation</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s1">'num_evaluations'</span><span class="p">:</span>    <span class="mi">20</span><span class="p">,</span>                   <span class="c1"># number of numeric outcomes used</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="s1">'threshold'</span><span class="p">:</span>          <span class="mf">0.005</span><span class="p">,</span>                <span class="c1"># threshold applied</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s1">'variance_ci'</span><span class="p">:</span>        <span class="p">[</span><span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.371</span><span class="p">],</span>       <span class="c1"># 95% bootstrap CI on variance</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s1">'confidence_level'</span><span class="p">:</span>   <span class="mf">0.95</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s1">'verdict_confidence'</span><span class="p">:</span> <span class="s1">'high'</span><span class="p">,</span>               <span class="c1"># 'high' or 'low'</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
 </code></pre></div>
 <table>
@@ -1240,17 +1240,17 @@ threshold alongside the verdict so your result is reproducible.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench</span><span class="w"> </span><span class="kn">import</span> <span class="n">HilbertTrace</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hilbertbench.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_barren_plateau</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">trace</span> <span class="o">=</span> <span class="n">HilbertTrace</span><span class="p">(</span><span class="s2">&quot;runs/vqe/20260605_143022_a1b2c3d4&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">trace</span> <span class="o">=</span> <span class="n">HilbertTrace</span><span class="p">(</span><span class="s2">"runs/vqe/20260605_143022_a1b2c3d4"</span><span class="p">)</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">result</span> <span class="o">=</span> <span class="n">detect_barren_plateau</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Barren Plateau Detected&#39;</span><span class="p">:</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Barren plateau — variance </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;variance&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2"> &quot;</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>          <span class="sa">f</span><span class="s2">&quot;below threshold </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CI: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;variance_ci&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">  confidence: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;verdict_confidence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="k">elif</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;verdict_confidence&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;low&#39;</span><span class="p">:</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Borderline result — run a longer experiment&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Barren Plateau Detected'</span><span class="p">:</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Barren plateau — variance </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'variance'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2"> "</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>          <span class="sa">f</span><span class="s2">"below threshold </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'threshold'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CI: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'variance_ci'</span><span class="p">]</span><span class="si">}</span><span class="s2">  confidence: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'verdict_confidence'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="k">elif</span> <span class="n">result</span><span class="p">[</span><span class="s1">'verdict_confidence'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'low'</span><span class="p">:</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Borderline result — run a longer experiment"</span><span class="p">)</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trainable — variance </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;variance&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Trainable — variance </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'variance'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1312,7 +1312,7 @@ threshold alongside the verdict so your result is reproducible.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       
