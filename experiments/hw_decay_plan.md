@@ -40,7 +40,11 @@ the per-layer rate?
   rate, about 5.5 min for three.
 - Budget rule: after submission and before execution, IBM's usage
   estimate is read; the job is cancelled while queued if it exceeds
-  180 s or would bring the total above 570 s. If a repeat is cancelled
+  180 s or would bring the total above 570 s. When IBM gives no
+  estimate, the estimate is the largest actual usage of the earlier
+  jobs (shots x 0.3 ms for the first job). This fallback was added
+  while job 1 was running, before any result was seen, after IBM
+  returned no estimate for job 1. If a repeat is cancelled
   for budget, the session stops and the completed repeats are reported.
 - A job that fails for a technical reason is resubmitted once and both
   are reported.

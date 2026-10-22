@@ -317,8 +317,11 @@ def build_pubs(backend, rows: dict, layouts: dict) -> tuple:
     return pubs, meta
 
 
-def _estimate(job, n_shots: int) -> tuple:
-    """IBM's usage estimate for a queued job, or the shot fallback."""
+def _estimate(job, n_shots: int, prev: list) -> tuple:
+    """
+    IBM's usage estimate for a queued job; without one, the largest
+    actual usage of the earlier jobs, or shots x 0.3 ms for the first.
+    """
     t0 = time.time()
     while time.time() - t0 < 120:
         try:
@@ -329,6 +332,8 @@ def _estimate(job, n_shots: int) -> tuple:
         except Exception:
             break
         time.sleep(5)
+    if prev:
+        return max(prev), "largest earlier job"
     return n_shots * SECONDS_PER_SHOT, "shots x 0.3 ms"
 
 
@@ -374,9 +379,9 @@ def run_job(k: int, fake: bool) -> dict:
 
     # budget so far: actual usage of the earlier jobs of this session
     #
-    spent = 0.0
-    for f in sorted(out.glob("job_*.json")):
-        spent += json.loads(f.read_text()).get("quantum_seconds") or 0.0
+    prev = [json.loads(f.read_text()).get("quantum_seconds") or 0.0
+            for f in sorted(out.glob("job_*.json"))]
+    spent = float(sum(prev))
 
     cal_submit = _props_dict(backend, refresh=not fake)
     est = EstimatorV2(mode=backend)
@@ -395,7 +400,7 @@ def run_job(k: int, fake: bool) -> dict:
     print(f"  job {k}: {job_id} on {backend.name}, {len(pubs)} PUBs, "
           f"{n_shots} shots", flush=True)
     if not fake:
-        qs_est, src = _estimate(job, n_shots)
+        qs_est, src = _estimate(job, n_shots, prev)
         print(f"  estimated {qs_est:.0f} s ({src}); spent {spent:.0f} s",
               flush=True)
         if qs_est > JOB_CAP_S or spent + qs_est > BUDGET_S:
