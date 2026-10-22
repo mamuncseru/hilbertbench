@@ -76,6 +76,20 @@ def main() -> int:
               for r in res["records"] if r["chain"] == chain}
         ks = sorted(y)
 
+        def var_rate(idx):
+            # log-linear fit of the shot-corrected variance ratio against
+            # depth over the saturated depths (8 to 48), all jobs
+            L, lr = [], []
+            for k in ks:
+                for d in reg.DEPTHS:
+                    if d < 8:
+                        continue
+                    yy, xx = y[k][d][idx[d]], x[d][idx[d]]
+                    sv = np.mean((1 - yy ** 2) / 511)
+                    L.append(d)
+                    lr.append(np.log((np.var(yy) - sv) / np.var(xx)))
+            return float(np.exp(np.polyfit(L, lr, 1)[0]))
+
         def fit_all(idx):
             f = {(k, d): float(np.polyfit(x[d][idx[d]], y[k][d][idx[d]],
                                           1)[0])
@@ -91,10 +105,12 @@ def main() -> int:
 
         ident = {d: np.arange(n) for d in reg.DEPTHS}
         f0, pooled0, per0 = fit_all(ident)
-        bq, bd, bper = [], [], {k: [] for k in ks}
+        s0 = var_rate(ident)
+        bq, bd, bs, bper = [], [], [], {k: [] for k in ks}
         for _ in range(N_BOOT):
             idx = {d: rng.integers(0, n, n) for d in reg.DEPTHS}
             _, pooled, per = fit_all(idx)
+            bs.append(var_rate(idx))
             m = pooled["models"]
             bq.append(m["exponential"]["params"]["q"])
             bd.append(m["line"]["aic"] - m["exponential"]["aic"])
@@ -115,8 +131,19 @@ def main() -> int:
         resid = {d: float(np.mean([f0[(k, d)] for k in ks])
                           - ex["A"] * ex["q"] ** d) for d in reg.DEPTHS}
 
+        # quasi-AIC: chi^2 scaled by the exponential fit's reduced chi^2
+        #
         m0 = pooled0["models"]
+        chat = max(1.0, m0["exponential"]["reduced_chi2"])
+        qaic = {name: m["chi2"] / chat + 2 * m["k"]
+                for name, m in m0.items()}
         report[chain] = {
+            "variance_ratio_rate_d8_48": s0,
+            "variance_ratio_rate_sqrt": float(np.sqrt(s0)),
+            "variance_ratio_rate_ci95_joint_row_bootstrap": pct(bs),
+            "qaic": qaic,
+            "qaic_line_minus_exp": qaic["line"] - qaic["exponential"],
+            "overdispersion_chat": chat,
             "pooled_q": ex["q"],
             "pooled_q_ci95_joint_row_bootstrap": pct(bq),
             "aic_line_minus_exp": m0["line"]["aic"] - m0["exponential"]["aic"],
@@ -147,6 +174,9 @@ def main() -> int:
         print(f"    job level: {r['job_level_mean_q']:.4f} "
               f"[{r['job_level_q_ci95_t'][0]:.4f}, "
               f"{r['job_level_q_ci95_t'][1]:.4f}]")
+        print(f"    variance-ratio rate (8-48) {s0:.4f} sqrt {np.sqrt(s0):.4f} "
+              f"[{pct(bs)[0]:.4f}, {pct(bs)[1]:.4f}]; quasi-AIC margin "
+              f"{r['qaic_line_minus_exp']:.1f} (c-hat {chat:.2f})")
         print("    mean residual by depth: " + ", ".join(
             f"{d}:{v:+.3f}" for d, v in resid.items()))
 
