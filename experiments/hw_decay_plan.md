@@ -88,3 +88,20 @@ Every job, chain and depth, whatever the result.
   spread between jobs.
 - If not, the paper reports the measured damping as it is and makes no
   barren plateau claim for that chain.
+
+## Corrections (added 2026-10-22, after the jobs, on review)
+
+- The budget-guard fallback was committed at 18:09:55 UTC, after attempt 1
+  of job 1 had been rejected by IBM (18:07:43 UTC, client sent QPY 11, no
+  QPU time) and before the resubmission (18:12:14 UTC). The text above
+  says it was added "while job 1 was running"; that is wrong. No data
+  existed at that time.
+- IBM executed 511 shots per row (precision 0.0442), not 512, in every job
+  (`results/hw_decay/executed_options.json`, retrieved by job ID; it also
+  confirms dynamical decoupling off, twirling off, resilience level 0).
+- This plan was specified in advance (sent to a co-author and committed
+  locally before data); it was not publicly registered. Any use of
+  "registered" in these files means this.
+- The three jobs reuse the same parameter rows, so pooled fits count the
+  row-sampling error three times. A post hoc joint-row bootstrap is in
+  `hw_decay_posthoc.py`.

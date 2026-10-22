@@ -33,3 +33,13 @@ about 40 s by the registered jobs' rate. The same budget rule applies
 3. The three models refitted to all depths (registered jobs plus this
    job), with AIC, reported next to the registered result, which stays
    the primary result.
+
+## Corrections (added 2026-10-22, after the job, on review)
+
+- "Registered" above means specified in advance in `hw_decay_plan.md`
+  (sent to a co-author and committed locally before data); not publicly
+  registered.
+- IBM executed 511 shots per row, not 512
+  (`results/hw_decay/executed_options.json`); `job_1.json` records 512
+  because the script wrote the requested value. The analysis does not use
+  the shot count.
