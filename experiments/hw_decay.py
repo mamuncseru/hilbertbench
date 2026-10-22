@@ -444,8 +444,12 @@ def run_job(k: int, fake: bool) -> dict:
         rec["shots"] = int((r.metadata or {}).get(
             "shots", int(np.ceil(1 / PRECISION ** 2))))
         pub_out.append(rec)
+    import qiskit
+    import qiskit_ibm_runtime
     record = {
         "repeat": k, "job_id": job_id, "backend": backend.name,
+        "client": {"qiskit": qiskit.__version__,
+                   "qiskit_ibm_runtime": qiskit_ibm_runtime.__version__},
         "submitted": submitted, "finished": _now(),
         "quantum_seconds": qs, "usage_estimate_s": qs_est,
         "usage_estimate_source": src, "metrics": metrics,
